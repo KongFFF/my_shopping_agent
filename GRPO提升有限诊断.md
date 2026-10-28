@@ -151,6 +151,8 @@ Reward v3 的部分满足奖励高于循环/错误购买，会合理地鼓励模
 
 [tools/analyze_grpo_diagnostics.py](tools/analyze_grpo_diagnostics.py) 只用 Python 标准库，读取现有 JSONL，写入一个新的诊断目录。它不会加载模型、启动环境、访问网络或读取 Final。已用合成日志核验过滤统计、真实更新消费计数、仅失败组识别、任务覆盖，以及重复/缺失更新的报错行为；尚未在你的云端真实日志上运行。
 
+**续跑合并范围修正**：续跑验收记录明确指出，旧日志还保留了被回滚的 step 351–358。原版分析命令直接读取两份日志的全部内容，漏掉了有效步数范围选择，因此在新日志 step 351 处报重复。输入路径正确，合并逻辑需要修正：旧文件只取 1–350，新文件只取 351–500。不能简单按 step 保留第一次或最后一次来消除冲突。
+
 将该脚本同步到 AutoDL 的父仓库 `tools/` 目录后，在云端执行：
 
 ```bash
@@ -160,18 +162,21 @@ RUN=outputs/runs/grpo_baseline_20261022_202816
   --diagnostics \
     "$RUN/formal_memfix_v1/training_diagnostics.jsonl" \
     "$RUN/formal_resume350_v1/training_diagnostics.jsonl" \
+  --step-ranges 1:350 351:500 \
   --expected-updates 500 \
-  --output "$RUN/preparation/offline_diagnosis_v1"
+  --output "$RUN/preparation/offline_diagnosis_v2"
 ```
 
-只传正式成功运行的两段日志；不要混入最初 OOM 运行或 smoke。输出目录若已存在，脚本会拒绝覆盖。产物：
+`--step-ranges` 与 `--diagnostics` 按相同顺序一一对应，对生成、跳更、更新事件一起筛选。只传这两份正式运行日志；不要混入最初 OOM 运行或 smoke。范围内若仍有重复更新、缺失更新，脚本继续报错，不擅自选择训练分支。输出目录若已存在，脚本会拒绝覆盖。原始日志完全保留。产物：
 
-- `summary.json`：全生成与实际消费比例、任务覆盖、奖励类型、优势尺度和按 50 步聚合的熵/clip/梯度等指标。
+- `summary.json`：有效训练链内生成与实际消费比例、任务覆盖、奖励类型、优势尺度和按 50 步聚合的熵/clip/梯度等指标；`sources` 另列每份文件的排除事件数和被回滚的更新步数，`generation_cost_scope` 报告包含范围外生成事件的输入日志采样成本。
 - `updates.csv`：每次真实更新的全部标量指标。
 - `groups.csv`：每个生成组的奖励差值、是否有 gold、动作序列多样性和首次分叉位置。
 - `tasks.csv`：每题生成/训练次数及是否曾采到 gold。
 
 `accepted` 只表示暂存成功，不保证最后进入更新；脚本从 `optimizer_step` 事件统计真实消费量，避免把跳更前清空的暂存样本算作已训练。中心化奖励只作为当前配置下的优势尺度代理，不冒充真实梯度贡献。
+
+主统计的分母只含所选有效训练链，适合解释最终模型学到了什么；回滚阶段的采样成本另列，不能把排除记录理解为这些成本没有发生。输入日志成本仍不包括未提供的最初 OOM 运行、验证和 SFT 等成本。已用旧 1–358、新 351–500 的合成日志验证合并后恰有 500 次有效更新，并验证范围内真实冲突和缺步仍会报错。
 
 下一轮最少需要这四份小体积统计文件，以及：
 
