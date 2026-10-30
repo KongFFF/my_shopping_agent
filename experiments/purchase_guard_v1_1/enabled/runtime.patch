@@ -1,0 +1,187 @@
+--- a/environment/web_agent_site/envs/web_agent_text_env.py
++++ b/environment/web_agent_site/envs/web_agent_text_env.py
+@@ -828,6 +828,9 @@
+     def receive(self, session_id, current_url, session_int=None, **kwargs):
+         """Map action to the corresponding page"""
+         status = dict(reward=0.0, done=False)
++        # Clear the last message, not the trajectory-wide attempt budget.
++        if session_id in self.user_sessions:
++            self.user_sessions[session_id].pop("purchase_guard_feedback", None)
+         with app.app_context(), app.test_request_context():
+             # Create/determine goal, instruction_text from current session
+             if session_id not in self.user_sessions:
+@@ -860,6 +863,8 @@
+                         'total_results': 0,
+                         'total_pages': 0,
+                         'options': dict(),
++                        'purchase_guard_incomplete_attempts': 0,
++                        'purchase_guard_history': [],
+                         'selected_price': None,
+                         'subpage': None,
+                         'price_resolution': None,
+@@ -907,17 +912,37 @@
+             elif 'clickable_name' in kwargs:
+                 clickable_name = kwargs['clickable_name'].lower()
+                 if clickable_name == END_BUTTON.lower():
+-                    # If "buy now" clicked, calculate reward and flag session as terminated
+-                    html, url, reward, reward_detail, purchased_product, goal, options = self.done(session_id, **kwargs)
+-                    status['reward'] = reward
+-                    status['reward_detail'] = reward_detail
+-                    status['done'] = True
+-                    status['purchase'] = self.get_purchase_info(purchased_product, options)
+-                    status['goal'] = goal
+-                    status['termination_reason'] = reward_detail.get(
+-                        "termination_reason", "environment_done"
+-                    )
+-                    status['reward_valid'] = reward_detail.get("reward_valid", True)
++                    from web_agent_site.engine.purchase_guard import guard_purchase
++                    guard = guard_purchase(self, session_id, enabled=True, max_attempts=3)
++                    if guard is not None:
++                        product = self.product_item_dict[session["asin"]]
++                        if guard["result"] is None:
++                            html = map_action_to_html(
++                                'click', session_id=session_id, product_info=product,
++                                keywords=session.get("keywords", []), page=session.get("page"),
++                                asin=session["asin"], options=session["options"],
++                                instruction_text=session["goal"]["instruction_text"],
++                                show_attrs=self.show_attrs, selected_price=session.get("selected_price"))
++                            url = current_url
++                        else:
++                            status.update(self._terminal_status(session_id, guard["result"]))
++                            html = map_action_to_html(
++                                f'click[{END_BUTTON}]', session_id=session_id,
++                                reward=guard["result"].reward, asin=session["asin"],
++                                options=session["options"], instruction_text=session["goal"]["instruction_text"])
++                            url = f'{self.base_url}/done/{session_id}/{session["asin"]}/{session["options"]}'
++                    else:
++                        # If "buy now" clicked, calculate reward and flag session as terminated
++                        html, url, reward, reward_detail, purchased_product, goal, options = self.done(session_id, **kwargs)
++                        status['reward'] = reward
++                        status['reward_detail'] = reward_detail
++                        status['done'] = True
++                        status['purchase'] = self.get_purchase_info(purchased_product, options)
++                        status['goal'] = goal
++                        status['termination_reason'] = reward_detail.get(
++                            "termination_reason", "environment_done"
++                        )
++                        status['reward_valid'] = reward_detail.get("reward_valid", True)
+                 elif clickable_name == BACK_TO_SEARCH.lower():
+                     # Return to the search form without erasing trajectory-level
+                     # progress, explored queries, or opened products.
+--- a/environment/web_agent_site/engine/observation.py
++++ b/environment/web_agent_site/engine/observation.py
+@@ -50,6 +50,8 @@
+         "search_available": bool(available_actions.get("has_search_bar")),
+         "actions": clickables,
+     }
++    if session.get("purchase_guard_feedback"):
++        state["purchase_guard"] = dict(session["purchase_guard_feedback"])
+     if page_type == "search_results":
+         all_asins = session.get("search_result_asins") or []
+         page_asins = session.get("current_page_asins") or []
+--- a/agent/shopping_grpo/environment/observation.py
++++ b/agent/shopping_grpo/environment/observation.py
+@@ -31,7 +31,10 @@
+ 
+ 
+ def _footer(state):
+-    actions = _list(state.get("actions"))
++    # Action strings are executable identifiers, not display prose.
++    # Preserve whitespace so the footer, option list and server agree.
++    raw_actions = state.get("actions")
++    actions = [value for value in raw_actions if isinstance(value, str) and value.strip()] if isinstance(raw_actions, list) else []
+     return [
+         f"搜索功能是否可用: {bool(state.get('search_available'))}",
+         "可点击的按钮: " + json.dumps(actions, ensure_ascii=False),
+@@ -66,6 +69,11 @@
+             lines.append("content: " + _text(state.get("content")))
+     elif page_type != "terminal":
+         raise StructuredObservationError(f"unsupported page_type: {page_type!r}")
++    feedback = state.get("purchase_guard")
++    if isinstance(feedback, Mapping):
++        # Whitelist public diagnostic fields, never echo an arbitrary payload.
++        public = {key: feedback[key] for key in ("version", "status", "missing_axes", "attempt", "max_attempts", "reason", "message") if key in feedback}
++        lines.append("purchase_guard: " + json.dumps(public, ensure_ascii=False))
+     return "\n".join(lines) + "\n\n" + "\n".join(_footer(state))
+ 
+ 
+--- a/agent/shopping_grpo/training/grpo/adapter/tools.py
++++ b/agent/shopping_grpo/training/grpo/adapter/tools.py
+@@ -111,6 +111,9 @@
+                 infrastructure_invalid=True,
+             )
+             return ToolResponse(text=f"Error: ShopSimulator tool execution failed: {exc}"), 0.0, {"error": state["error"]}
++        feedback = (result.get("observation_state") or {}).get("purchase_guard")
++        if isinstance(feedback, dict):
++            step["purchase_guard"] = {key: feedback[key] for key in ("version", "status", "missing_axes", "attempt", "max_attempts", "reason") if key in feedback}
+         state["consecutive_guard_rejections"] = 0
+         if step["done"]:
+             state["done"] = True
+--- a/agent/shopping_grpo/training/grpo/adapter/agent_loop.py
++++ b/agent/shopping_grpo/training/grpo/adapter/agent_loop.py
+@@ -282,6 +282,7 @@
+             output.extra_fields["shopping"] = {
+                 "task_id": task_id,
+                 "steps": len(state["steps"]),
++                "purchase_guard_events": [step["purchase_guard"] for step in state["steps"] if "purchase_guard" in step],
+                 "actions": [
+                     {"tool": step["tool"], "parameters": step["parameters"]}
+                     for step in state["steps"]
+--- a/environment/web_agent_site/engine/purchase_guard.py
++++ b/environment/web_agent_site/engine/purchase_guard.py
+@@ -0,0 +1,55 @@
++"""Purchase-completeness guard using product metadata only, never task answers."""
++
++VERSION = "purchase-guard-v1"
++
++
++def inspect_purchase(product, selected_options):
++    from web_agent_site.engine.variant_price import option_axes, resolve_variant_price
++
++    price = resolve_variant_price(product, selected_options)
++    missing = []
++    if price.get("method") == "effective_price_axis_unselected":
++        canonical = price["evidence"]["effective_price_axis"]
++        axis = option_axes(product)["axes"].get(canonical)
++        if axis is not None:
++            missing.append(axis["source_axis"])
++    return {"version": VERSION,
++            "status": "missing_options" if missing else "ready" if price["status"] == "pass" else "metadata_unverifiable",
++            "missing_axes": missing, "price_method": price["method"]}
++
++
++def guard_purchase(server, session_id, *, enabled=True, max_attempts=3):
++    """None means proceed with the original purchase, including metadata errors."""
++    if not isinstance(max_attempts, int) or isinstance(max_attempts, bool) or not 1 <= max_attempts <= 10:
++        raise ValueError("max_attempts must be an integer in [1,10]")
++    session = server.user_sessions[session_id]
++    if not enabled:
++        return None
++    product = server.product_item_dict[session["asin"]]
++    readiness = inspect_purchase(product, session.get("options") or {})
++    if readiness["status"] != "missing_options":
++        return None
++    count = session.get("purchase_guard_incomplete_attempts", 0) + 1
++    session["purchase_guard_incomplete_attempts"] = count
++    exhausted = count >= max_attempts
++    feedback = {**readiness, "status": "exhausted" if exhausted else "rejected",
++                "attempt": count, "max_attempts": max_attempts,
++                "reason": "incomplete_purchase_limit" if exhausted else "missing_purchase_options",
++                "message": ("缺少必要规格，购买未执行。请从当前页面补选：" + "、".join(readiness["missing_axes"])
++                            + f"。不完整购买第{count}/{max_attempts}次。"
++                            + ("已达到上限，本任务以失败结束。" if exhausted else "请补选后再购买；也可以返回搜索其他商品。"))}
++    session["purchase_guard_feedback"] = feedback
++    session.setdefault("purchase_guard_history", []).append(dict(feedback))
++    if not exhausted:
++        return {"feedback": feedback, "result": None}
++    from web_agent_site.engine.comparators import FAIL, comparison
++    from web_agent_site.engine.reward import DEFAULT_REWARDS, RewardResult
++
++    reward = server.environment_config.get("reward", {}).get("wrong_purchase", DEFAULT_REWARDS["wrong_purchase"])
++    result = RewardResult(reward=float(reward), reward_type="wrong_purchase", reward_valid=True,
++                          termination_reason="wrong_purchase", target_asin_match=False,
++                          hard_gates={"purchase_completeness": comparison(
++                              FAIL, comparator=VERSION, required=readiness["missing_axes"], actual=dict(session.get("options") or {}),
++                              source_field="public_product_options")}, weighted_score=0.0,
++                          evidence={"purchase_guard": feedback, "target_identity_evaluated": False})
++    return {"feedback": feedback, "result": result}

@@ -86,9 +86,11 @@ def select(server, value="黑色"):
 
 def public_state(server):
     session = server.user_sessions["s"]
+    product = server.product_item_dict[session["asin"]]
+    values = [value for options in product.get("options", {}).values() for value in options]
     return web.build_observation_state(page_type="terminal" if session["done"] else "product_detail", session=session,
                                        product_item_dict=server.product_item_dict,
-                                       available_actions={"has_search_bar": False, "clickables": ["Buy Now", "黑色", "白色", "Back to Search"]})
+                                       available_actions={"has_search_bar": False, "clickables": ["Buy Now", *values, "Back to Search"]})
 
 
 class GuardBehaviorTest(unittest.TestCase):
@@ -291,8 +293,8 @@ class EvaluationAdapterTest(unittest.TestCase):
 
 
 class EnvironmentStepTest(unittest.TestCase):
-    def make_env(self, max_steps=None):
-        server = fixture()
+    def make_env(self, max_steps=None, p=None):
+        server = fixture(p)
         if max_steps is not None:
             server.max_steps = max_steps
         server.receive("s", "http://fixture/item_page/s")

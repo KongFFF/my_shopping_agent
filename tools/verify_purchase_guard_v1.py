@@ -13,11 +13,13 @@ def verify(bundle):
     manifest = json.loads((bundle / "manifest.json").read_text(encoding="utf-8"))
     if manifest["base"] != "original-upstream-not-task-contract-v2":
         raise ValueError("Wrong experimental base")
-    changes = sources(manifest["enabled"], manifest["max_incomplete_attempts"])
+    preserve = manifest.get("preserve_action_values", False)
+    changes = sources(manifest["enabled"], manifest["max_incomplete_attempts"], preserve)
     expected = {name: sha(text.encode("utf-8")) for name, (_, text) in changes.items()}
     if manifest["changed_files_sha256"] != expected:
         raise ValueError("Source receipt differs from current builder")
-    package = PACKAGE / ("enabled" if manifest["enabled"] else "disabled")
+    package_root = PACKAGE.with_name("purchase_guard_v1_1") if preserve else PACKAGE
+    package = package_root / ("enabled" if manifest["enabled"] else "disabled")
     for name, digest in expected.items():
         if sha((bundle / name).read_bytes()) != digest or sha((package / name).read_bytes()) != digest:
             raise ValueError(f"Changed overlay: {name}")

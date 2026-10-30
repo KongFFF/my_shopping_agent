@@ -23,7 +23,7 @@ def json_bytes(value):
     return (json.dumps(value, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
 
 
-def sources(enabled=True, max_attempts=3):
+def sources(enabled=True, max_attempts=3, preserve_action_values=False):
     server_path = "web_agent_site/envs/web_agent_text_env.py"
     original = (SHOP / server_path).read_text(encoding="utf-8")
     source = original
@@ -82,6 +82,14 @@ def sources(enabled=True, max_attempts=3):
         lines.append("purchase_guard: " + json.dumps(public, ensure_ascii=False))
     return "\\n".join(lines) + "\\n\\n" + "\\n".join(_footer(state))
 ''')
+    if preserve_action_values:
+        needle = '    actions = _list(state.get("actions"))\n'
+        assert source.count(needle) == 1
+        source = source.replace(needle, '''    # Action strings are executable identifiers, not display prose.
+    # Preserve whitespace so the footer, option list and server agree.
+    raw_actions = state.get("actions")
+    actions = [value for value in raw_actions if isinstance(value, str) and value.strip()] if isinstance(raw_actions, list) else []
+''')
     changes["agent/" + name] = (original, source)
     name = "shopping_grpo/training/grpo/adapter/tools.py"
     original = (UP / "src" / name).read_text(encoding="utf-8")
@@ -107,13 +115,13 @@ def sources(enabled=True, max_attempts=3):
     return changes
 
 
-def build(target, *, enabled=True, max_attempts=3):
+def build(target, *, enabled=True, max_attempts=3, preserve_action_values=False):
     if not 1 <= max_attempts <= 10:
         raise ValueError("max_attempts must be in [1,10]")
     target = target.resolve()
     if target.exists():
         raise ValueError(f"Refusing to overwrite {target}")
-    changes = sources(enabled, max_attempts)
+    changes = sources(enabled, max_attempts, preserve_action_values)
     target.mkdir(parents=True)
     ignore = shutil.ignore_patterns("data", "search_engine", "__pycache__", ".venv*", ".git", "*.log", ".ipynb_checkpoints", "outputs")
     shutil.copytree(SHOP, target / "environment", ignore=ignore)
@@ -153,6 +161,9 @@ def build(target, *, enabled=True, max_attempts=3):
                            "Metadata-unverifiable purchases retain original behavior.",
                            "Exhaustion is valid wrong_purchase at the existing configured failure reward; no actual purchase recorded.",
                            "Model and HTTP service not started by this builder."]}
+    if preserve_action_values:
+        manifest["variant"] = "purchase-guard-v1.1"
+        manifest["preserve_action_values"] = True
     env = json.loads((UP / "data/environment.json").read_text(encoding="utf-8"))
     env["product_data_sha256"] = sha(catalog_bytes)
     paths = {"observation.py": "web_agent_site/engine/observation.py", "pack_api.py": "shop_env/pack_api.py",
@@ -164,7 +175,8 @@ def build(target, *, enabled=True, max_attempts=3):
     (target / "manifest.json").write_bytes(json_bytes(manifest))
     # Publish small, reviewable source overlays. Separate on/off receipts prevent
     # accidental mixing; no files under upstream or frozen repairs are edited.
-    package = PACKAGE / ("enabled" if enabled else "disabled")
+    package_root = PACKAGE.with_name("purchase_guard_v1_1") if preserve_action_values else PACKAGE
+    package = package_root / ("enabled" if enabled else "disabled")
     package.mkdir(parents=True, exist_ok=True)
     patch = []
     for name, (old, text) in changes.items():
@@ -182,5 +194,8 @@ if __name__ == "__main__":
     parser.add_argument("--materialize", required=True, type=Path)
     parser.add_argument("--disabled", action="store_true")
     parser.add_argument("--max-attempts", default=3, type=int)
+    parser.add_argument("--preserve-action-values", action="store_true",
+                        help="Build isolated v1.1: preserve exact action strings in the observation footer")
     args = parser.parse_args()
-    print(json.dumps(build(args.materialize, enabled=not args.disabled, max_attempts=args.max_attempts), ensure_ascii=False, indent=2))
+    print(json.dumps(build(args.materialize, enabled=not args.disabled, max_attempts=args.max_attempts,
+                           preserve_action_values=args.preserve_action_values), ensure_ascii=False, indent=2))
