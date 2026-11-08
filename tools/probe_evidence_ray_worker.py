@@ -12,7 +12,7 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 
 
-def probe_worker(manifest,config,src):
+def probe_worker(manifest,config,src,env_url=None):
     sys.path.insert(0,src)
     from shopping_grpo.training.grpo.adapter.evidence import load_backend
     bindings=config['ray_kwargs']['ray_init']['runtime_env']['env_vars']
@@ -23,15 +23,21 @@ def probe_worker(manifest,config,src):
     os.environ.pop('SHOPPING_REWARD_TOOLS_DIR',None)
     os.environ.pop('SHOPPING_EVIDENCE_MANIFEST',None)
     backend=load_backend(manifest,trainer_config=config)
-    return {'ray_environment_matches':True,'backend_loaded_with_environment_removed':True,
+    result={'ray_environment_matches':True,'backend_loaded_with_environment_removed':True,
             'released_tasks':len(backend.released_ids),'held_tasks':len(backend.held_ids),
             'runtime_files_verified':backend.environment_check['runtime_files_verified'],'model_loaded':False}
+    if env_url:
+        from probe_shopsim_service import probe_slots
+        task=int(json.loads(backend.paths['train_ids'].read_text(encoding='utf-8').splitlines()[0])['task_id'])
+        result['environment_service']=probe_slots(env_url,task,slots=1)
+    return result
 
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--manifest',type=Path,required=True)
     parser.add_argument('--reward-tools-dir',type=Path,default=ROOT/'tools')
+    parser.add_argument('--env-url',help='Also reset/release one lease from the actual Ray worker (CPU only)')
     args=parser.parse_args()
     manifest=str(args.manifest.resolve());tools=str(args.reward_tools_dir.resolve())
     src=str(ROOT/'upstream/shopping-grpo-longhorizon/src')
@@ -48,7 +54,7 @@ def main():
     try:
         inner=ray.remote(num_cpus=1,num_gpus=0)(probe_worker)
         @ray.remote(num_cpus=0,num_gpus=0)
-        def outer():return ray.get(inner.remote(manifest,config,src))
+        def outer():return ray.get(inner.remote(manifest,config,src,args.env_url))
         result=ray.get(outer.remote(),timeout=180)
         print(json.dumps({'nested_ray_probe_passed':True,**result},ensure_ascii=False))
     finally:ray.shutdown()

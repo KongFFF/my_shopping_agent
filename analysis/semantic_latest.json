@@ -27,7 +27,7 @@
   "product_fact_extractor": "tools/extract_product_facts_v3.py",
   "reviewed_pilot_fact_pack": "analysis/semantic_product_facts_v2_20261107/catalog_facts.jsonl",
   "formal_training_ready": false,
-  "reason": "批次验收放行原1000题中的981题进行最多20步试跑，19题整组不可评分。用户首次有卡试跑在0/20的worker初始化阶段失败；已修复配置传递，等待云端Ray自检及新目录重试。",
+  "reason": "981题已放行20步试跑，19题整组不可评分。最新云端日志进入环境reset，5700连接被拒绝；需在实际训练实例启动并实测ShopSimulator，再用v3新目录重试。",
   "report": "analysis/semantic_batch_acceptance_20261108/批次验收与训练放行报告.md",
   "history_acceptance": {
     "report": "analysis/semantic_history_closeout_20261107/验收收尾报告.md",
@@ -94,7 +94,8 @@
     "verified_against_contracts": "analysis/semantic_batch_acceptance_20261108/contracts1000.jsonl",
     "current_reward_regression_tests": 132,
     "cpu_integration_and_release_tests": 32,
-    "gpu_trial_status": "first_batch_worker_bootstrap_failed; routing fix published; awaiting cloud Ray probe and retry"
+    "gpu_trial_status": "latest reported:0/20,session.start/reset raised ShopHttpError:[Errno111]Connection refused at127.0.0.1:5700;backend initialization was passed by this worker",
+    "environment_service_probe": "tools/probe_shopsim_service.py; then probe_evidence_ray_worker.py --env-url"
   },
   "semantic_closeout": {
     "status": "completed_under_confirmed_source_limits",

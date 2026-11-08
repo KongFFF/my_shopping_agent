@@ -69,8 +69,8 @@ def main():
         current_reward_regression_tests=132,cpu_integration_and_release_tests=receipt['cpu_integration_and_release_tests_passed'],
         training_started=receipt.get('user_gpu_trial_attempted',False),real_verl_ray_gpu_tested=False)
     if receipt.get('user_gpu_trial_attempted'):
-        latest['training_integration']['gpu_trial_status']='first_batch_worker_bootstrap_failed; routing fix published; awaiting cloud Ray probe and retry'
-        latest['reason']='批次验收放行原1000题中的981题进行最多20步试跑，19题整组不可评分。用户首次有卡试跑在0/20的worker初始化阶段失败；已修复配置传递，等待云端Ray自检及新目录重试。'
+        latest['training_integration']['gpu_trial_status']=receipt.get('user_gpu_trial_status','GPU trial reported; full training validation pending')
+        latest['reason']='批次验收放行原1000题中的981题进行最多20步试跑，19题整组不可评分。用户GPU试跑仍待完整验证；最新失败位置见training_integration.gpu_trial_status。重试前需通过当前实例的环境服务与Ray自检。'
     dump(latest_path,latest)
     print(json.dumps({'pilot_training_ready':True,'released_tasks':len(backend.released_ids),
                       'held_tasks':len(backend.held_ids),'formal_training_ready':False,'total_tests_passed':total_tests}))
