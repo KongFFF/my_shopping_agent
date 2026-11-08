@@ -201,6 +201,10 @@ class TrainingEvidenceBackend:
             path = (ROOT / rel).resolve()
             if not path.is_relative_to(ROOT) or sha256(path) != expected:
                 raise ValueError(f'Frozen reward dependency mismatch: {rel}')
+        # A manifest file can match its frozen hash while declaring stale
+        # hashes for the real environment. Reject that before GPU preflight.
+        from semantic_environment_preflight import check_environment
+        self.environment_check=check_environment(self.paths['environment'],UPSTREAM,sha256)
         self.contracts = {r['task_id']: r for r in rows(self.paths['contracts'])}
         self.registry = {r['task_id']: r for r in rows(self.paths['registry'])}
         self.train_ids = {int(r['task_id']) for r in rows(self.paths['train_ids'])}
@@ -346,6 +350,7 @@ def main():
                           'signed_tasks': len(backend.approved_ids), 'training_released_tasks': len(backend.released_ids),
                           'held_tasks': len(backend.train_ids-backend.released_ids),
                           'release_scope': backend.manifest.get('release_scope'),
+                          **backend.environment_check,
                           'pilot_training_ready': bool(backend.batch_release),
                           'max_optimizer_steps': backend.batch_release['max_optimizer_steps'] if backend.batch_release else None,
                           'formal_training_ready': backend.approved_ids == backend.train_ids}))

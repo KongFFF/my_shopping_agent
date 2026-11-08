@@ -14,7 +14,7 @@ def main():
     receipt=json.loads((OUT/'verification.json').read_text(encoding='utf-8'))
     if receipt['regression_tests_passed']!=132 or receipt['cpu_integration_and_release_tests_passed']<31:
         raise ValueError('Missing completed regression/CPU test receipt')
-    total_tests=receipt['regression_tests_passed']+receipt['cpu_integration_and_release_tests_passed']
+    total_tests=receipt['regression_tests_passed']+receipt['cpu_integration_and_release_tests_passed']+receipt.get('environment_sync_regression_tests_passed',0)
     certificate_path=OUT/'pilot_release.json'
     certificate=json.loads(certificate_path.read_text(encoding='utf-8'))
     # Audit metadata name was clarified after the tests. The scoring formulas,

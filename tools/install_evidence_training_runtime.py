@@ -1,8 +1,9 @@
 """Install the main-repo's frozen code snapshot over the pinned submodule.
 
-Only the eight named source/config files may be written. Unknown local edits
+Only the named source/config files may be written. Unknown local code edits
 require --backup-existing and are preserved byte-for-byte under outputs/.
-No training, dataset, environment manifest or model file is changed.
+Environment metadata accepts only the known baseline or confirmed hash fix.
+No training, dataset or model file is changed.
 """
 import argparse
 import hashlib
@@ -15,7 +16,7 @@ ROOT=Path(__file__).resolve().parents[1]
 PACKAGE=ROOT/'experiments/evidence_training_runtime_v1'
 UPSTREAM=ROOT/'upstream/shopping-grpo-longhorizon'
 FILES={
- 'configs/agent_loop.yaml','configs/grpo.yaml','pyproject.toml',
+ 'configs/agent_loop.yaml','configs/grpo.yaml','pyproject.toml','data/environment.json',
  'scripts/check_grpo_runtime.py','scripts/train_grpo.py',
  'src/shopping_grpo/training/grpo/adapter/agent_loop.py',
  'src/shopping_grpo/training/grpo/adapter/tools.py',
@@ -23,6 +24,13 @@ FILES={
 
 
 def sha(data):return hashlib.sha256(data.replace(b'\r\n',b'\n')).hexdigest()
+
+
+def changed_paths(before,after,prefix=''):
+    if isinstance(before,dict) and isinstance(after,dict):
+        return [p for key in sorted(set(before)|set(after))
+                for p in changed_paths(before.get(key),after.get(key),prefix+'/'+key)]
+    return [] if before==after else [prefix or '/']
 
 
 def inspect(target,package=PACKAGE):
@@ -38,6 +46,13 @@ def inspect(target,package=PACKAGE):
         data=source.read_bytes()
         if sha(data)!=entry['sha256_lf']:raise ValueError('Snapshot fingerprint mismatch: '+rel)
         before=destination.read_bytes() if destination.exists() else None
+        if rel=='data/environment.json' and before is not None:
+            desired=json.loads(data.decode('utf-8'));baseline=json.loads(data.decode('utf-8'))
+            baseline['runtime_files_sha256']['web_agent_text_env.py']='448f5ec31fe5a71d1e43376d42cd84787a0e48fe96a8032fc0383f65e5928ea2'
+            try:current=json.loads(before.decode('utf-8'))
+            except (ValueError,UnicodeError) as exc:raise ValueError('Invalid local environment.json; nothing written') from exc
+            if current!=desired and current!=baseline:
+                raise ValueError('Unrecognized environment.json changes; nothing written. Different fields: '+', '.join(changed_paths(current,desired)))
         value=sha(before) if before is not None else None
         state='installed' if value==entry['sha256_lf'] else 'base' if value==entry['base_sha256_lf'] else 'local_changes'
         plan.append({'path':rel,'destination':destination,'data':data,'before':before,'state':state})
@@ -73,7 +88,8 @@ def install(target=UPSTREAM,package=PACKAGE,*,backup_existing=False,backup_root=
                 elif p['destination'].exists():p['destination'].unlink()
             raise
     return {'installed':True,'changed_files':[p['path'] for p in pending],
-            'backup':str(backup) if backup else None,'data_or_models_changed':False}
+            'backup':str(backup) if backup else None,'datasets_or_models_changed':False,
+            'environment_metadata_changed':any(p['path']=='data/environment.json' for p in pending)}
 
 
 def main():
