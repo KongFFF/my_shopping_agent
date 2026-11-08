@@ -14,7 +14,8 @@ def main():
     receipt=json.loads((OUT/'verification.json').read_text(encoding='utf-8'))
     if receipt['regression_tests_passed']!=132 or receipt['cpu_integration_and_release_tests_passed']<31:
         raise ValueError('Missing completed regression/CPU test receipt')
-    total_tests=receipt['regression_tests_passed']+receipt['cpu_integration_and_release_tests_passed']+receipt.get('environment_sync_regression_tests_passed',0)
+    total_tests=(receipt['regression_tests_passed']+receipt['cpu_integration_and_release_tests_passed']
+                 +receipt.get('environment_sync_regression_tests_passed',0)+receipt.get('worker_routing_regression_tests_passed',0))
     certificate_path=OUT/'pilot_release.json'
     certificate=json.loads(certificate_path.read_text(encoding='utf-8'))
     # Audit metadata name was clarified after the tests. The scoring formulas,
@@ -33,7 +34,7 @@ def main():
         contracts_sha256_lf=sha256(OUT/'contracts1000.jsonl'),manifest_sha256_lf=sha256(OUT/'training_bundle/manifest.json'),
         original_semantic_source_unchanged=sha256(ROOT/'analysis/semantic_remaining_final_20261108/validated1000.jsonl')==
             json.loads((OUT/'sample_lock.json').read_text(encoding='utf-8'))['source_sha256'],
-        pilot_training_ready=True,formal_training_ready=False,training_started=False)
+        pilot_training_ready=True,formal_training_ready=False,training_started=receipt.get('user_gpu_trial_attempted',False))
     dump(OUT/'verification.json',receipt)
     latest_path=ROOT/'analysis/semantic_latest.json';latest=json.loads(latest_path.read_text(encoding='utf-8'))
     latest['previous_contracts']=latest.get('previous_contracts') if latest.get('contracts')=='analysis/semantic_batch_acceptance_20261108/contracts1000.jsonl' else latest['contracts']
@@ -66,7 +67,10 @@ def main():
         latest['semantic_closeout']['frozen_assets_valid_at_previous_stage']=latest['semantic_closeout'].pop('frozen_assets_valid')
     latest['training_integration'].update(verified_against_contracts=latest['contracts'],
         current_reward_regression_tests=132,cpu_integration_and_release_tests=receipt['cpu_integration_and_release_tests_passed'],
-        training_started=False,real_verl_ray_gpu_tested=False)
+        training_started=receipt.get('user_gpu_trial_attempted',False),real_verl_ray_gpu_tested=False)
+    if receipt.get('user_gpu_trial_attempted'):
+        latest['training_integration']['gpu_trial_status']='first_batch_worker_bootstrap_failed; routing fix published; awaiting cloud Ray probe and retry'
+        latest['reason']='批次验收放行原1000题中的981题进行最多20步试跑，19题整组不可评分。用户首次有卡试跑在0/20的worker初始化阶段失败；已修复配置传递，等待云端Ray自检及新目录重试。'
     dump(latest_path,latest)
     print(json.dumps({'pilot_training_ready':True,'released_tasks':len(backend.released_ids),
                       'held_tasks':len(backend.held_ids),'formal_training_ready':False,'total_tests_passed':total_tests}))

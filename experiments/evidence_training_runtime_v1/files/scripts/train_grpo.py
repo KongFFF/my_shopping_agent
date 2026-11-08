@@ -20,6 +20,31 @@ DEFAULT_MODEL = ROOT / "outputs/models/sft-merged"
 DEFAULT_TRAIN_DATA = ROOT / "data/grpo/train.parquet"
 DEFAULT_VAL_DATA = ROOT / "data/grpo/validation.parquet"
 
+# Pin values before Ray serializes the config. veRL0.8's ray.init path calls
+# OmegaConf.to_container without resolve=True; lazy ${oc.env:...} strings can
+# otherwise become literal worker environment values.
+RAY_RUNTIME_KEYS = (
+    "SHOPPING_GRPO_ROOT", "SHOPPING_ENVIRONMENT_VERSION", "SHOPPING_ENV_MANIFEST",
+    "GRPO_MODEL_PATH", "GRPO_TRAIN_FILE", "GRPO_VAL_FILE", "GRPO_OUTPUT_DIR",
+    "SHOPPING_GRPO_DIAGNOSTICS_PATH", "SHOPSIM_BASE_URL", "SHOPPING_AGENT_LOOP_CONFIG",
+    "SHOPPING_TOOL_CONFIG", "SHOPPING_EVIDENCE_MANIFEST", "SHOPPING_REWARD_TOOLS_DIR",
+    "PYTHONPATH", "SHOPPING_LENGTH_SHAPING_ENABLE", "OMP_NUM_THREADS",
+    "VLLM_USE_FLASHINFER_SAMPLER", "PYTHONHASHSEED",
+)
+
+
+def ray_runtime_overrides(environment):
+    from hydra.core.override_parser.types import Quote, QuotedString
+    result = []
+    for name in RAY_RUNTIME_KEYS:
+        if name not in environment:
+            continue
+        value = environment[name]
+        if not isinstance(value, str) or "${" in value:
+            raise ValueError(f"Ray runtime binding must be a literal string: {name}")
+        result.append(f"++ray_kwargs.ray_init.runtime_env.env_vars.{name}=" + QuotedString(value, Quote.double).with_quotes())
+    return result
+
 
 def _model_has_weights(path: Path) -> bool:
     candidates = (
@@ -157,6 +182,7 @@ def build_command(args: argparse.Namespace) -> tuple[list[str], dict[str, str]]:
         f"--config-name={config.stem}",
         *overrides,
         *extra,
+        *ray_runtime_overrides(environment),
     ]
     return command, environment
 

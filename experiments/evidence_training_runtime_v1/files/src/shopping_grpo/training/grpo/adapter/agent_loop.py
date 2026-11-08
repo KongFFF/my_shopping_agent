@@ -62,6 +62,12 @@ class ShoppingToolAgentLoop(ToolAgentLoop):
         self.required_environment_version = required_environment_version
         self.reward_mode = str(reward_mode)
         self.evidence_backend = None
+        from shopping_grpo.training.grpo.adapter.evidence import configured_runtime_binding
+        configured_manifest = configured_runtime_binding(getattr(self, "config", None), "SHOPPING_EVIDENCE_MANIFEST")
+        if configured_manifest:
+            if evidence_reward_manifest and evidence_reward_manifest != configured_manifest:
+                raise ValueError("Evidence manifest disagrees with explicit trainer config")
+            evidence_reward_manifest = configured_manifest
         if evidence_reward_manifest:
             from shopping_grpo.training.grpo.adapter.evidence import load_backend
             # veRL 0.8 passes DictConfigWrap, then AgentLoopBase unwraps it

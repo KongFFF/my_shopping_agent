@@ -7,8 +7,31 @@ import sys
 from pathlib import Path
 
 
+def configured_runtime_binding(config, name):
+    value = config or {}
+    for key in ('ray_kwargs', 'ray_init', 'runtime_env', 'env_vars'):
+        value = value.get(key, {})
+    binding = value.get(name, '')
+    if not isinstance(binding, str) or '${' in binding:
+        raise ValueError('Unresolved Ray runtime binding: ' + name)
+    return binding
+
+
+def validate_literal_ray_bindings(bindings, expected):
+    for name, value in expected.items():
+        actual = bindings.get(name)
+        if not isinstance(actual, str) or '${' in actual or actual != value:
+            raise ValueError('Ray worker requires a literal launch binding for ' + name)
+
+
 def load_backend(manifest_path, trainer_config=None):
-    tools_dir = Path(os.environ.get('SHOPPING_REWARD_TOOLS_DIR', '')).resolve()
+    # The full trainer config is serialized to AgentLoopWorker explicitly.
+    # Prefer its literal path even if Ray replaces/omits the job environment.
+    configured_manifest = configured_runtime_binding(trainer_config, 'SHOPPING_EVIDENCE_MANIFEST')
+    if configured_manifest and Path(configured_manifest).resolve() != Path(manifest_path).resolve():
+        raise ValueError('Worker manifest differs from explicit trainer config')
+    binding = configured_runtime_binding(trainer_config, 'SHOPPING_REWARD_TOOLS_DIR')
+    tools_dir = Path(binding or os.environ.get('SHOPPING_REWARD_TOOLS_DIR', '')).resolve()
     if not (tools_dir / 'semantic_training_bundle.py').is_file():
         raise ValueError('Evidence reward requires SHOPPING_REWARD_TOOLS_DIR with semantic_training_bundle.py')
     if str(tools_dir) not in sys.path:

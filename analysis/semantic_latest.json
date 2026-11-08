@@ -27,7 +27,7 @@
   "product_fact_extractor": "tools/extract_product_facts_v3.py",
   "reviewed_pilot_fact_pack": "analysis/semantic_product_facts_v2_20261107/catalog_facts.jsonl",
   "formal_training_ready": false,
-  "reason": "批次验收完成；原1000题保留，981题获批参与最多20步试跑，19题按冻结源限制整组不可评分；尚未启动GPU训练或放行500步正式训练。",
+  "reason": "批次验收放行原1000题中的981题进行最多20步试跑，19题整组不可评分。用户首次有卡试跑在0/20的worker初始化阶段失败；已修复配置传递，等待云端Ray自检及新目录重试。",
   "report": "analysis/semantic_batch_acceptance_20261108/批次验收与训练放行报告.md",
   "history_acceptance": {
     "report": "analysis/semantic_history_closeout_20261107/验收收尾报告.md",
@@ -87,13 +87,14 @@
     "cpu_integration_tests": 19,
     "existing_reward_regression_tests": 79,
     "real_verl_ray_gpu_tested": false,
-    "training_started": false,
+    "training_started": true,
     "actor_queries_changed": 0,
     "tasks_removed": 0,
     "validation_policy": "native_v3_separate_metric",
     "verified_against_contracts": "analysis/semantic_batch_acceptance_20261108/contracts1000.jsonl",
     "current_reward_regression_tests": 132,
-    "cpu_integration_and_release_tests": 32
+    "cpu_integration_and_release_tests": 32,
+    "gpu_trial_status": "first_batch_worker_bootstrap_failed; routing fix published; awaiting cloud Ray probe and retry"
   },
   "semantic_closeout": {
     "status": "completed_under_confirmed_source_limits",
@@ -126,7 +127,7 @@
     "retained_actor_tasks": 1000,
     "max_optimizer_steps": 20,
     "full_training_released": false,
-    "tests_passed": 171,
+    "tests_passed": 178,
     "source_limits": "analysis/semantic_batch_acceptance_20261108/source_limitations.jsonl",
     "sample_reviews": "analysis/semantic_batch_acceptance_20261108/sample_reviews60.jsonl",
     "data_edits": "analysis/semantic_batch_acceptance_20261108/data_edits.jsonl",

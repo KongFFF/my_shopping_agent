@@ -387,6 +387,13 @@ def validate_evidence_release(config):
     sys.path.insert(0, str(tools_dir))
     from semantic_training_bundle import TrainingEvidenceBackend
     try:
+        from omegaconf import OmegaConf
+        from shopping_grpo.training.grpo.adapter.evidence import validate_literal_ray_bindings
+        raw_bindings = OmegaConf.to_container(config.ray_kwargs.ray_init.runtime_env.env_vars, resolve=False)
+        validate_literal_ray_bindings(raw_bindings, {
+            name: os.environ.get(name, "") for name in
+            ("SHOPPING_EVIDENCE_MANIFEST", "SHOPPING_REWARD_TOOLS_DIR", "PYTHONPATH")
+        })
         backend = TrainingEvidenceBackend(manifest)
         backend.require_ready(train_parquet=os.environ.get("GRPO_TRAIN_FILE"),
                               validation_parquet=os.environ.get("GRPO_VAL_FILE"))
