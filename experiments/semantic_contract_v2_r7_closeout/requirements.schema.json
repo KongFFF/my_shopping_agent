@@ -1,0 +1,770 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "shopping-semantic-requirements-v2-r7-closeout-draft"
+    },
+    "task_id": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "query": {
+      "type": "string",
+      "minLength": 1
+    },
+    "category": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "#/$defs/requirement"
+          },
+          {
+            "properties": {
+              "subtype": {
+                "enum": [
+                  "product_category"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "budget": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "#/$defs/requirement"
+          },
+          {
+            "properties": {
+              "subtype": {
+                "enum": [
+                  "total_price",
+                  "unit_price",
+                  "deposit",
+                  "balance",
+                  "processing_fee",
+                  "shipping_fee"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "functions": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "#/$defs/requirement"
+          },
+          {
+            "properties": {
+              "subtype": {
+                "enum": [
+                  "function",
+                  "purpose",
+                  "target_user",
+                  "use_environment"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "specifications": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "#/$defs/requirement"
+          },
+          {
+            "properties": {
+              "subtype": {
+                "enum": [
+                  "quantity",
+                  "attribute_count",
+                  "bundle",
+                  "components",
+                  "color",
+                  "size",
+                  "dimensions",
+                  "material",
+                  "capacity",
+                  "net_content",
+                  "compatibility",
+                  "merchant",
+                  "delivery",
+                  "warranty",
+                  "packaging",
+                  "origin",
+                  "pattern",
+                  "form_factor",
+                  "flavor",
+                  "condition",
+                  "craft",
+                  "customization",
+                  "installation_service",
+                  "composition",
+                  "style",
+                  "content",
+                  "weight",
+                  "manufacturer",
+                  "transaction_terms"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "brand": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "#/$defs/requirement"
+          },
+          {
+            "properties": {
+              "subtype": {
+                "enum": [
+                  "brand"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "model": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "#/$defs/requirement"
+          },
+          {
+            "properties": {
+              "subtype": {
+                "enum": [
+                  "product_model",
+                  "version"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "pending_mentions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "evidence": {
+            "$ref": "#/$defs/evidence"
+          },
+          "reason": {
+            "enum": [
+              "ambiguous_meaning",
+              "ambiguous_strength",
+              "unsupported_type",
+              "unsupported_unit",
+              "contradiction",
+              "undefined_tolerance",
+              "unverifiable_subjective",
+              "missing_reference_time"
+            ]
+          },
+          "importance": {
+            "enum": [
+              "required",
+              "preference",
+              "uncertain"
+            ]
+          }
+        },
+        "required": [
+          "evidence",
+          "reason",
+          "importance"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "task_id",
+    "query",
+    "category",
+    "budget",
+    "functions",
+    "specifications",
+    "brand",
+    "model",
+    "pending_mentions"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "text",
+        "start",
+        "end"
+      ],
+      "additionalProperties": false
+    },
+    "subject": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "enum": [
+            "primary_product",
+            "component",
+            "gift",
+            "compatible_target",
+            "intended_user",
+            "order"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "kind",
+        "name"
+      ],
+      "additionalProperties": false
+    },
+    "expected": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "text"
+            },
+            "value": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "text_list"
+            },
+            "values": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "type",
+            "values"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "number"
+            },
+            "value": {
+              "type": "number",
+              "minimum": 0
+            },
+            "unit": {
+              "enum": [
+                "piece",
+                "bottle",
+                "bag",
+                "box",
+                "pair",
+                "set",
+                "book",
+                "sheet",
+                "roll",
+                "tube",
+                "CNY",
+                "count",
+                "kg",
+                "g",
+                "jin",
+                "ml",
+                "l",
+                "mm",
+                "cm",
+                "m",
+                "inch",
+                "W",
+                "V",
+                "A",
+                "mAh",
+                "Ah",
+                "Wh",
+                "kWh",
+                "degree",
+                "day",
+                "month",
+                "year"
+              ]
+            }
+          },
+          "required": [
+            "type",
+            "value",
+            "unit"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "range"
+            },
+            "lower": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "minimum": 0
+            },
+            "upper": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "minimum": 0
+            },
+            "unit": {
+              "enum": [
+                "piece",
+                "bottle",
+                "bag",
+                "box",
+                "pair",
+                "set",
+                "book",
+                "sheet",
+                "roll",
+                "tube",
+                "CNY",
+                "count",
+                "kg",
+                "g",
+                "jin",
+                "ml",
+                "l",
+                "mm",
+                "cm",
+                "m",
+                "inch",
+                "W",
+                "V",
+                "A",
+                "mAh",
+                "Ah",
+                "Wh",
+                "kWh",
+                "degree",
+                "day",
+                "month",
+                "year"
+              ]
+            },
+            "lower_inclusive": {
+              "type": "boolean"
+            },
+            "upper_inclusive": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "type",
+            "lower",
+            "upper",
+            "unit",
+            "lower_inclusive",
+            "upper_inclusive"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "bundle"
+            },
+            "paid_quantity": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1
+            },
+            "gift_quantity": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            },
+            "received_quantity": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1
+            },
+            "unit": {
+              "enum": [
+                "piece",
+                "bottle",
+                "bag",
+                "box",
+                "pair",
+                "set",
+                "book",
+                "sheet",
+                "roll",
+                "tube"
+              ]
+            },
+            "same_item": {
+              "const": true
+            }
+          },
+          "required": [
+            "type",
+            "paid_quantity",
+            "gift_quantity",
+            "received_quantity",
+            "unit",
+            "same_item"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "components"
+            },
+            "items": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "quantity": {
+                    "type": [
+                      "number",
+                      "null"
+                    ],
+                    "minimum": 0
+                  },
+                  "unit": {
+                    "enum": [
+                      "piece",
+                      "bottle",
+                      "bag",
+                      "box",
+                      "pair",
+                      "set",
+                      "book",
+                      "sheet",
+                      "roll",
+                      "tube",
+                      null
+                    ]
+                  }
+                },
+                "required": [
+                  "name",
+                  "quantity",
+                  "unit"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "type",
+            "items"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "requirement": {
+      "type": "object",
+      "properties": {
+        "subtype": {
+          "enum": [
+            "attribute_count",
+            "balance",
+            "brand",
+            "bundle",
+            "capacity",
+            "color",
+            "compatibility",
+            "components",
+            "composition",
+            "condition",
+            "content",
+            "craft",
+            "customization",
+            "delivery",
+            "deposit",
+            "dimensions",
+            "flavor",
+            "form_factor",
+            "function",
+            "installation_service",
+            "manufacturer",
+            "material",
+            "merchant",
+            "net_content",
+            "origin",
+            "packaging",
+            "pattern",
+            "processing_fee",
+            "product_category",
+            "product_model",
+            "purpose",
+            "quantity",
+            "shipping_fee",
+            "size",
+            "style",
+            "target_user",
+            "total_price",
+            "transaction_terms",
+            "unit_price",
+            "use_environment",
+            "version",
+            "warranty",
+            "weight"
+          ]
+        },
+        "subject": {
+          "$ref": "#/$defs/subject"
+        },
+        "attribute": {
+          "enum": [
+            "angle",
+            "balance",
+            "billing_method",
+            "brand",
+            "color",
+            "compatibility",
+            "composition",
+            "condition",
+            "content",
+            "craft",
+            "customization",
+            "delivery",
+            "deposit",
+            "diameter",
+            "dimensions",
+            "drive_structure",
+            "effect_type_count",
+            "electric_charge",
+            "energy_capacity",
+            "face_count",
+            "flavor",
+            "form_factor",
+            "function",
+            "gear_count",
+            "gift_presence",
+            "height",
+            "included_components",
+            "installation_service",
+            "length",
+            "liquid_volume",
+            "load_capacity",
+            "manufacturer",
+            "mass",
+            "material",
+            "merchant",
+            "origin",
+            "other_feature_count",
+            "pack_count",
+            "packaging",
+            "pattern",
+            "per_variant_count",
+            "power",
+            "preset_count",
+            "processing_fee",
+            "product_category",
+            "product_model",
+            "promotion",
+            "purchase_count",
+            "purchase_mass",
+            "purchase_volume",
+            "purpose",
+            "return_shipping_reimbursement",
+            "settlement_adjustment",
+            "shipping_fee",
+            "shoe_upper_height",
+            "size",
+            "size_label",
+            "sleeve_length",
+            "storage_capacity",
+            "style",
+            "target_user",
+            "thickness",
+            "tone_type_count",
+            "total_price",
+            "unit_price",
+            "use_environment",
+            "version",
+            "voltage",
+            "warranty",
+            "wearer_height",
+            "wearer_weight_limit",
+            "width"
+          ]
+        },
+        "importance": {
+          "enum": [
+            "required",
+            "preference",
+            "uncertain"
+          ]
+        },
+        "operator": {
+          "enum": [
+            "eq",
+            "one_of",
+            "contains_all",
+            "excludes",
+            "at_least",
+            "at_most",
+            "between",
+            "matches_bundle"
+          ]
+        },
+        "expected": {
+          "$ref": "#/$defs/expected"
+        },
+        "price_basis": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "amount": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "unit": {
+                  "enum": [
+                    "piece",
+                    "bottle",
+                    "bag",
+                    "box",
+                    "pair",
+                    "set",
+                    "book",
+                    "sheet",
+                    "roll",
+                    "tube",
+                    "m",
+                    "cm",
+                    "kg",
+                    "g",
+                    "l",
+                    "ml",
+                    "m2"
+                  ]
+                }
+              },
+              "required": [
+                "amount",
+                "unit"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/evidence"
+          }
+        },
+        "review_status": {
+          "enum": [
+            "pending",
+            "approved"
+          ]
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "subtype",
+        "subject",
+        "attribute",
+        "importance",
+        "operator",
+        "expected",
+        "price_basis",
+        "evidence",
+        "review_status",
+        "id"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

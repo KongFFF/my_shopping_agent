@@ -1,0 +1,136 @@
+{
+  "2547": {"verdict":"needs_resolution","coverage":"咖啡液；170元硬预算；礼盒送礼；约350ml；附赠收纳包和吸管杯。预算及附件已保留。","findings":[
+    {"code":"schema_gap","quote":"精致礼盒包装","problem":"礼盒包装及品质较好被保留为待审，尚未成为可核验需求；不是已经覆盖完成。","suggestion":"包装与主观质量分开处理；礼盒属于可核验包装事实，品质较好须确定证据和判定标准。"},
+    {"code":"policy_gap","quote":"350ml左右","problem":"容量以原文文本保留，未发明数值范围，但程序还不能据此直接比较。","suggestion":"单独制定非预算测量值的近似解释；未确定前保留文字待审，不套预算10%。"}]},
+  "3499": {"verdict":"needs_resolution","coverage":"地暖蝶柄套阀；一寸；厚铜加厚；流量偏好；不卡水；压力表；32 PPR热熔；预算≤66。关键要求已覆盖。","findings":[
+    {"code":"dedup_review","quote":"要厚实的铜材质，得是加厚加料做","problem":"厚实铜材与加厚加料有语义重叠，当前拆成两个material项，可能重复增加满足度权重。","suggestion":"保留铜材这一独立事实，审定加厚要求的边界并合并重复部分；不是直接删除所有加厚要求。"},
+    {"code":"logical_scope","quote":"别卡水、憋水，影响暖气效果","problem":"否定对象在一个文本中保留，尚无明确的组合判定方式。","suggestion":"核验器按不卡水、不憋水理解；不要把影响暖气效果当成正向要求。原文及否定作用域一起保留。"}]},
+  "3723": {"verdict":"needs_correction","coverage":"kig系兽头眼睫毛；小狗造型；五十出头按已定规则≤54。","findings":[
+    {"code":"misclassification","quote":"小狗的造型","problem":"r002把造型归为color，属于明确误分类。","suggestion":"删除color归类；现schema无形状类型时保留待审，未来以造型属性表达。"},
+    {"code":"supported_pending","quote":"kig系兽头","problem":"适配对象被放入unsupported_type，但已有compatibility可表达。","suggestion":"提取为必需的适配kig系兽头；保留原文，不把kig当品牌或产品型号。"}]},
+  "3876": {"verdict":"needs_resolution","coverage":"户外及车载移动电源；1800W；110/220V转换；至少达到1度储能；预算≤3190。主要要求保留。","findings":[
+    {"code":"measurement_scope","quote":"储能容量达到1度电","problem":"达到关系仅保留在文本，能源容量单位未被schema覆盖；不能拿eq文本当数值相等。","suggestion":"补充能量单位和属性对象后表达储能达到阈值；1800W功率与110/220V电压分别核验，禁止混成容量。"}]},
+  "3885": {"verdict":"pass_draft","coverage":"助听器；老年人及耳鸣用途；隐蔽佩戴；降噪；必需绿色；预算≤3300，未发现明显遗漏或强弱错误。","findings":[]},
+  "4971": {"verdict":"needs_correction","coverage":"14mm小轮车火箭筒；超轻；碳塑；一对；带垫圈；预算按既定政策≤110。","findings":[
+    {"code":"strength_error","quote":"价格在100元左右的","problem":"r005预算被标成preference；左右只描述金额容差，不表示预算可忽略。","suggestion":"预算改required，上限110保持不变。"},
+    {"code":"omission","quote":"超轻","problem":"超轻只混在产品类别名称中，未形成独立可核验属性。","suggestion":"类别保留火箭筒，轻量需求另列；无重量阈值时保留定性要求，不自行补克数。"}]},
+  "5598": {"verdict":"invalid_output","coverage":"胜邪剑；龙泉产地；花纹钢；刃长≤35cm；八棱面；铜柄；唐风；一体锻造；尖角>55°；绿色；不开刃；预算≤2000。审阅两次失败原始响应。","findings":[
+    {"code":"format_failure","quote":"刀尖要大于55度","problem":"degree不在单位枚举；specifications还错误放入function。重复请求未修正。","suggestion":"暂用待审文本或经用户确定后扩展角度单位；function放functions维度。"},
+    {"code":"numeric_relation","quote":"大于55度","problem":"模型用at_least 55，丢失严格大于的开边界。","suggestion":"应是lower=55、lower_inclusive=false；不能把≥55当>55。"},
+    {"code":"misclassification","quote":"产自浙江龙泉市","problem":"产地归为merchant；工艺归为material；八棱面归quantity，物品属性对象混乱。","suggestion":"产地、工艺、结构计数分别表达；没有合适类型时待审。类别或款式需保留胜邪，不能只剩剑。"},
+    {"code":"strength_ambiguity","quote":"不需要开刃","problem":"不需要可能表示不要求提供开刃服务，不必然等于禁止已开刃产品。","suggestion":"保留否定及完整语境，先审定不要求和必须不具备的区别，不自动确立新的强弱规则。"}]},
+  "6401": {"verdict":"needs_correction","coverage":"小型UPS用于灯带摄像头断电续电；12V输出；容量约一万毫安；集成盒子；电源线和充电头偏好；预算≤143。","findings":[
+    {"code":"strength_error","quote":"价格在130左右的","problem":"r003预算被降为偏好，前句最好自带附件不应扩散到预算。","suggestion":"预算required≤143；附件仍可为preference。"},
+    {"code":"policy_gap","quote":"一万毫安比较安心","problem":"容量的原文单位不完整，且比较安心的强弱需审定；不能擅自把毫安改成毫安时。","suggestion":"保留原文并待审单位/强弱；重复的12V要求去重，明确集成结构与输出电压的对象。"}]},
+  "6547": {"verdict":"needs_correction","coverage":"香辣乐山钵钵鸡调料；家用麻辣烫冒菜；约200g一袋；赠几包约2g蘸料；预算≤15。","findings":[
+    {"code":"bundle_error","quote":"能赠送几包蘸料","problem":"r007捏造paid=1、gift=0的bundle，与明确要求赠料冲突。未知赠品数不等于0。","suggestion":"移除伪造bundle；保留有蘸料赠品，数量不明待审；每包约2g绑定赠品，不是主商品净含量。"},
+    {"code":"strength_error","quote":"规格在200克左右","problem":"近似规格被自动标preference，原文未说可选。","suggestion":"保留必需的近似规格，容差另定；口味地道的主观核验标准也需待审。"}]},
+  "6893": {"verdict":"invalid_output","coverage":"婴幼儿爬行加厚地垫；防摔；夏季不热；粉色；按房间裁剪定制；客厅用；预算≤264。两次响应均审阅。","findings":[
+    {"code":"format_failure","quote":"可按照房间实际尺寸进行裁剪定制","problem":"r007同时用于客厅使用和定制规格，ID重复导致失败。","suggestion":"程序可在独立审计层重编号，但不应静默改变原始响应；ID不是模型需要推理的语义。"},
+    {"code":"misclassification","quote":"加厚款","problem":"加厚被归material；定制被归size。语义文字虽保留，类型错误会妨碍核验。","suggestion":"厚度是尺寸/结构属性；按需裁剪是定制能力，不是具体尺码。"}]},
+  "7454": {"verdict":"needs_correction","coverage":"美容院点痣笔；电离子激光去痣；斑点和疣；30档；预算≤440。","findings":[
+    {"code":"measurement_scope","quote":"30个不同档位","problem":"r006成为quantity=30 piece，丢失计数对象，可能被当成买30支。","suggestion":"表达档位数=30；现schema可先用function文本30个档位，不要伪装购买数量。"}]},
+  "7861": {"verdict":"needs_correction","coverage":"韩国邮寄女款跑鞋；厚底；久站舒适；透气不闷；百搭；36号；九百多预算。","findings":[
+    {"code":"budget_policy_error","quote":"九百多块钱","problem":"上限909是把出头规则套到多字上；九百多的政策未确定。","suggestion":"撤销909的已确定数值，保留预算原文待用户确定；不能自动当作900出头。"},
+    {"code":"supported_pending","quote":"从韩国邮寄的","problem":"发货来源被标unsupported，已有delivery可保留完整文本。","suggestion":"归配送约束，不等于韩国产地；百搭属于主观风格要求可待审。"}]},
+  "8181": {"verdict":"needs_correction","coverage":"牙医练习备牙打磨机；韩国产；主机、车针、转换头、手柄；价格不低于340。","findings":[
+    {"code":"misclassification","quote":"韩国生产","problem":"产地错误归merchant。","suggestion":"保留产地约束待类型完善；不把韩国当商家。"},
+    {"code":"invented_quantity","quote":"由主机、高速车针、转换头和手柄组成","problem":"四个附件均被补成数量1，原文只明确组成名称。","suggestion":"组件名称完整保留；数量未知不要猜。价格下限≥340忠于原文，不因不常见而改成上限。"}]},
+  "8784": {"verdict":"needs_correction","coverage":"电/木吉他效果器；踏板鼓机；节奏；至少80预设、20多失真、4种音箱音色；赠品；顺丰；预算≤409。","findings":[
+    {"code":"measurement_scope","quote":"预设音色库至少80个","problem":"80预设、20多失真、4音色均映射成没有计数对象的购买quantity/piece。","suggestion":"三个计数分别绑定预设、效果类型和音色类型，不能互相替代或映射到购买件数。"},
+    {"code":"numeric_relation","quote":"20多种失真类效果","problem":"至少20含20，未保留多于20的含义；4种也被放宽为至少4。","suggestion":"保留20多和4种的原文关系，未确定严格/最低要求前待审，勿擅自更换比较符。"},
+    {"code":"supported_pending","quote":"能赠送一些礼品","problem":"有赠品的存在性要求被标unsupported。","suggestion":"用components文本记录存在赠品，具体种类数量未知；不捏造gift_quantity。"}]},
+  "9286": {"verdict":"needs_correction","coverage":"氯氟氰菊酯粉状杀虫剂；三类虫害；室内外；原文大概一100包；预算≤495。","findings":[
+    {"code":"strength_error","quote":"预算的价钱在450元左右","problem":"预算被标preference。","suggestion":"预算required≤495。"},
+    {"code":"omission","quote":"粉状","problem":"粉状剂型未提取也未待审。","suggestion":"保留剂型事实，暂无类型则待审；大概一100包疑有录入错误，标歧义而非直接当偏好或擅改100。"}]},
+  "9294": {"verdict":"needs_correction","coverage":"内蒙古真空全套香辣羊杂；热食煮汤夜宵；每袋250g；两袋；买一送一；预算≤77。","findings":[
+    {"code":"strength_error","quote":"预算70元左右","problem":"预算被标preference。","suggestion":"预算required≤77。"},
+    {"code":"bundle_error","quote":"要两袋，要有买一送一的优惠","problem":"两袋与买赠均用piece，未表达购买数和最终到手数之间的关系。真空包装还误归material。","suggestion":"单位保留bag；确认两袋是到手总数还是付费数；买赠只按明示1送1记录，主商品包装与净重分开。"},
+    {"code":"schema_gap","quote":"要香辣味的","problem":"产地、全套部件和味型进入待审，不能当作已满足。","suggestion":"味型与产地补充表达；全套具体组成未知应待审，不猜羊杂部位。"}]},
+  "10086": {"verdict":"needs_correction","coverage":"送男友鼻烟壶；乌木竹节雕刻；非遗描述；配半世纪薄荷味；益德成旗舰店；≤400。","findings":[
+    {"code":"misclassification","quote":"薄荷香味","problem":"薄荷香味被当color。","suggestion":"气味不等于颜色；与配个半世纪的合并上下文待审，不能拆掉商品/香型所属对象。"},
+    {"code":"schema_gap","quote":"雕成一节节竹子模样","problem":"形状、雕刻工艺及半世纪上下文被保留待审。","suggestion":"补充造型/工艺表达；半世纪可能是商品名等，不应猜50年或直接当型号。非遗表述是否硬要求需单独审定。"}]},
+  "11552": {"verdict":"needs_correction","coverage":"老人防走失牌；挂脖；文字定制；绳红、牌金；预算≤44。","findings":[
+    {"code":"component_scope","quote":"绳子要红色的，牌子要金色的","problem":"两个color期望值只剩红色/金色，未显式绑定绳子和牌子；证据保留对象但评分不能只比较颜色集合。","suggestion":"期望文字保留绳子=红色、牌子=金色；未来字段增加部件作用域后分别比较，禁止交换颜色仍得分。"}]},
+  "11639": {"verdict":"needs_correction","coverage":"家用纯铝蜂窝复合板；室内外；降噪；墙顶及门；工厂直营；定制；≤80。","findings":[
+    {"code":"misclassification","quote":"可以跟客服沟通进行定制","problem":"定制能力被归delivery，而非配送事实。","suggestion":"归function定制能力或待新定制类型，不改变工厂直营的merchant；80元未明示单价，不擅补每平米。"}]},
+  "11955": {"verdict":"needs_correction","coverage":"彩礼礼金手提包；喜庆红；单独福字；大容量；帆布结实；预算≤49.5。","findings":[
+    {"code":"misclassification","quote":"单独的福字","problem":"福字图案被当color；结实被当material。","suggestion":"红色仍归color，福字归图案待审；帆布是材质，结实是耐用性定性要求，分别处理。"}]},
+  "12126": {"verdict":"needs_resolution","coverage":"硬碳钢细直条；约1m；弹性；5根；规格≤0.5mm；包邮；总预算≤20。","findings":[
+    {"code":"policy_gap","quote":"一米左右","problem":"长度被保留待审，没有捏造容差；其本身可表达，但左右的范围未定义。","suggestion":"保留必需约1m长度，统一非预算容差后数值化。0.5mm是规格，原文未明说直径，不擅补属性轴。"}]},
+  "12134": {"verdict":"needs_correction","coverage":"浴室面膜；舒缓不红肿；补水锁水水嫩弹性提亮清洁；≤80g；预算≤165。","findings":[
+    {"code":"strength_error","quote":"价格在150元左右","problem":"价格被当preference，原文无非强制表述。","suggestion":"预算required≤165；保留各效果及净含量上限，近义效果后续做去重核对。"}]},
+  "12459": {"verdict":"needs_correction","coverage":"运动场馆窗帘；遮光分隔；标识定制；蓝色；按长度每米收费；约50元/米。","findings":[
+    {"code":"strength_error","quote":"每米价格在50元左右","problem":"单价被标preference。","suggestion":"单价required；金额按已定政策≤55，但不是整单总价55。"},
+    {"code":"price_basis","quote":"每米价格","problem":"unit_price虽有分类，数值单位仅CNY，缺每米的计价分母；计价方式被放待审。","suggestion":"金额、计价单位m和数量/总价关系一起表达；未给总长度时不能推总价。"}]},
+  "12697": {"verdict":"needs_correction","coverage":"牛羊猪口蹄相关用途的外用喷剂；直接喷伤口；20元一瓶。","findings":[
+    {"code":"misclassification","quote":"一瓶装的","problem":"瓶装被归delivery，不是配送服务。","suggestion":"归包装/数量单位，单价按每瓶保留计价基准；eq20是否作为预算上限尚需价格政策审定，不自动改。"},
+    {"code":"price_basis","quote":"20元一瓶装的","problem":"unit_price缺每瓶分母，若只是20 CNY会丢失比较基准。","suggestion":"将价格对象与bottle绑定，不能按整箱或整单20元核验。"}]},
+  "12748": {"verdict":"needs_correction","coverage":"准孕妇水乳霜三件套；水中羊初乳；自然无添加；补水保湿改善发黄；买一送一；预算≤726。","findings":[
+    {"code":"strength_error","quote":"预算在660元左右的","problem":"预算被当preference。","suggestion":"required≤726。"},
+    {"code":"bundle_error","quote":"三件套化妆品，是水乳霜的组合","problem":"r003水乳霜组合之外又建三件套数量3的组件项，可能成为三套/重复计分；买一送一用piece丢失套级别。","suggestion":"水乳霜组成一个套装；促销按套buy1gift1核验，不能把送一件和送一套视为同等。"},
+    {"code":"component_scope","quote":"护肤水中含有羊的初乳","problem":"羊初乳material没有保留必须位于护肤水这一对象。","suggestion":"绑定护肤水成分；不能只在霜里有初乳就满足。"}]},
+  "12769": {"verdict":"needs_correction","coverage":"电动晾衣架；灯照明；伸缩嵌入式；遥控升降；升降杆象牙白；薄一体；组装和质保；额外10多个铝衣架；≤1500。","findings":[
+    {"code":"component_scope","quote":"再配置10多个铝制晾衣架","problem":"r010数量和r011铝制未绑定额外手动衣架，可能被当电动主架的购买数量/材质。","suggestion":"建立额外衣架组件及其数量、材质关系；升降杆颜色也绑定部件。"},
+    {"code":"misclassification","quote":"要能帮忙组装","problem":"安装组装服务被归delivery；可伸缩与嵌入安装也不能简单视为尺码或兼容。","suggestion":"分别保留结构能力、安装方式与安装服务；长期质保不自造年限。"}]},
+  "12852": {"verdict":"needs_correction","coverage":"豆制蛋白肉；安徽阜阳；商家自制；少盐无添加；五斤装；预算≤27.5。","findings":[
+    {"code":"strength_error","quote":"预算在二十五块钱左右","problem":"预算被当preference。","suggestion":"预算required≤27.5。"},
+    {"code":"misclassification","quote":"带有少量的盐","problem":"少盐归net_content，五斤包装归quantity；成分与净重混淆。","suggestion":"少盐与不加添加剂属于配方/成分，五斤是净含量；产地仍需专门表达，不把商家自制等同产地。"}]},
+  "13045": {"verdict":"needs_correction","coverage":"小洗衣机；洗内裤袜子；折叠便携；自动清洗甩干；小黄鸭图案；预算≤88。","findings":[
+    {"code":"strength_error","quote":"价格80元左右即可","problem":"预算被当preference。","suggestion":"预算required≤88；即可不是放弃约束。"},
+    {"code":"misclassification","quote":"可爱小黄鸭的图案","problem":"图案被当color，不能推断整机必须黄色。","suggestion":"图案单独待审或补类型；颜色字段不应塞小黄鸭。"}]},
+  "13946": {"verdict":"invalid_output","coverage":"春秋宽松男运动裤；李宁最新款；黑色；新潮设计；散热；3XL；预算≤660。两次响应均审阅。","findings":[
+    {"code":"format_failure","quote":"最新出的款式","problem":"version放在specifications不被允许；r002还同时用于brand与使用环境，第一条schema错误遮住ID错误。","suggestion":"版本归model或待审相对时间；ID由程序生成，不因移动维度丢需求。"},
+    {"code":"omission","quote":"宽松运动裤","problem":"expected类别缩成运动裤，宽松仅在证据中，未形成独立要求。","suggestion":"宽松剪裁单独表达；最新须有时间基准，不由程序猜具体年份。"}]},
+  "14222": {"verdict":"needs_correction","coverage":"户外儿童上衣；约110cm身高；中性款；凉感透气；绿色；插肩长袖偏好；预算≤38.5。","findings":[
+    {"code":"strength_error","quote":"价格在35元左右","problem":"预算被当preference；前面的希望作用于插肩长袖，不能延伸到预算。","suggestion":"预算required≤38.5；插肩设计/长袖偏好保留。"},
+    {"code":"misclassification","quote":"带有插肩设计的长袖","problem":"剪裁与袖长组合被放size，不能当尺码。","suggestion":"保持设计偏好并分清款式、袖长和适配身高；不把凉感直接推断为具体面料。"}]},
+  "14894": {"verdict":"pass_draft","coverage":"低于脚踝鞋帮的运动鞋；青少年棒球；美津浓；白红同时包含；190码；预算≤506，主要要求保留。","findings":[],"notes":"白红必须共同满足，不是二选一；190保持原尺码文本，不擅转换成毫米。鞋帮高度以原文为准。"},
+  "15032": {"verdict":"needs_resolution","coverage":"口袋便携电吉他效果器；蓝牙鼓机节奏；黑色；耳机转接头OTG赠品；≤500。","findings":[
+    {"code":"strength_ambiguity","quote":"可以赠送耳机，转接头和OTG线","problem":"可以赠送是在提出附赠要求还是非强制期望，模型直接判required；本轮不据此断言一定错。","suggestion":"结合语用审定强弱政策；附件名称不能漏，体积小巧与放口袋便携检查是否重复计分。"}]},
+  "16177": {"verdict":"needs_correction","coverage":"一双复古中筒烟筒靴；厚底；淡灰38；秋冬；预算≤2090。","findings":[
+    {"code":"strength_error","quote":"价格在1900元左右","problem":"预算被当preference。","suggestion":"预算required≤2090。"},
+    {"code":"misclassification","quote":"厚底设计","problem":"厚底归material。复古已待审，但一双未作为数量保留。","suggestion":"厚底是结构/形态；保留数量pair=1，不猜鞋底材质；复古标准另审。"}]},
+  "16609": {"verdict":"needs_correction","coverage":"徐璐同款唇部精华一支；水润养护防干裂；蓝莓味偏好；≤20。","findings":[
+    {"code":"misclassification","quote":"我喜欢蓝莓味的","problem":"蓝莓味被归color；偏好强弱本身正确。","suggestion":"味型偏好保留待审或扩充类型，不要求产品蓝色。"},
+    {"code":"omission","quote":"找一支同款","problem":"徐璐同款及一支未结构化也未待审。","suggestion":"保留同款关联待审，不能凭常识指定ASIN；数量按一支保留。"}]},
+  "16730": {"verdict":"needs_correction","coverage":"中华v3适配压缩机泵头；H220；三件套配件；预算≤176。","findings":[
+    {"code":"strength_error","quote":"160块左右","problem":"预算被标preference。","suggestion":"预算required≤176。"},
+    {"code":"supported_pending","quote":"开中华v3","problem":"车辆适配信息放unsupported；已有compatibility可以表达。","suggestion":"车辆适配与配件自身H220型号分开；三件套只明确总件数，不能猜三个配件名称。想换这一小段证据不足以独立支持泵头用途，应扩大引用上下文。"}]},
+  "17111": {"verdict":"needs_resolution","coverage":"夏季宽松雪纺衫；微胖女生显瘦；偏黄；能穿到140斤；预算≤66。","findings":[
+    {"code":"measurement_scope","quote":"尺码能穿到140斤","problem":"size at_least 140 jin未写明是适穿者体重上限能力，绝非衣服重量或消费者最低体重。","suggestion":"明确适穿体重/尺码能力对象；可先用完整文本能穿到140斤，不能直接拿数值140与商品重量比较。"}]},
+  "17803": {"verdict":"needs_correction","coverage":"女士厨房指套；切菜或剥毛豆；最好女款2个和10个装；≤5。","findings":[
+    {"code":"supported_pending","quote":"女士专用","problem":"女士用途被列unsupported，而target_user已有对应表达。","suggestion":"必需适用对象=女士；女款偏好不要覆盖这条硬要求。"},
+    {"code":"logical_scope","quote":"2个和10个装","problem":"和被直接改成one_of二选一，但原文可能要求组合或是枚举可选包装。","suggestion":"保留原文并待审AND/OR意图，不擅自确定买两种或任一种。"}]},
+  "18008": {"verdict":"needs_correction","coverage":"机洗凝珠；除菌除螨；量不用太多、约20颗；≤30。","findings":[
+    {"code":"strength_error","quote":"量不用太多，20颗左右就够了","problem":"数量被直接标preference，数量限制被弱化。","suggestion":"保留必需的适量/约20颗要求；近似范围与量不用太多的上限含义需要另定，不能套预算10%。"}]},
+  "18609": {"verdict":"needs_resolution","coverage":"林氏家居官方旗舰店；升降学习椅；耐脏蓝色；质量好；≤700。","findings":[
+    {"code":"schema_gap","quote":"质量要好","problem":"主观质量已保留待审，尚无可复核评分标准。","suggestion":"先确定可用的商品证据或明确保持不可判定；不能静默忽略质量要求。林氏家居在此是明确店铺，不额外推品牌。"}]},
+  "19764": {"verdict":"invalid_output","coverage":"进口原版1级课本一本；核心词汇；赠APP和翻译练习册；四级及后续考试适用；无预算。两次响应均审阅。","findings":[
+    {"code":"format_failure","quote":"1级课本","problem":"version放specifications不合规；进口原版还被当material。","suggestion":"version类型只能放model；1级究竟是课程级别须保留语义，不能只因版本枚举可用就硬认版本。进口来源与原版属性不能当材质。"},
+    {"code":"strength_error","quote":"也适合之后的六级、剑桥和雅思等考试","problem":"也适合被模型降为preference，原文没有最好或可选。","suggestion":"保留这些适用需求；四级报考背景是否构成当前适用硬要求需结合全句审阅，不自动删除背景。"},
+    {"code":"component_scope","quote":"内容包含核心词汇，赠送APP和翻译练习册","problem":"书籍内容与附赠组件合成一个components项，数量一本也未显式保存。","suggestion":"核心词汇归内容/功能，APP和练习册归赠品，主书数量1单独保留。"}]},
+  "20025": {"verdict":"pass_draft","coverage":"液压油缸+拐臂组合；自动调平；适配原厂吊篮结构；同时兼容徐工中联三一；未捏造预算。","findings":[],"notes":"三品牌是兼容对象，不是所购商品必须同时有三个品牌；不得把同时兼容改成任选其一。"},
+  "20229": {"verdict":"needs_correction","coverage":"儿童紫色保暖外套；约85身高适穿；三合一可拆；秋冬；≤200。","findings":[
+    {"code":"strength_error","quote":"适合身高85左右","problem":"身高适配被降为preference。","suggestion":"作为必需的适穿对象/尺码约束；原文未写单位，勿擅自把85直接当衣长厘米。"},
+    {"code":"misclassification","quote":"三合一可拆卸款","problem":"可拆卸结构归compatibility，并非设备适配。","suggestion":"保留三合一可拆功能/结构，不映射成外部兼容。"}]},
+  "20357": {"verdict":"needs_correction","coverage":"可悬挂收纳包；透明小墨罐；约10×16cm；毛球挂绳赠品偏好；预算≤16.5。","findings":[
+    {"code":"strength_error","quote":"预算在15元左右","problem":"预算与近似尺寸都被标preference；希望只明确修饰毛球和挂绳赠品。","suggestion":"预算required≤16.5；尺寸为必需近似要求、范围待定；赠品偏好保持。"}]},
+  "21051": {"verdict":"needs_correction","coverage":"10寸双驱气轮转换套件；便携；约200kg承重；倒车；预算≤550。","findings":[
+    {"code":"strength_error","quote":"价格在500元左右","problem":"预算被标preference。","suggestion":"预算required≤550。"},
+    {"code":"numeric_relation","quote":"承重范围大约200公斤","problem":"被变成preference且at_most220kg，把预算10%容差挪到承重，并有方向颠倒风险。","suggestion":"恢复必需承重需求原文；确定承载能力的阈值解释后再结构化，不能奖励承重越低越好。"},
+    {"code":"supported_pending","quote":"双驱动气轮","problem":"双驱和气轮被整体列unsupported，function文本可先保留双驱。","suggestion":"拆分驱动结构与轮胎类型；不是只有待审就算提取完成。"}]},
+  "21100": {"verdict":"needs_resolution","coverage":"鸡用疫苗；新城疫C30株；单支装；稀释液偏好；三种使用方式；多项预防需求；预算≤22；店铺提及。","findings":[
+    {"code":"strength_ambiguity","quote":"听说兴牧康畜牧疫苗企业店不错","problem":"店铺提及被标unsupported，实际是商家建议/偏好或非约束背景，需判断而非类型缺失。","suggestion":"merchant可表达；建议标uncertain或待审强弱，不升级成必需店铺。"},
+    {"code":"measurement_scope","quote":"新城疫C30株","problem":"菌株信息放compatibility不贴切，但不能把C30仅因字母数字当型号。","suggestion":"保留品种/菌株对象文本，待决定语义类型；只审阅用户表达，不据此声称商品能满足这些效果。"}]},
+  "21120": {"verdict":"needs_correction","coverage":"07年Jeep指南者适配空调泵；原装全新；较长质保、最好三年；预算≤2750。","findings":[
+    {"code":"strength_error","quote":"2500 块左右","problem":"预算被标preference，最好三年不作用于后面的预算。","suggestion":"预算required≤2750；三年偏好保留，较长质保的基础要求另保留而非只留三年。"},
+    {"code":"misclassification","quote":"原装全新","problem":"原装来源/全新品相被当material；空调坏了的背景被另列空调工作，可能与购买用途重复。","suggestion":"原装与全新分别保留来源和品相；不要由背景额外增加无独立证据的计分项。"}]},
+  "21576": {"verdict":"pass_draft","coverage":"索尼DSC-RX0第一代；运动用；迷你；防水防尘防摔；硬上限1700未被差不多放宽，主要要求完整。","findings":[],"notes":"三防仍是组合文本，后续比较器须逐项核验；本次语义未丢失，不能据此说已经实现可执行核验。"},
+  "21998": {"verdict":"needs_correction","coverage":"退伍老兵圆领T恤；军绿；冰丝；XL；聚会用途；预算≤60.5。","findings":[
+    {"code":"omission","quote":"圆领T恤","problem":"expected类别只保留T恤，圆领仅留在证据，未成为明确需求或待审项。","suggestion":"单独保留圆领领型；不能在评分时只验证T恤就认为领型也满足。"}]},
+  "22210": {"verdict":"needs_correction","coverage":"大海浮雕装饰；可石膏；装饰框胡桃色实木；约19×19cm；桌面或玄关；≤300。","findings":[
+    {"code":"strength_error","quote":"尺寸在19x19cm左右","problem":"尺寸被降为preference，近似不等于可忽略。","suggestion":"必需的近似尺寸，容差另定；可以是石膏的强弱单独审定，不强行要求主体实木。"},
+    {"code":"component_scope","quote":"装饰框要求是胡桃色实木的","problem":"实木和胡桃色合在material里且缺部件对象，可能把主体材质误判。","suggestion":"明确框的颜色=胡桃色、框的材质=实木；主体石膏与框实木可同时满足。"}]},
+  "22560": {"verdict":"pass_draft","coverage":"男孩三合一冲锋衣；户外挡风雨；内层防静电摇粒绒；黑色偏好；≤500。主要需求与偏好正确保留。","findings":[],"notes":"核验时保留外层防护、内层面料的部件作用域；黑色是喜欢而非必需。"}
+}

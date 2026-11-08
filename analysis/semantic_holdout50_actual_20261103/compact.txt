@@ -1,0 +1,577 @@
+TASK 1167 valid=False
+最近想送朋友个小礼物，他喜欢紫檀木雕的关公鼻烟壶，关键是得配礼盒。价格别超三百，平时能拿在手里把玩。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "鼻烟壶"}
+budget total_price/total_price @本次订单 required eq {"type": "text", "value": "价格别超三百"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "送朋友个小礼物"}
+functions use_environment/use_environment @主商品 required eq {"type": "text", "value": "平时能拿在手里把玩"}
+specifications material/material @主商品 preference eq {"type": "text", "value": "紫檀木雕"}
+specifications components/included_components @主商品 required contains_all {"type": "components", "items": [{"name": "礼盒", "quantity": null, "unit": null}]}
+PENDING ambiguous_strength {"text": "他喜欢紫檀木雕的关公鼻烟壶"}
+
+TASK 1588 valid=True
+闺蜜推荐了一款适合新手的基础款双色轮廓盘，颜色为低饱和度的灰棕调，采用深浅两色搭配设计，使用起来自然不突兀，预算控制在160元以内，规格需求为8-9克。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "双色轮廓盘"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 160.0, "unit": "CNY"}
+functions target_user/target_user @新手 required eq {"type": "text", "value": "适合新手"}
+specifications color/color @主商品 required eq {"type": "text", "value": "低饱和度的灰棕调"}
+specifications attribute_count/other_feature_count @主商品 required eq {"type": "number", "value": 2, "unit": "count"}
+specifications net_content/mass @主商品 required between {"type": "range", "lower": 8, "upper": 9, "unit": "g", "lower_inclusive": true, "upper_inclusive": true}
+PENDING unverifiable_subjective {"text": "使用起来自然不突兀", "start": 44, "end": 53}
+
+TASK 2061 valid=True
+我需要一个当下流行风格的屏风，带有卡瓦斯风格的公仔图案，适用于商铺内部装饰，又能够有效分隔空间，遮挡视线，便于调整摆放位置，要求五片组合式设计，尺寸约为2米宽、1.8米高，价格区间在440至460元之间。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "屏风"}
+budget total_price/total_price @本次订单 required between {"type": "range", "lower": 440.0, "upper": 460.0, "unit": "CNY", "lower_inclusive": true, "upper_inclusive": true}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "适用于商铺内部装饰"}
+functions function/function @主商品 required eq {"type": "text", "value": "有效分隔空间"}
+functions function/function @主商品 required eq {"type": "text", "value": "遮挡视线"}
+functions function/function @主商品 required eq {"type": "text", "value": "便于调整摆放位置"}
+specifications quantity/purchase_count @主商品 required eq {"type": "number", "value": 1, "unit": "piece"}
+specifications style/style @主商品 required eq {"type": "text", "value": "当下流行风格"}
+specifications pattern/pattern @主商品 required eq {"type": "text", "value": "卡瓦斯风格的公仔图案"}
+specifications attribute_count/other_feature_count @主商品 required eq {"type": "number", "value": 5, "unit": "count"}
+specifications dimensions/width @主商品 required eq {"type": "text", "value": "2米宽"}
+specifications dimensions/height @主商品 required eq {"type": "text", "value": "1.8米高"}
+PENDING missing_reference_time {"text": "当下流行风格", "start": 5, "end": 11}
+PENDING undefined_tolerance {"text": "尺寸约为2米宽、1.8米高", "start": 72, "end": 85}
+
+TASK 2711 valid=True
+我想找一款网红款的冰粉摆摊车，用来卖一些东西，支持自选喜欢的海报，价格在400元以内。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "冰粉摆摊车"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 400.0, "unit": "CNY"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "用来卖一些东西"}
+specifications style/style @主商品 required eq {"type": "text", "value": "网红款"}
+specifications customization/customization @主商品 uncertain eq {"type": "text", "value": "支持自选喜欢的海报"}
+
+TASK 2995 valid=True
+我的预算在850块左右，想入手一款专业的羽毛球鞋，要求具备抗扭的特性，喜欢戴资颖同款的，男女皆可穿，颜色方面，我比较喜欢亮白色和绿色的组合，有合适的吗？对了，我穿的尺码是43的。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "羽毛球鞋"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 935.0, "unit": "CNY"}
+functions function/function @主商品 required eq {"type": "text", "value": "抗扭"}
+functions target_user/target_user @主商品 required eq {"type": "text", "value": "男女皆可穿"}
+specifications color/color @主商品 preference eq {"type": "text", "value": "亮白色和绿色的组合"}
+specifications size/size_label @主商品 required eq {"type": "number", "value": 43, "unit": "count"}
+model product_model/product_model @主商品 preference eq {"type": "text", "value": "戴资颖同款"}
+
+TASK 5122 valid=True
+请帮我找一款原木材质的环形焚香器皿，古风禅意，UFO造型，适合放在家中使用，价格在15元左右即可。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "环形焚香器皿"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 16.5, "unit": "CNY"}
+functions use_environment/use_environment @主商品 required eq {"type": "text", "value": "放在家中使用"}
+specifications material/material @主商品 required eq {"type": "text", "value": "原木材质"}
+specifications style/style @主商品 required eq {"type": "text", "value": "古风禅意"}
+specifications form_factor/form_factor @主商品 required eq {"type": "text", "value": "UFO造型"}
+
+TASK 5792 valid=True
+搜一下能定时还能调温的电烤炉，要带自动旋转功能的，烤的时候烟少一点不会弄得屋里都是味，价格在500块钱上下。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "电烤炉"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 550.0, "unit": "CNY"}
+functions function/function @主商品 required eq {"type": "text", "value": "定时"}
+functions function/function @主商品 required eq {"type": "text", "value": "调温"}
+functions function/function @主商品 required eq {"type": "text", "value": "自动旋转"}
+functions function/function @主商品 required eq {"type": "text", "value": "烟少一点"}
+PENDING unverifiable_subjective {"text": "不会弄得屋里都是味", "start": 33, "end": 42}
+
+TASK 6158 valid=True
+我的小宝最近喝奶有点上火，麻烦推荐一罐欧洲原装进口的菊花晶固体饮料，清热解火，很适合作为宝宝的辅食，一盒大约有200克，140元左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "菊花晶固体饮料"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 154.0, "unit": "CNY"}
+functions function/function @主商品 required eq {"type": "text", "value": "清热解火"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "作为宝宝的辅食"}
+specifications origin/origin @主商品 required eq {"type": "text", "value": "欧洲原装进口"}
+specifications net_content/mass @主商品 uncertain eq {"type": "text", "value": "一盒大约有200克"}
+PENDING ambiguous_meaning {"text": "我的小宝最近喝奶有点上火", "start": 0, "end": 12}
+PENDING undefined_tolerance {"text": "一盒大约有200克", "start": 50, "end": 59}
+
+TASK 6467 valid=True
+想找一款适合放在三轮车上可转移使用的台式烤具，适合在外边和晚上闹市出摊，能减少烟雾更绿色，用起来方便，尺寸是120*60*60且带风机的款式，价格在1900元左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "台式烤具"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 2090.0, "unit": "CNY"}
+functions use_environment/use_environment @主商品 required eq {"type": "text", "value": "放在三轮车上"}
+functions use_environment/use_environment @主商品 required eq {"type": "text", "value": "在外边和晚上闹市出摊"}
+functions function/function @主商品 required eq {"type": "text", "value": "可转移使用"}
+functions function/function @主商品 required eq {"type": "text", "value": "能减少烟雾"}
+functions function/function @主商品 required eq {"type": "text", "value": "用起来方便"}
+specifications dimensions/dimensions @主商品 required eq {"type": "text", "value": "120*60*60"}
+specifications components/included_components @主商品 required contains_all {"type": "components", "items": [{"name": "风机", "quantity": null, "unit": null}]}
+PENDING unverifiable_subjective {"text": "更绿色", "start": 41, "end": 44}
+
+TASK 6581 valid=True
+想要一瓶方便携带的婴儿爽身露喷雾，滚珠式的，用来舒缓宝宝痱子、皮肤闷热瘙痒的问题，每瓶大约有150ml，预算35元左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "婴儿爽身露喷雾"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 38.5, "unit": "CNY"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "舒缓宝宝痱子、皮肤闷热瘙痒的问题"}
+specifications quantity/purchase_count @主商品 required eq {"type": "number", "value": 1, "unit": "bottle"}
+specifications form_factor/form_factor @主商品 required eq {"type": "text", "value": "方便携带"}
+specifications form_factor/form_factor @主商品 required eq {"type": "text", "value": "滚珠式"}
+specifications capacity/liquid_volume @主商品 uncertain eq {"type": "text", "value": "每瓶大约有150ml"}
+PENDING undefined_tolerance {"text": "每瓶大约有150ml", "start": 41, "end": 51}
+
+TASK 7201 valid=False
+帮我找一款适合售卖烤鸭的餐车，还能在车上给烤鸭切片，要求采用不锈钢的材质，有增强照明的功能，日常可以驾驶餐车的随意找地方售卖，还可以适用于餐厅或酒店，价格在500-550元之间。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "餐车"}
+budget total_price/total_price @本次订单 required eq {"type": "text", "value": "价格在500-550元之间"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "适合售卖烤鸭"}
+functions function/function @主商品 required eq {"type": "text", "value": "在车上给烤鸭切片"}
+functions function/function @主商品 required eq {"type": "text", "value": "增强照明"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "日常可以驾驶餐车的随意找地方售卖"}
+functions use_environment/use_environment @主商品 required eq {"type": "text", "value": "适用于餐厅或酒店"}
+specifications material/material @主商品 required eq {"type": "text", "value": "不锈钢"}
+
+TASK 7502 valid=True
+我需要一款在牙科使用的椅子，可以自由挪动，便于外出诊疗，不用时可以折起来，便于携带，要小点的，价格不超过800元。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "椅子"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 800.0, "unit": "CNY"}
+functions use_environment/use_environment @主商品 required eq {"type": "text", "value": "在牙科使用"}
+functions function/function @主商品 required eq {"type": "text", "value": "可以自由挪动"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "便于外出诊疗"}
+functions function/function @主商品 required eq {"type": "text", "value": "不用时可以折起来"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "便于携带"}
+specifications size/size @主商品 required eq {"type": "text", "value": "小点的"}
+
+TASK 7909 valid=True
+请帮我找一款张雨绮同款的包包，颜色我想要蓝色系的，价格在80块钱左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "包包"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 88.0, "unit": "CNY"}
+specifications color/color @主商品 required eq {"type": "text", "value": "蓝色系"}
+PENDING missing_reference_time {"text": "张雨绮同款", "start": 6, "end": 11}
+
+TASK 8551 valid=False
+给我推荐一盒可以降火解热的京儿清润饮料，里面有许多可以入药的食物，富含益生元和低聚果糖，还可以缓解便便干燥的问题，一盒约有20小袋，价格在130元左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "饮料"}
+budget total_price/total_price @本次订单 required eq {"type": "text", "value": "价格在130元左右"}
+functions function/function @主商品 required eq {"type": "text", "value": "降火解热"}
+functions function/function @主商品 required eq {"type": "text", "value": "缓解便便干燥"}
+specifications quantity/purchase_count @主商品 required eq {"type": "number", "value": 1, "unit": "box"}
+specifications packaging/pack_count @主商品 required eq {"type": "number", "value": 20, "unit": "piece"}
+specifications components/included_components @主商品 required contains_all {"type": "components", "items": [{"name": "益生元", "quantity": null, "unit": null}, {"name": "低聚果糖", "quantity": null, "unit": null}]}
+PENDING ambiguous_meaning {"text": "里面有许多可以入药的食物"}
+
+TASK 8804 valid=True
+我要买一个适合展示打火机的六层展示架，每层空间的内部宽度接近5cm，价格要在80元左右，如有合适的请推荐给我。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "展示架"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 88.0, "unit": "CNY"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "适合展示打火机"}
+specifications quantity/purchase_count @主商品 required eq {"type": "number", "value": 1, "unit": "piece"}
+specifications attribute_count/other_feature_count @主商品 required eq {"type": "number", "value": 6, "unit": "count"}
+specifications dimensions/width @主商品 uncertain eq {"type": "text", "value": "接近5cm"}
+PENDING undefined_tolerance {"text": "每层空间的内部宽度接近5cm", "start": 19, "end": 33}
+
+TASK 9227 valid=True
+麻烦帮我推荐一下草本抑菌乳膏，想要买3盒，还送棉签，预估价格是40元。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "草本抑菌乳膏"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 40.0, "unit": "CNY"}
+specifications quantity/purchase_count @主商品 required eq {"type": "number", "value": 3, "unit": "box"}
+specifications components/gift_presence @主商品 required contains_all {"type": "components", "items": [{"name": "棉签", "quantity": null, "unit": null}]}
+
+TASK 10018 valid=True
+准备购买一款长度为3.6米的中通竿，调性为19调，硬度为6H，结实耐用，材质为碳素，采用内走线设计，搭配塑料轮，价格在150元左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "中通竿"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 165.0, "unit": "CNY"}
+functions function/function @主商品 required eq {"type": "text", "value": "结实耐用"}
+specifications dimensions/length @主商品 required eq {"type": "number", "value": 3.6, "unit": "m"}
+specifications content/content @主商品 required eq {"type": "text", "value": "19调"}
+specifications content/content @主商品 required eq {"type": "text", "value": "6H"}
+specifications material/material @主商品 required eq {"type": "text", "value": "碳素"}
+specifications form_factor/form_factor @主商品 required eq {"type": "text", "value": "内走线设计"}
+specifications components/included_components @主商品 required contains_all {"type": "components", "items": [{"name": "塑料轮", "quantity": null, "unit": null}]}
+
+TASK 10522 valid=True
+请推荐一款适用于冷热饮机、果汁机等饮品设备的防水密封圈配件，价格在10元以内。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "密封圈配件"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 10.0, "unit": "CNY"}
+functions function/function @主商品 required eq {"type": "text", "value": "防水"}
+specifications compatibility/compatibility @主商品 required eq {"type": "text", "value": "适用于冷热饮机、果汁机等饮品设备"}
+
+TASK 11337 valid=True
+帮我瞅瞅适合小朋友夏天穿的轻便运动鞋，要透气性好的，颜色希望是清爽的类型，比如白搭绿这种组合，看着干净又亮眼，尺码要28码的，我的预算在540块左右，别超了。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "运动鞋"}
+budget total_price/total_price @本次订单 uncertain eq {"type": "text", "value": "预算在540块左右，别超了"}
+functions target_user/target_user @小朋友 required eq {"type": "text", "value": "小朋友"}
+functions use_environment/use_environment @主商品 required eq {"type": "text", "value": "夏天"}
+functions function/function @主商品 required eq {"type": "text", "value": "透气性好"}
+specifications size/size_label @主商品 required eq {"type": "text", "value": "28码"}
+specifications color/color @主商品 preference eq {"type": "text", "value": "清爽的类型，比如白搭绿这种组合"}
+PENDING unverifiable_subjective {"text": "轻便", "start": 13, "end": 15}
+PENDING unverifiable_subjective {"text": "看着干净又亮眼", "start": 47, "end": 54}
+PENDING ambiguous_meaning {"text": "预算在540块左右，别超了", "start": 65, "end": 78}
+
+TASK 11489 valid=True
+有没有可以给床加宽的垫子？采用松木材质定制尺寸为长200cm、宽25cm、高38cm，具有折叠功能，方便收纳，价格在140元左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "垫子"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 154.0, "unit": "CNY"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "给床加宽"}
+functions function/function @主商品 required eq {"type": "text", "value": "折叠"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "方便收纳"}
+specifications material/material @主商品 required eq {"type": "text", "value": "松木"}
+specifications dimensions/length @主商品 required eq {"type": "number", "value": 200, "unit": "cm"}
+specifications dimensions/width @主商品 required eq {"type": "number", "value": 25, "unit": "cm"}
+specifications dimensions/height @主商品 required eq {"type": "number", "value": 38, "unit": "cm"}
+specifications customization/customization @主商品 required eq {"type": "text", "value": "定制尺寸"}
+
+TASK 11840 valid=True
+请帮我找一款鞋底柔软舒适、鞋头耐磨的女款增高拖鞋，还得有保护脚趾的设计，颜色为粉色，36.5码，价格在530元左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "拖鞋"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 583.0, "unit": "CNY"}
+functions function/function @主商品 required eq {"type": "text", "value": "鞋底柔软舒适"}
+functions function/function @主商品 required eq {"type": "text", "value": "鞋头耐磨"}
+functions function/function @主商品 required eq {"type": "text", "value": "保护脚趾的设计"}
+specifications color/color @主商品 required eq {"type": "text", "value": "粉色"}
+specifications size/size_label @主商品 required eq {"type": "text", "value": "36.5码"}
+
+TASK 11944 valid=True
+我想找一个2025新款的家用落地风扇，电机要进口的，颜色要紫色的，有国补优惠，可以左右自动摇头带遥控使用，有智能定时功能，风速可以三档调节，适合在120平方的大面积房间使用，有降温功能还能让室内空气循环流通，价格在120-150元之间。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "家用落地风扇"}
+budget total_price/total_price @本次订单 required between {"type": "range", "lower": 120.0, "upper": 150.0, "unit": "CNY", "lower_inclusive": true, "upper_inclusive": true}
+functions function/function @主商品 uncertain eq {"type": "text", "value": "左右自动摇头"}
+functions function/function @主商品 required eq {"type": "text", "value": "带遥控使用"}
+functions function/function @主商品 required eq {"type": "text", "value": "智能定时"}
+functions function/function @主商品 required eq {"type": "text", "value": "降温"}
+functions function/function @主商品 required eq {"type": "text", "value": "让室内空气循环流通"}
+specifications quantity/purchase_count @主商品 required eq {"type": "number", "value": 1, "unit": "piece"}
+specifications material/material @电机 required eq {"type": "text", "value": "进口"}
+specifications color/color @主商品 required eq {"type": "text", "value": "紫色"}
+specifications attribute_count/gear_count @主商品 required eq {"type": "number", "value": 3, "unit": "count"}
+specifications size/size @主商品 required eq {"type": "text", "value": "适合在120平方的大面积房间使用"}
+model version/version @主商品 required eq {"type": "text", "value": "2025新款"}
+PENDING ambiguous_meaning {"text": "有国补优惠", "start": 33, "end": 38}
+PENDING undefined_tolerance {"text": "左右自动摇头", "start": 41, "end": 47}
+
+TASK 12147 valid=True
+请帮我找一款今年刚推出的女包，可以在夏天出门拿着。包上要有若隐若现的印花纹理。颜色是米色就行，售价300块钱左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "女包"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 330.0, "unit": "CNY"}
+functions use_environment/use_environment @主商品 required eq {"type": "text", "value": "夏天出门"}
+specifications pattern/pattern @主商品 required eq {"type": "text", "value": "若隐若现的印花纹理"}
+specifications color/color @主商品 required eq {"type": "text", "value": "米色"}
+PENDING missing_reference_time {"text": "今年刚推出", "start": 6, "end": 11}
+
+TASK 12178 valid=True
+急需购置一个综合效果器，要M-VAVE品牌的，带有可用于手机和电脑内录音频的声卡，要求顺丰快递发货，价格在700元以内。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "综合效果器"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 700.0, "unit": "CNY"}
+functions function/function @声卡 required eq {"type": "text", "value": "可用于手机和电脑内录音频"}
+specifications quantity/purchase_count @主商品 required eq {"type": "number", "value": 1, "unit": "piece"}
+specifications components/included_components @主商品 required contains_all {"type": "components", "items": [{"name": "声卡", "quantity": null, "unit": null}]}
+specifications delivery/delivery @本次订单 required eq {"type": "text", "value": "顺丰快递发货"}
+brand brand/brand @主商品 required eq {"type": "text", "value": "M-VAVE"}
+
+TASK 12357 valid=True
+推荐一套电脑平车的配件。要包含梅花型接头的联轴器和橡胶圈来减缓冲击和震动，还要带有可分散压力的法兰圈。适合电子控制系统的电机使用。预算在20元左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "电脑平车的配件"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 22.0, "unit": "CNY"}
+functions function/function @橡胶圈 required eq {"type": "text", "value": "减缓冲击和震动"}
+functions function/function @法兰圈 required eq {"type": "text", "value": "可分散压力"}
+functions target_user/target_user @电子控制系统的电机 required eq {"type": "text", "value": "适合电子控制系统的电机使用"}
+specifications components/included_components @主商品 required contains_all {"type": "components", "items": [{"name": "联轴器", "quantity": null, "unit": null}, {"name": "橡胶圈", "quantity": null, "unit": null}, {"name": "法兰圈", "quantity": null, "unit": null}]}
+specifications form_factor/form_factor @联轴器 required eq {"type": "text", "value": "梅花型接头"}
+
+TASK 12362 valid=True
+需要一个相框来陈列昆虫藏品，要显得高端一些，既能当摆设装饰，也能作为礼品送人，要展开翅膀的状态，要八寸带白底的款式，尺寸为长方形，预算在65元左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "相框"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 71.5, "unit": "CNY"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "陈列昆虫藏品"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "当摆设装饰"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "作为礼品送人"}
+specifications quantity/purchase_count @主商品 required eq {"type": "number", "value": 1, "unit": "piece"}
+specifications size/size_label @主商品 required eq {"type": "text", "value": "八寸"}
+specifications color/color @主商品 required eq {"type": "text", "value": "白底"}
+specifications dimensions/dimensions @主商品 required eq {"type": "text", "value": "长方形"}
+specifications form_factor/form_factor @主商品 required eq {"type": "text", "value": "展开翅膀的状态"}
+PENDING unverifiable_subjective {"text": "要显得高端一些", "start": 14, "end": 21}
+
+TASK 12637 valid=True
+想买一款可以送女生的含金量不低于99.9%的金戒指，采用古法工艺，宫廷花丝风格款式，上有镶嵌蓝色托帕石，重量为3.32克，价格在5000元左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "金戒指"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 5500.0, "unit": "CNY"}
+functions target_user/target_user @女生 required eq {"type": "text", "value": "女生"}
+specifications material/material @主商品 required at_least {"type": "number", "value": 99.9, "unit": "count"}
+specifications craft/craft @主商品 required eq {"type": "text", "value": "古法工艺"}
+specifications style/style @主商品 required eq {"type": "text", "value": "宫廷花丝风格"}
+specifications components/included_components @主商品 required contains_all {"type": "components", "items": [{"name": "蓝色托帕石", "quantity": null, "unit": null}]}
+specifications weight/mass @主商品 required eq {"type": "number", "value": 3.32, "unit": "g"}
+
+TASK 13198 valid=True
+我想找一款来自滇南的茶类膏状物，最好是混合了金桂香气的普洱风味，直接冲泡可以快速溶化，用密封罐包装的，适合平时作为礼品拿来送人，最好罐子里是小包装方便每次使用，要有配套的袋子方便提取，一袋里面需要有两罐，价格在330-340元之间，有推荐吗？
+category product_category/product_category @主商品 required eq {"type": "text", "value": "茶类膏状物"}
+budget total_price/total_price @本次订单 required between {"type": "range", "lower": 330.0, "upper": 340.0, "unit": "CNY", "lower_inclusive": true, "upper_inclusive": true}
+functions purpose/purpose @主商品 preference eq {"type": "text", "value": "适合平时作为礼品拿来送人"}
+functions function/function @主商品 required eq {"type": "text", "value": "直接冲泡可以快速溶化"}
+specifications origin/origin @主商品 required eq {"type": "text", "value": "来自滇南"}
+specifications flavor/flavor @主商品 preference eq {"type": "text", "value": "混合了金桂香气的普洱风味"}
+specifications packaging/packaging @主商品 required eq {"type": "text", "value": "用密封罐包装"}
+specifications packaging/packaging @罐子 preference eq {"type": "text", "value": "小包装"}
+specifications components/included_components @主商品 required contains_all {"type": "components", "items": [{"name": "袋子", "quantity": null, "unit": null}]}
+specifications quantity/purchase_count @主商品 required eq {"type": "number", "value": 1, "unit": "bag"}
+specifications components/included_components @主商品 required contains_all {"type": "components", "items": [{"name": "罐", "quantity": 2, "unit": "piece"}]}
+
+TASK 13806 valid=True
+给我选一双适合秋冬季节穿的厚底短靴，鞋底带齿轮纹路的，颜色想要燕麦白的，尺码38.5，价格接近5000元的。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "短靴"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 5000.0, "unit": "CNY"}
+functions use_environment/use_environment @主商品 required eq {"type": "text", "value": "秋冬季节"}
+specifications dimensions/thickness @主商品 required eq {"type": "text", "value": "厚底"}
+specifications pattern/pattern @鞋底 required eq {"type": "text", "value": "齿轮纹路"}
+specifications color/color @主商品 required eq {"type": "text", "value": "燕麦白"}
+specifications size/size_label @主商品 required eq {"type": "number", "value": 38.5, "unit": "count"}
+PENDING undefined_tolerance {"text": "价格接近5000元", "start": 43, "end": 52}
+
+TASK 13918 valid=True
+麻烦给我推荐一款旋钮式的男款羽毛球鞋，需要具备防滑、减震和透气的特性，我可能会用来训练或者打排球，我的脚是44码的，平时比较喜欢纯白色的鞋子，预算在480块左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "羽毛球鞋"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 528.0, "unit": "CNY"}
+functions function/function @主商品 required eq {"type": "text", "value": "防滑"}
+functions function/function @主商品 required eq {"type": "text", "value": "减震"}
+functions function/function @主商品 required eq {"type": "text", "value": "透气"}
+functions purpose/purpose @主商品 uncertain eq {"type": "text", "value": "训练"}
+functions purpose/purpose @主商品 uncertain eq {"type": "text", "value": "打排球"}
+specifications form_factor/form_factor @主商品 required eq {"type": "text", "value": "旋钮式"}
+specifications size/size_label @主商品 required eq {"type": "text", "value": "44码"}
+specifications color/color @主商品 preference eq {"type": "text", "value": "纯白色"}
+PENDING ambiguous_meaning {"text": "男款", "start": 12, "end": 14}
+
+TASK 14742 valid=True
+求推荐一款能提升美甲店铺装修质感的壁挂式收纳架，要圆盘形状的，颜色选饱和度高的金色，要求分层设计能展示指甲油的，适合放在墙上的那种，价格170元左右的。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "壁挂式收纳架"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 187.0, "unit": "CNY"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "能提升美甲店铺装修质感"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "能展示指甲油的"}
+functions use_environment/use_environment @主商品 required eq {"type": "text", "value": "适合放在墙上的那种"}
+specifications form_factor/form_factor @主商品 required eq {"type": "text", "value": "圆盘形状"}
+specifications color/color @主商品 required eq {"type": "text", "value": "饱和度高的金色"}
+specifications components/included_components @主商品 required contains_all {"type": "components", "items": [{"name": "分层设计", "quantity": null, "unit": null}]}
+
+TASK 15291 valid=True
+请问有没有持妆8小时不泛油光，能遮盖熬夜黑眼圈，色号贴近原生肤色，价格在60元左右的气垫产品？要求具备控油效果，不出现斑驳现象，同时能遮盖突发的痘痘，具有抗暗沉特性。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "气垫产品"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 66.0, "unit": "CNY"}
+functions function/function @主商品 required eq {"type": "text", "value": "持妆8小时不泛油光"}
+functions function/function @主商品 required eq {"type": "text", "value": "遮盖熬夜黑眼圈"}
+functions function/function @主商品 required eq {"type": "text", "value": "控油效果"}
+functions function/function @主商品 required eq {"type": "text", "value": "不出现斑驳现象"}
+functions function/function @主商品 required eq {"type": "text", "value": "遮盖突发的痘痘"}
+functions function/function @主商品 required eq {"type": "text", "value": "抗暗沉特性"}
+specifications color/color @主商品 required eq {"type": "text", "value": "贴近原生肤色"}
+
+TASK 15386 valid=True
+帮我看看有没有配备了空降装备的奥古高达模型，要能在2025年8月左右发售，先支付的订金限制在100元左右，后续补款不能超过550元。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "高达模型"}
+budget deposit/deposit @本次订单 required at_most {"type": "number", "value": 110.0, "unit": "CNY"}
+budget balance/balance @本次订单 required at_most {"type": "number", "value": 550.0, "unit": "CNY"}
+specifications components/included_components @主商品 required contains_all {"type": "components", "items": [{"name": "空降装备", "quantity": null, "unit": null}]}
+specifications delivery/delivery @主商品 uncertain eq {"type": "text", "value": "在2025年8月左右发售"}
+PENDING ambiguous_meaning {"text": "奥古", "start": 15, "end": 17}
+PENDING undefined_tolerance {"text": "2025年8月左右", "start": 25, "end": 34}
+PENDING undefined_tolerance {"text": "在2025年8月左右发售", "start": 24, "end": 36}
+
+TASK 15471 valid=True
+自己在diy组装长串的108，现在缺少套装组件，想要一款天然的白琉璃，需要搭配古法工艺镶金用作三通。三通的尺寸大概在13.8*26mm左右，预算60元上下。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "白琉璃"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 66.0, "unit": "CNY"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "用作三通"}
+specifications material/material @主商品 required eq {"type": "text", "value": "天然"}
+specifications craft/craft @主商品 required eq {"type": "text", "value": "古法工艺镶金"}
+specifications dimensions/dimensions @主商品 uncertain eq {"type": "text", "value": "三通的尺寸大概在13.8*26mm左右"}
+PENDING ambiguous_meaning {"text": "自己在diy组装长串的108，现在缺少套装组件", "start": 0, "end": 23}
+PENDING undefined_tolerance {"text": "三通的尺寸大概在13.8*26mm左右", "start": 50, "end": 69}
+
+TASK 15493 valid=True
+我想找一款适合家庭使用的智能洗地机，要同时具备吸尘、扫地、拖地和烘干等功能，还能对水进行加热去清洁地面，且使用过程中不会出现毛发缠绕的问题。这款洗地机参与官方补贴活动以及拥有过硬的品质，还是热销的款式，同时颜值很高，价格控制在4000元以下。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "智能洗地机"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 4000.0, "unit": "CNY"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "适合家庭使用"}
+functions function/function @主商品 required contains_all {"type": "text_list", "values": ["吸尘", "扫地", "拖地", "烘干"]}
+functions function/function @主商品 required eq {"type": "text", "value": "对水进行加热去清洁地面"}
+functions function/function @主商品 required eq {"type": "text", "value": "不会出现毛发缠绕"}
+specifications merchant/merchant @主商品 required eq {"type": "text", "value": "参与官方补贴活动"}
+specifications condition/condition @主商品 required eq {"type": "text", "value": "过硬的品质"}
+specifications style/style @主商品 required eq {"type": "text", "value": "热销的款式"}
+specifications style/style @主商品 required eq {"type": "text", "value": "颜值很高"}
+PENDING unverifiable_subjective {"text": "拥有过硬的品质", "start": 85, "end": 92}
+PENDING unverifiable_subjective {"text": "还是热销的款式", "start": 93, "end": 100}
+PENDING unverifiable_subjective {"text": "同时颜值很高", "start": 101, "end": 107}
+
+TASK 15649 valid=True
+给我选购一款红色的瘦瘦靴，甜酷风格的，25年春秋的新款式，鞋底厚厚的有增高效果，有弹性的真皮材质，价格400元左右的，尺码选37。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "瘦瘦靴"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 440.0, "unit": "CNY"}
+functions function/function @主商品 required eq {"type": "text", "value": "有增高效果"}
+specifications color/color @主商品 required eq {"type": "text", "value": "红色"}
+specifications style/style @主商品 required eq {"type": "text", "value": "甜酷风格"}
+specifications dimensions/thickness @主商品 required eq {"type": "text", "value": "鞋底厚厚"}
+specifications material/material @主商品 required eq {"type": "text", "value": "有弹性的真皮材质"}
+specifications size/size_label @主商品 required eq {"type": "text", "value": "37"}
+model version/version @主商品 required eq {"type": "text", "value": "25年春秋的新款式"}
+
+TASK 15655 valid=True
+想要一款金属材质的智能蓝牙音箱，带高清可触屏，有氛围灯，带时钟闹钟功能，体型小巧便于携带，想要情人节当礼物送给男朋友用，价格在300元左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "智能蓝牙音箱"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 330.0, "unit": "CNY"}
+functions function/function @主商品 required eq {"type": "text", "value": "时钟闹钟功能"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "情人节当礼物送给男朋友用"}
+specifications material/material @主商品 required eq {"type": "text", "value": "金属材质"}
+specifications components/included_components @主商品 required contains_all {"type": "components", "items": [{"name": "高清可触屏", "quantity": null, "unit": null}, {"name": "氛围灯", "quantity": null, "unit": null}]}
+specifications dimensions/dimensions @主商品 required eq {"type": "text", "value": "体型小巧"}
+PENDING ambiguous_meaning {"text": "便于携带", "start": 40, "end": 44}
+
+TASK 15700 valid=True
+给我推荐一条长度为6寸的短裤，材质要具备快速干燥、弹性很好的特点，穿着能让皮肤觉得柔软舒服又透气，适合健身和跑步时穿，尺码要小号，颜色为绿色，价格不超过420元。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "短裤"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 420.0, "unit": "CNY"}
+functions function/function @主商品 required eq {"type": "text", "value": "快速干燥"}
+functions function/function @主商品 required eq {"type": "text", "value": "弹性很好"}
+functions function/function @主商品 required eq {"type": "text", "value": "柔软舒服"}
+functions function/function @主商品 required eq {"type": "text", "value": "透气"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "适合健身和跑步时穿"}
+specifications dimensions/length @主商品 required eq {"type": "number", "value": 6, "unit": "inch"}
+specifications size/size_label @主商品 required eq {"type": "text", "value": "小号"}
+specifications color/color @主商品 required eq {"type": "text", "value": "绿色"}
+
+TASK 15717 valid=True
+帮忙找一款拥有自动化技术的洗地机，要吸力强劲，避免毛发、纤维等杂物缠绕的，价格在1800-1900元之间。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "洗地机"}
+budget total_price/total_price @本次订单 required between {"type": "range", "lower": 1800.0, "upper": 1900.0, "unit": "CNY", "lower_inclusive": true, "upper_inclusive": true}
+functions function/function @主商品 required eq {"type": "text", "value": "拥有自动化技术"}
+functions function/function @主商品 required eq {"type": "text", "value": "吸力强劲"}
+functions function/function @主商品 required eq {"type": "text", "value": "避免毛发、纤维等杂物缠绕"}
+
+TASK 15760 valid=True
+想给家里的高龄犬找一款进口狗粮，要脂肪含量低，能帮助控制体重，要带有鸡肉香，颗粒不大，重量5斤左右就好，有效期要到2026年1月份，预算在330元左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "狗粮"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 363.0, "unit": "CNY"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "帮助控制体重"}
+functions target_user/target_user @高龄犬 required eq {"type": "text", "value": "高龄犬"}
+specifications origin/origin @主商品 required eq {"type": "text", "value": "进口"}
+specifications composition/composition @主商品 required eq {"type": "text", "value": "脂肪含量低"}
+specifications flavor/flavor @主商品 required eq {"type": "text", "value": "鸡肉香"}
+specifications size/size @主商品 required eq {"type": "text", "value": "颗粒不大"}
+specifications weight/mass @主商品 uncertain eq {"type": "text", "value": "重量5斤左右"}
+specifications warranty/warranty @主商品 required eq {"type": "text", "value": "有效期要到2026年1月份"}
+PENDING unverifiable_subjective {"text": "脂肪含量低", "start": 17, "end": 22}
+PENDING unverifiable_subjective {"text": "颗粒不大", "start": 38, "end": 42}
+PENDING undefined_tolerance {"text": "重量5斤左右", "start": 43, "end": 49}
+
+TASK 15802 valid=False
+老爱丽舍手动,新爱丽舍手动带亮圈,新爱丽舍手动黑色,C2手动,老世嘉手动,新世嘉手动带亮圈,世嘉手动银色,世嘉手动黑色,世嘉自动带亮圈,凯旋自动黑色,C5自动934ZD,C4L自动333ZD
+specifications compatibility/compatibility @老爱丽舍 required eq {"type": "text", "value": "老爱丽舍"}
+specifications compatibility/compatibility @新爱丽舍 required eq {"type": "text", "value": "新爱丽舍"}
+specifications compatibility/compatibility @C2 required eq {"type": "text", "value": "C2"}
+specifications compatibility/compatibility @老世嘉 required eq {"type": "text", "value": "老世嘉"}
+specifications compatibility/compatibility @新世嘉 required eq {"type": "text", "value": "新世嘉"}
+specifications compatibility/compatibility @世嘉 required eq {"type": "text", "value": "世嘉"}
+specifications compatibility/compatibility @凯旋 required eq {"type": "text", "value": "凯旋"}
+specifications compatibility/compatibility @C5 required eq {"type": "text", "value": "C5"}
+specifications compatibility/compatibility @C4L required eq {"type": "text", "value": "C4L"}
+specifications compatibility/compatibility @老爱丽舍 required eq {"type": "text", "value": "手动"}
+specifications compatibility/compatibility @新爱丽舍 required eq {"type": "text", "value": "手动"}
+specifications compatibility/compatibility @C2 required eq {"type": "text", "value": "手动"}
+specifications compatibility/compatibility @老世嘉 required eq {"type": "text", "value": "手动"}
+specifications compatibility/compatibility @新世嘉 required eq {"type": "text", "value": "手动"}
+specifications compatibility/compatibility @世嘉 required eq {"type": "text", "value": "手动"}
+specifications compatibility/compatibility @世嘉 required eq {"type": "text", "value": "自动"}
+specifications compatibility/compatibility @凯旋 required eq {"type": "text", "value": "自动"}
+specifications compatibility/compatibility @C5 required eq {"type": "text", "value": "自动"}
+specifications compatibility/compatibility @C4L required eq {"type": "text", "value": "自动"}
+specifications compatibility/compatibility @新爱丽舍 required eq {"type": "text", "value": "带亮圈"}
+specifications compatibility/compatibility @新世嘉 required eq {"type": "text", "value": "带亮圈"}
+specifications compatibility/compatibility @世嘉 required eq {"type": "text", "value": "带亮圈"}
+specifications color/color @新爱丽舍 required eq {"type": "text", "value": "黑色"}
+specifications color/color @世嘉 required eq {"type": "text", "value": "银色"}
+specifications color/color @世嘉 required eq {"type": "text", "value": "黑色"}
+specifications color/color @凯旋 required eq {"type": "text", "value": "黑色"}
+specifications model/product_model @C5 required eq {"type": "text", "value": "934ZD"}
+specifications model/product_model @C4L required eq {"type": "text", "value": "333ZD"}
+
+TASK 16376 valid=True
+我需要一款适配奇妙屋座椅的椅套，要针织面料的，透气性好，颜色想要奶咖棕色，有推荐吗？
+category product_category/product_category @主商品 required eq {"type": "text", "value": "椅套"}
+functions function/function @主商品 required eq {"type": "text", "value": "透气性好"}
+specifications compatibility/compatibility @主商品 required eq {"type": "text", "value": "适配奇妙屋座椅"}
+specifications material/material @主商品 required eq {"type": "text", "value": "针织面料"}
+specifications color/color @主商品 preference eq {"type": "text", "value": "奶咖棕色"}
+
+TASK 17311 valid=False
+有没有适合200斤左右体型的春夏荷叶边连衣裙？想要浅草绿底调带水墨感小花图案的，裙摆有点小设计感——前面利落后面稍微长点那种，两百出头能接受。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "连衣裙"}
+budget total_price/total_price @本次订单 required eq {"type": "text", "value": "两百出头能接受"}
+functions target_user/target_user @200斤左右体型 required eq {"type": "text", "value": "200斤左右体型"}
+functions use_environment/use_environment @主商品 required eq {"type": "text", "value": "春夏"}
+specifications size/wearer_weight_limit @200斤左右体型 required eq {"type": "text", "value": "200斤左右"}
+specifications pattern/pattern @主商品 required eq {"type": "text", "value": "浅草绿底调带水墨感小花图案"}
+specifications form_factor/form_factor @主商品 required eq {"type": "text", "value": "荷叶边"}
+specifications form_factor/form_factor @主商品 required eq {"type": "text", "value": "前面利落后面稍微长点"}
+PENDING ambiguous_meaning {"text": "裙摆有点小设计感"}
+
+TASK 18095 valid=True
+请帮我找一款用于稻瘟病、纹枯病和叶斑病的多菌灵农药，要求包装规格不超过450克装，预算控制在20元左右的产品。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "多菌灵农药"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 22.0, "unit": "CNY"}
+functions purpose/purpose @主商品 required eq {"type": "text_list", "values": ["稻瘟病", "纹枯病", "叶斑病"]}
+specifications packaging/packaging @主商品 required at_most {"type": "number", "value": 450, "unit": "g"}
+
+TASK 18433 valid=True
+挑选一款适合打高尔夫的裙子套装，短袖，polo领，开叉设计和防走光设计，材质透气速干，上衣是杏色，裙子是绿色，尺码为M，价格在200元以内的。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "裙子套装"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 200.0, "unit": "CNY"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "适合打高尔夫"}
+functions function/function @主商品 required eq {"type": "text", "value": "防走光"}
+specifications size/size_label @主商品 required eq {"type": "text", "value": "M"}
+specifications material/material @主商品 required eq {"type": "text", "value": "透气速干"}
+specifications form_factor/form_factor @主商品 required eq {"type": "text", "value": "开叉设计"}
+specifications style/style @主商品 required eq {"type": "text", "value": "polo领"}
+specifications style/style @主商品 required eq {"type": "text", "value": "短袖"}
+specifications color/color @上衣 required eq {"type": "text", "value": "杏色"}
+specifications color/color @裙子 required eq {"type": "text", "value": "绿色"}
+
+TASK 19426 valid=True
+麻烦帮我找下静藤牌公路自行车轮组，LIGHT C40型号，SH 塔基，采用碟刹系统，高框开口能装真空胎，到手价不要超过6000元。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "公路自行车轮组"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 6000.0, "unit": "CNY"}
+functions function/function @主商品 required eq {"type": "text", "value": "采用碟刹系统"}
+functions function/function @主商品 required eq {"type": "text", "value": "高框开口能装真空胎"}
+specifications compatibility/compatibility @塔基 required eq {"type": "text", "value": "SH"}
+brand brand/brand @主商品 required eq {"type": "text", "value": "静藤牌"}
+model product_model/product_model @主商品 required eq {"type": "text", "value": "LIGHT C40"}
+
+TASK 20493 valid=True
+帮我在FUNNYDEER旗舰店里找一件小学生穿的课本封面主题的T恤，带有二年级语文上册封面图案，价格希望不超过30元。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "T恤"}
+budget total_price/total_price @本次订单 uncertain at_most {"type": "number", "value": 30.0, "unit": "CNY"}
+functions target_user/target_user @主商品 required eq {"type": "text", "value": "小学生"}
+specifications quantity/purchase_count @主商品 required eq {"type": "number", "value": 1, "unit": "piece"}
+specifications merchant/merchant @主商品 required eq {"type": "text", "value": "FUNNYDEER旗舰店"}
+specifications pattern/pattern @主商品 required eq {"type": "text", "value": "课本封面主题"}
+specifications pattern/pattern @主商品 required eq {"type": "text", "value": "二年级语文上册封面图案"}
+PENDING ambiguous_strength {"text": "价格希望不超过30元", "start": 48, "end": 58}
+
+TASK 20520 valid=False
+挑选一款一米一的男孩在夏天穿，包含上衣、马甲、短裤的黄色三件套演出服，价格在700元之内。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "演出服"}
+budget total_price/total_price @本次订单 required eq {"type": "text", "value": "价格在700元之内"}
+functions target_user/target_user @男孩 required eq {"type": "text", "value": "男孩"}
+functions use_environment/use_environment @主商品 required eq {"type": "text", "value": "夏天穿"}
+specifications size/wearer_height @男孩 required eq {"type": "text", "value": "一米一"}
+specifications components/included_components @主商品 required contains_all {"type": "components", "items": [{"name": "上衣", "quantity": 1, "unit": "piece"}, {"name": "马甲", "quantity": 1, "unit": "piece"}, {"name": "短裤", "quantity": 1, "unit": "piece"}]}
+specifications color/color @主商品 required eq {"type": "text", "value": "黄色"}
+specifications quantity/purchase_count @主商品 required eq {"type": "number", "value": 1, "unit": "set"}
+
+TASK 22602 valid=True
+我想给犬舍买点特研的二联疫苗用用，能防犬瘟和犬细小的那种，要个5支左右，买那种自带注射器的，价格不要超过一百块。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "二联疫苗"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 100.0, "unit": "CNY"}
+functions function/function @主商品 required eq {"type": "text", "value": "防犬瘟和犬细小"}
+specifications quantity/purchase_count @主商品 uncertain eq {"type": "text", "value": "要个5支左右"}
+specifications components/included_components @主商品 required contains_all {"type": "components", "items": [{"name": "注射器", "quantity": null, "unit": null}]}
+PENDING ambiguous_meaning {"text": "特研", "start": 7, "end": 9}
+PENDING ambiguous_meaning {"text": "犬舍", "start": 3, "end": 5}
+PENDING undefined_tolerance {"text": "要个5支左右", "start": 29, "end": 35}
+
+TASK 22652 valid=True
+想找一款高光、修容和提亮三合一的高光盘，颜色是偏暖调的粉色，质地为哑光+微闪组合，适合打造自然立体妆效，不夸张但有存在感，价格的话五十元以内搞定。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "高光盘"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 50.0, "unit": "CNY"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "适合打造自然立体妆效"}
+specifications components/included_components @主商品 required contains_all {"type": "components", "items": [{"name": "高光", "quantity": null, "unit": null}, {"name": "修容", "quantity": null, "unit": null}, {"name": "提亮", "quantity": null, "unit": null}]}
+specifications color/color @主商品 required eq {"type": "text", "value": "偏暖调的粉色"}
+specifications form_factor/form_factor @主商品 required eq {"type": "text", "value": "哑光+微闪组合"}
+PENDING unverifiable_subjective {"text": "不夸张但有存在感", "start": 52, "end": 60}

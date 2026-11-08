@@ -1,0 +1,166 @@
+{
+  "scope": "Offline adapter/canonicalizer/guard replay of saved r2 answers; NOT new r3 LLM quality or semantic approval",
+  "input": "D:\\shopping_agent\\analysis\\semantic_contract_v2_full50_review_20261102\\review_inputs.jsonl",
+  "input_sha256": "10e03d449f4eab7d01e676f1640591c54f0c5984dbb53be180fd43f9e973ae11",
+  "r3_files_sha256": {
+    "D:\\shopping_agent\\tools\\semantic_contract_v2_r3.py": "610bf9b0baa5e886403c67a67fd1735a04cefe517255ab78276e5a42881bab23",
+    "D:\\shopping_agent\\tools\\semantic_coverage_v2_r3.py": "bcbd65d38a96da42c1a0e5a8818660a375513ae1b478aaf6bb9907a83dd36fb3",
+    "D:\\shopping_agent\\tools\\semantic_relations_v2_r3.py": "73d9aac7a33c0ff7c790d1f30d1fbe8a770cf91db5e29d52c9c5389cce0ea613",
+    "D:\\shopping_agent\\tools\\replay_semantic_v2_r3.py": "e665cde0b97d60a9c639a7948aaae91874ac0fa2859c679aec98966cf36d2260",
+    "D:\\shopping_agent\\experiments\\semantic_contract_v2_r3\\system_prompt.txt": "5045c0df06df53d300d0890191d3d3133df6307ce4c7c252c5e1cdc33e9d66b5",
+    "D:\\shopping_agent\\experiments\\semantic_contract_v2_r3\\policy.json": "aea3449310fdce2664ed7a3cd55df8ccb516060d201ea062ad1de444e3b0a08e"
+  },
+  "total_tasks": 50,
+  "r2_program_valid": 36,
+  "r3_program_valid": 23,
+  "diagnostic_complete": true,
+  "all_candidates_passed": false,
+  "recovered_r2_failures": [
+    12459,
+    12852
+  ],
+  "newly_blocked_r2_passes": [
+    3499,
+    3876,
+    4971,
+    8784,
+    10086,
+    12134,
+    12748,
+    16177,
+    16730,
+    17111,
+    17803,
+    18609,
+    21120,
+    22210,
+    22560
+  ],
+  "canonicalized_task_ids": [
+    3723,
+    3876,
+    6401,
+    7861,
+    12459,
+    12852,
+    13045,
+    14222,
+    14894,
+    19764,
+    21051,
+    21100,
+    21576
+  ],
+  "remaining_failures": [
+    {
+      "task_id": 3499,
+      "error": "Semantic review flags: [{\"code\": \"category_scope\", \"location\": \"/category/0\", \"detail\": \"Keep product kind in category; express weight/height/neckline/dimensions/use separately, never as a hard category failure\"}]"
+    },
+    {
+      "task_id": 3876,
+      "error": "Semantic review flags: [{\"code\": \"conversion_relation_coverage\", \"location\": \"/query\", \"detail\": \"Keep the AC conversion relation, not just a list of voltage labels\"}]"
+    },
+    {
+      "task_id": 4971,
+      "error": "Semantic review flags: [{\"code\": \"category_scope\", \"location\": \"/category/0\", \"detail\": \"Keep product kind in category; express weight/height/neckline/dimensions/use separately, never as a hard category failure\"}]"
+    },
+    {
+      "task_id": 5598,
+      "error": "subject_evidence: quote the literal subject and attribute in separate evidence entries if needed; do not invent composite subject names"
+    },
+    {
+      "task_id": 6401,
+      "error": "Semantic review flags: [{\"code\": \"charge_as_energy\", \"location\": \"/specifications/1\", \"detail\": \"Raw 毫安 does not establish energy capacity; preserve unsupported unit/meaning without inventing mAh\"}]"
+    },
+    {
+      "task_id": 6547,
+      "error": "subject_evidence: quote the literal subject and attribute in separate evidence entries if needed; do not invent composite subject names"
+    },
+    {
+      "task_id": 8784,
+      "error": "Semantic review flags: [{\"code\": \"feature_duo_boundary\", \"location\": \"/specifications/3\", \"detail\": \"Bare feature counts are exact; explicit 至少/达到 is a lower bound; 20多 is strict >20 with range pending. Bind each count to its own clause.\"}, {\"code\": \"feature_duo_pending\", \"location\": \"/specifications/3\", \"detail\": \"20多 is not >=20; preserve strict >20 information and unresolved range/upper interpretation pending\"}, {\"code\": \"bare_feature_exact_count\", \"location\": \"/specifications/4\", \"detail\": \"Bare feature counts are exact; explicit 至少/达到 is a lower bound; 20多 is strict >20 with range pending. Bind each count to its own clause.\"}]"
+    },
+    {
+      "task_id": 9294,
+      "error": "Empty promotion"
+    },
+    {
+      "task_id": 10086,
+      "error": "Semantic review flags: [{\"code\": \"flavor_as_subject\", \"location\": \"/specifications/2\", \"detail\": \"Name the flavor's carrier, not the flavor itself; retain the full source pending if the carrier is unknown\"}]"
+    },
+    {
+      "task_id": 12134,
+      "error": "Semantic review flags: [{\"code\": \"explicit_function_coverage\", \"location\": \"/query\", \"detail\": \"Keep the explicitly requested non-redness effect as a function; an ambiguous_strength pending alone does not preserve its role\"}]"
+    },
+    {
+      "task_id": 12748,
+      "error": "Semantic review flags: [{\"code\": \"composition_atomicity\", \"location\": \"/specifications/2\", \"detail\": \"Separate subjective 自然 from the explicit additive constraint; do not conflate evidence standards\"}]"
+    },
+    {
+      "task_id": 12769,
+      "error": "subject_evidence: quote the literal subject and attribute in separate evidence entries if needed; do not invent composite subject names"
+    },
+    {
+      "task_id": 13045,
+      "error": "Semantic review flags: [{\"code\": \"purchase_quantity_coverage\", \"location\": \"/query\", \"source\": {\"role\": \"purchase\", \"count\": 1, \"unit\": \"piece\", \"name_context\": \"\", \"operator\": \"eq\", \"start\": 2, \"end\": 4, \"text\": \"一个\", \"source\": \"买一个\", \"ambiguous\": false}, \"detail\": \"Retain explicit purchase count 1 piece from 买一个; do not leave missing/null/text-only or bind to another object\"}]"
+    },
+    {
+      "task_id": 14222,
+      "error": "subject_evidence: quote the literal subject and attribute in separate evidence entries if needed; do not invent composite subject names"
+    },
+    {
+      "task_id": 15032,
+      "error": "/specifications/0/evidence/0: quote must occur once (matches=0); use exact contiguous source or multiple evidence entries; never paraphrase/join nonadjacent spans"
+    },
+    {
+      "task_id": 16177,
+      "error": "Semantic review flags: [{\"code\": \"category_scope\", \"location\": \"/category/0\", \"detail\": \"Keep product kind in category; express weight/height/neckline/dimensions/use separately, never as a hard category failure\"}]"
+    },
+    {
+      "task_id": 16730,
+      "error": "Semantic review flags: [{\"code\": \"set_as_component\", \"location\": \"/specifications/0\", \"detail\": \"A three-piece set is a pack structure, not a component literally named 三件套; retain unknown composition pending\"}, {\"code\": \"model_target_scope\", \"location\": \"/model/0\", \"detail\": \"Confirm whether the model belongs to the compatible target or the purchased part; preserve source scope pending instead of guessing\"}]"
+    },
+    {
+      "task_id": 17111,
+      "error": "Semantic review flags: [{\"code\": \"wearer_limit_relation\", \"location\": \"/specifications/1\", \"detail\": \"Preserve the stated wearer-weight coverage numerically; not an undefined approximation\"}]"
+    },
+    {
+      "task_id": 17803,
+      "error": "Semantic review flags: [{\"code\": \"pack_as_purchase\", \"location\": \"/specifications/0\", \"detail\": \"Pack contents are not order count: use packaging/pack_count or net_content/mass; keep ambiguous conjunctions pending\"}]"
+    },
+    {
+      "task_id": 18609,
+      "error": "Semantic review flags: [{\"code\": \"color_function_atomicity\", \"location\": \"/specifications/0\", \"detail\": \"Split color and performance, retaining unresolved evidence standards separately\"}]"
+    },
+    {
+      "task_id": 19764,
+      "error": "Semantic review flags: [{\"code\": \"course_level_as_version\", \"location\": \"/model/0\", \"detail\": \"Course level is content/level, not necessarily product model or generation\"}]"
+    },
+    {
+      "task_id": 20025,
+      "error": "subject_evidence: quote the literal subject and attribute in separate evidence entries if needed; do not invent composite subject names"
+    },
+    {
+      "task_id": 20229,
+      "error": "subject_evidence: quote the literal subject and attribute in separate evidence entries if needed; do not invent composite subject names"
+    },
+    {
+      "task_id": 21051,
+      "error": "Semantic review flags: [{\"code\": \"drive_wheel_atomicity\", \"location\": \"/functions/1\", \"detail\": \"Split drive structure from wheel/tire construction; do not grade both through one drive attribute\"}]"
+    },
+    {
+      "task_id": 21120,
+      "error": "Semantic review flags: [{\"code\": \"warranty_strength_scope\", \"location\": \"/specifications/1\", \"detail\": \"Split base warranty requirement/undefined duration and preferred three-year duration\"}]"
+    },
+    {
+      "task_id": 22210,
+      "error": "Semantic review flags: [{\"code\": \"permitted_material_strength\", \"location\": \"/specifications/0\", \"detail\": \"Permitted material does not establish a preference; retain source and pending strength until policy confirmed\"}, {\"code\": \"material_color_atomicity\", \"location\": \"/specifications/1\", \"detail\": \"Split material and color, keeping both bound to the same component\"}]"
+    },
+    {
+      "task_id": 22560,
+      "error": "Semantic review flags: [{\"code\": \"explicit_function_coverage\", \"location\": \"/query\", \"detail\": \"Retain explicit function 不容易起静电 with correct subject; an unrelated category/evidence/pending-only match is insufficient\"}]"
+    }
+  ],
+  "api_calls": 0,
+  "approved_for_reward": 0
+}

@@ -1,0 +1,616 @@
+TASK 2547 valid=False
+170元的预算，想要购买一套有精致礼盒包装，品质较好适合节日期间送礼的咖啡液，总容量要有350ml左右，还要附赠收纳包和吸管杯。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "咖啡液"}
+budget total_price/total_price @本次订单 required eq {"type": "text", "value": "170元的预算"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "适合节日期间送礼"}
+specifications quantity/purchase_count @主商品 required eq {"type": "number", "value": 1, "unit": "set"}
+specifications packaging/packaging @主商品 required eq {"type": "text", "value": "精致礼盒包装"}
+specifications capacity/liquid_volume @主商品 uncertain eq {"type": "text", "value": "350ml左右"}
+specifications components/included_components @主商品 required contains_all {"type": "components", "items": [{"name": "收纳包", "quantity": 1, "unit": "piece"}, {"name": "吸管杯", "quantity": 1, "unit": "piece"}]}
+PENDING unverifiable_subjective [{"text": "品质较好"}]
+ERROR Semantic review flags: [{"code": "invented_component_count", "location": "/specifications/3", "detail": "No explicit component quantity in source; keep null instead of defaulting to one"}]
+
+TASK 3499 valid=False
+找下地暖用的一寸蝶柄套阀，要厚实的铜材质，得是加厚加料做。希望水流能大一些，别卡水、憋水，影响暖气效果。自带一个小压力表。要能直接和32的PPR水管热熔接上，价格六十块左右能搞定就行。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "一寸蝶柄套阀"}
+budget total_price/total_price @本次订单 uncertain eq {"type": "text", "value": "价格六十块左右能搞定就行"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "地暖用"}
+functions function/function @主商品 preference eq {"type": "text", "value": "水流能大一些"}
+functions function/function @主商品 required eq {"type": "text", "value": "别卡水、憋水，影响暖气效果"}
+specifications material/material @主商品 required eq {"type": "text", "value": "铜"}
+specifications craft/craft @主商品 required eq {"type": "text", "value": "加厚加料做"}
+specifications components/included_components @主商品 required contains_all {"type": "components", "items": [{"name": "小压力表", "quantity": 1, "unit": "piece"}]}
+specifications compatibility/compatibility @主商品 required eq {"type": "text", "value": "直接和32的PPR水管热熔接上"}
+PENDING unverifiable_subjective [{"text": "厚实"}]
+PENDING undefined_tolerance [{"text": "价格六十块左右能搞定就行"}]
+ERROR Semantic review flags: [{"code": "category_scope", "location": "/category/0", "detail": "Keep product kind in category; express weight/height/neckline/dimensions/use separately, never as a hard category failure"}]
+
+TASK 3723 valid=True
+想找找kig系兽头的眼睫毛，要小狗的造型，大概卖五十块钱出头。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "眼睫毛"}
+budget total_price/total_price @本次订单 uncertain at_most {"type": "number", "value": 54.0, "unit": "CNY"}
+specifications pattern/pattern @主商品 required eq {"type": "text", "value": "小狗的造型"}
+PENDING ambiguous_meaning {"text": "kig系兽头", "start": 3, "end": 9}
+
+TASK 3876 valid=True
+最近打算买一款适合户外露营及车载使用的移动电源，要具备1800瓦功率，兼容110伏与220伏交流电转换，储能容量达到1度电，我的预算在2900元左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "移动电源"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 3190.0, "unit": "CNY"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "适合户外露营及车载使用"}
+functions function/power @主商品 required eq {"type": "number", "value": 1800, "unit": "W"}
+specifications compatibility/compatibility @主商品 required eq {"type": "text", "value": "兼容110伏与220伏交流电转换"}
+specifications capacity/energy_capacity @主商品 required at_least {"type": "number", "value": 1, "unit": "kWh"}
+PENDING undefined_tolerance {"text": "我的预算在2900元左右", "start": 62, "end": 74}
+
+TASK 3885 valid=True
+想买一款针对老年人耳鸣问题设计的助听器，要求戴起来不易被人察觉，能降低噪音，颜色要绿色，预算控制在3000元左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "助听器"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 3300.0, "unit": "CNY"}
+functions target_user/target_user @老年人 required eq {"type": "text", "value": "老年人"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "针对老年人耳鸣问题设计"}
+functions function/function @主商品 required eq {"type": "text", "value": "能降低噪音"}
+specifications color/color @主商品 required eq {"type": "text", "value": "绿色"}
+PENDING unverifiable_subjective {"text": "戴起来不易被人察觉", "start": 22, "end": 31}
+
+TASK 4971 valid=False
+求推荐一款14mm的小轮车超轻火箭筒，碳塑材质的，需要一对带垫圈的，价格在100元左右的。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "小轮车超轻火箭筒"}
+budget total_price/total_price @本次订单 required eq {"type": "text", "value": "价格在100元左右的"}
+specifications dimensions/diameter @主商品 required eq {"type": "number", "value": 14, "unit": "mm"}
+specifications material/material @主商品 required eq {"type": "text", "value": "碳塑材质"}
+specifications quantity/purchase_count @主商品 required eq {"type": "number", "value": 1, "unit": "pair"}
+specifications components/included_components @主商品 required contains_all {"type": "components", "items": [{"name": "垫圈", "quantity": null, "unit": null}]}
+ERROR Semantic review flags: [{"code": "category_scope", "location": "/category/0", "detail": "Keep product kind in category; express weight/height/neckline/dimensions/use separately, never as a hard category failure"}]
+
+TASK 5598 valid=False
+我要一把胜邪剑，要求产自浙江龙泉市，采用花纹钢制作而成，剑刃长度不超过35公分，有八个棱面，铜制刀柄，借鉴唐代工艺风格，采用一体成型锻造技术，刀尖要大于55度，整体的颜色要绿色，不需要开刃，价格不超过2000块。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "胜邪剑"}
+budget total_price/total_price @本次订单 required eq {"type": "text", "value": "价格不超过2000块"}
+specifications origin/origin @主商品 required eq {"type": "text", "value": "浙江龙泉市"}
+specifications material/material @主商品 required eq {"type": "text", "value": "花纹钢"}
+specifications dimensions/length @剑刃 required at_most {"type": "number", "value": 35, "unit": "cm"}
+specifications attribute_count/face_count @剑刃 required eq {"type": "number", "value": 8, "unit": "count"}
+specifications material/material @刀柄 required eq {"type": "text", "value": "铜制"}
+specifications style/style @主商品 required eq {"type": "text", "value": "唐代工艺风格"}
+specifications craft/craft @主商品 required eq {"type": "text", "value": "一体成型锻造技术"}
+specifications dimensions/angle @刀尖 required at_least {"type": "number", "value": 55, "unit": "degree"}
+specifications color/color @主商品 required eq {"type": "text", "value": "绿色"}
+specifications condition/condition @主商品 required eq {"type": "text", "value": "不需要开刃"}
+ERROR subject_evidence: quote the literal subject and attribute in separate evidence entries if needed; do not invent composite subject names
+
+TASK 6401 valid=False
+家里装了智能灯带和摄像头，怕停电断网，想买个能自动续电的小型UPS，12伏输出的，容量别太小，一万毫安比较安心。有没有那种集成好的12V移动电源盒子，最好自带电源线和充电头，价格在130左右的？
+category product_category/product_category @主商品 required eq {"type": "text", "value": "小型UPS"}
+budget total_price/total_price @本次订单 uncertain eq {"type": "text", "value": "价格在130左右的"}
+functions function/function @主商品 required eq {"type": "text", "value": "自动续电"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "怕停电断网"}
+specifications voltage/voltage @主商品 required eq {"type": "text", "value": "12伏输出"}
+specifications capacity/electric_charge @主商品 required at_least {"type": "number", "value": 10000, "unit": "mAh"}
+specifications form_factor/form_factor @主商品 required eq {"type": "text", "value": "集成好的12V移动电源盒子"}
+specifications components/included_components @主商品 preference contains_all {"type": "components", "items": [{"name": "电源线", "quantity": null, "unit": null}, {"name": "充电头", "quantity": null, "unit": null}]}
+PENDING undefined_tolerance [{"text": "容量别太小"}]
+PENDING ambiguous_strength [{"text": "最好自带电源线和充电头"}]
+ERROR Semantic review flags: [{"code": "invented_charge_unit", "location": "/specifications/0", "detail": "Cannot turn 毫安 into 毫安时 without source evidence"}]
+
+TASK 6547 valid=False
+想要一款可制作四川乐山风味的香辣冷锅钵钵鸡调料，口味需地道，适合在家做麻辣烫和冒菜。规格在200克左右，只需一袋，能赠送几包蘸料，每包大概2克，价格不超过15元。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "钵钵鸡调料"}
+budget total_price/total_price @本次订单 required eq {"type": "text", "value": "价格不超过15元"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "可制作四川乐山风味的香辣冷锅钵钵鸡"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "适合在家做麻辣烫和冒菜"}
+specifications net_content/mass @主商品 uncertain eq {"type": "number", "value": 200, "unit": "g"}
+specifications quantity/purchase_count @主商品 required eq {"type": "number", "value": 1, "unit": "bag"}
+specifications components/gift_presence @主商品 required contains_all {"type": "components", "items": [{"name": "蘸料", "quantity": null, "unit": "piece"}]}
+specifications net_content/mass @蘸料 uncertain eq {"type": "number", "value": 2, "unit": "g"}
+PENDING unverifiable_subjective [{"text": "口味需地道"}]
+PENDING undefined_tolerance [{"text": "规格在200克左右"}]
+PENDING undefined_tolerance [{"text": "每包大概2克"}]
+ERROR subject_evidence: quote the literal subject and attribute in separate evidence entries if needed; do not invent composite subject names
+
+TASK 6893 valid=True
+我想要购买一款适合婴幼儿爬行阶段使用的加厚款地垫，防宝宝摔倒的，夏天用也不会很热，颜色为粉色，可按照房间实际尺寸进行裁剪定制，适合客厅使用。价格控制在240元左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "地垫"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 264.0, "unit": "CNY"}
+functions function/function @主商品 required eq {"type": "text", "value": "防宝宝摔倒"}
+functions function/function @主商品 required eq {"type": "text", "value": "夏天用也不会很热"}
+functions target_user/target_user @婴幼儿 required eq {"type": "text", "value": "婴幼儿爬行阶段"}
+functions use_environment/use_environment @主商品 required eq {"type": "text", "value": "客厅"}
+specifications material/material @主商品 required eq {"type": "text", "value": "加厚款"}
+specifications color/color @主商品 required eq {"type": "text", "value": "粉色"}
+specifications customization/customization @主商品 required eq {"type": "text", "value": "可按照房间实际尺寸进行裁剪定制"}
+PENDING undefined_tolerance {"text": "240元左右", "start": 75, "end": 81}
+
+TASK 7454 valid=True
+搜一下主要在美容院用的点痣笔，是依靠电离子激光做到去痣的那种，此外还能点掉斑点和疣。我想买有30个不同档位的，价格要在400元左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "点痣笔"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 440.0, "unit": "CNY"}
+functions use_environment/use_environment @主商品 required eq {"type": "text", "value": "美容院"}
+functions function/function @主商品 required eq {"type": "text", "value": "去痣"}
+functions function/function @主商品 required eq {"type": "text", "value": "点掉斑点和疣"}
+specifications attribute_count/gear_count @主商品 required eq {"type": "number", "value": 30, "unit": "count"}
+PENDING ambiguous_meaning {"text": "依靠电离子激光", "start": 16, "end": 23}
+
+TASK 7861 valid=True
+求一款从韩国邮寄的，女生都穿的跑步鞋，是厚底设计的，久站不累，透气性好，不闷脚，搭什么衣服都好看，鞋码要36号，价格在九百多块钱。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "跑步鞋"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 999.0, "unit": "CNY"}
+functions function/function @主商品 required eq {"type": "text", "value": "久站不累"}
+functions function/function @主商品 required eq {"type": "text", "value": "透气性好"}
+functions function/function @主商品 required eq {"type": "text", "value": "不闷脚"}
+specifications delivery/delivery @主商品 required eq {"type": "text", "value": "从韩国邮寄"}
+specifications form_factor/form_factor @主商品 required eq {"type": "text", "value": "厚底设计"}
+specifications size/size_label @主商品 required eq {"type": "text", "value": "36号"}
+PENDING ambiguous_meaning {"text": "女生都穿", "start": 10, "end": 14}
+PENDING unverifiable_subjective {"text": "搭什么衣服都好看", "start": 40, "end": 48}
+PENDING undefined_tolerance {"text": "九百多块钱", "start": 59, "end": 64}
+
+TASK 8181 valid=True
+急求一款给口腔牙医练习备牙过程用的打磨机，要韩国生产的，由主机、高速车针、转换头和手柄组成，价格不低于340元。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "打磨机"}
+budget total_price/total_price @本次订单 required at_least {"type": "number", "value": 340.0, "unit": "CNY"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "给口腔牙医练习备牙过程用"}
+functions target_user/target_user @口腔牙医 required eq {"type": "text", "value": "口腔牙医"}
+specifications origin/origin @主商品 required eq {"type": "text", "value": "韩国生产"}
+specifications components/included_components @主商品 required contains_all {"type": "components", "items": [{"name": "主机", "quantity": null, "unit": null}, {"name": "高速车针", "quantity": null, "unit": null}, {"name": "转换头", "quantity": null, "unit": null}, {"name": "手柄", "quantity": null, "unit": null}]}
+
+TASK 8784 valid=False
+麻烦推荐一款适配电吉他和木吉他的综合效果器，需要配备踏板和鼓机模块，能提供节奏支持。其中预设音色库至少80个，包含20多种失真类效果，以及4种不同风格的标志性音箱音色。能赠送一些礼品，并且通过顺丰快递发货，预算在400元出头。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "综合效果器"}
+budget total_price/total_price @本次订单 required eq {"type": "text", "value": "预算在400元出头"}
+functions function/function @主商品 required eq {"type": "text", "value": "能提供节奏支持"}
+specifications compatibility/compatibility @主商品 required eq {"type": "text", "value": "适配电吉他和木吉他"}
+specifications components/included_components @主商品 required contains_all {"type": "components", "items": [{"name": "踏板", "quantity": null, "unit": null}, {"name": "鼓机模块", "quantity": null, "unit": null}]}
+specifications attribute_count/preset_count @主商品 required at_least {"type": "number", "value": 80, "unit": "count"}
+specifications attribute_count/effect_type_count @主商品 required at_least {"type": "number", "value": 20, "unit": "count"}
+specifications attribute_count/tone_type_count @主商品 required eq {"type": "number", "value": 4, "unit": "count"}
+specifications components/gift_presence @主商品 required contains_all {"type": "components", "items": [{"name": "礼品", "quantity": null, "unit": null}]}
+specifications delivery/delivery @本次订单 required eq {"type": "text", "value": "通过顺丰快递发货"}
+PENDING undefined_tolerance [{"text": "20多种失真类效果"}]
+PENDING undefined_tolerance [{"text": "预算在400元出头"}]
+ERROR Semantic review flags: [{"code": "feature_duo_boundary", "location": "/specifications/3", "detail": "Bare feature counts are exact; explicit 至少/达到 is a lower bound; 20多 is strict >20 with range pending. Bind each count to its own clause."}, {"code": "feature_duo_pending", "location": "/specifications/3", "detail": "20多 is not >=20; preserve strict >20 information and unresolved range/upper interpretation pending"}]
+
+TASK 9286 valid=True
+打算安排上一种成分是氯氟氰菊酯的粉状杀虫药剂，专门对付蚊子、苍蝇、蟑螂这类虫子，可以在室外大范围使用，也可以在家里用。我用量比较大，需要大概一100包，预算的价钱在450元左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "杀虫药剂"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 495.0, "unit": "CNY"}
+functions function/function @主商品 required eq {"type": "text", "value": "对付蚊子、苍蝇、蟑螂这类虫子"}
+functions use_environment/use_environment @主商品 required eq {"type": "text", "value": "室外大范围使用，也可以在家里用"}
+specifications composition/composition @主商品 required eq {"type": "text", "value": "成分是氯氟氰菊酯"}
+specifications form_factor/form_factor @主商品 required eq {"type": "text", "value": "粉状"}
+specifications quantity/purchase_count @主商品 uncertain eq {"type": "text", "value": "需要大概一100包"}
+PENDING undefined_tolerance {"text": "大概一100包", "start": 68, "end": 75}
+PENDING undefined_tolerance {"text": "预算的价钱在450元左右", "start": 76, "end": 88}
+PENDING undefined_tolerance {"text": "需要大概一100包", "start": 66, "end": 75}
+
+TASK 9294 valid=False
+有没有内蒙古的真空包装的全套羊杂，要香辣味的，适合煮羊杂汤，热一下就能吃，还能当夜宵吃，净含量一袋在250克要两袋，要有买一送一的优惠，预算70元左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "全套羊杂"}
+budget total_price/total_price @本次订单 uncertain eq {"type": "text", "value": "预算70元左右"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "适合煮羊杂汤"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "热一下就能吃"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "还能当夜宵吃"}
+specifications origin/origin @主商品 required eq {"type": "text", "value": "内蒙古"}
+specifications packaging/packaging @主商品 required eq {"type": "text", "value": "真空包装"}
+specifications flavor/flavor @主商品 required eq {"type": "text", "value": "香辣味"}
+specifications net_content/mass @主商品 required eq {"type": "number", "value": 250, "unit": "g"}
+specifications quantity/purchase_count @主商品 required eq {"type": "number", "value": 2, "unit": "bag"}
+specifications bundle/promotion @主商品 required matches_bundle {"type": "bundle", "paid_quantity": null, "gift_quantity": null, "received_quantity": null, "unit": "bag", "same_item": true}
+PENDING undefined_tolerance [{"text": "预算70元左右"}]
+ERROR Empty promotion
+
+TASK 10086 valid=True
+想给男朋友挑个特别点的礼物，是乌木材质、雕成一节节竹子模样的鼻烟壶，听说这种雕刻是非遗手艺。配个半世纪的薄荷香味，价格别超400，益德成旗舰店有合适的款吗？
+category product_category/product_category @主商品 required eq {"type": "text", "value": "鼻烟壶"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 400.0, "unit": "CNY"}
+functions target_user/target_user @男朋友 required eq {"type": "text", "value": "男朋友"}
+specifications material/material @主商品 required eq {"type": "text", "value": "乌木"}
+specifications pattern/pattern @主商品 required eq {"type": "text", "value": "雕成一节节竹子模样"}
+specifications flavor/flavor @主商品 required eq {"type": "text", "value": "薄荷香味"}
+specifications merchant/merchant @主商品 required eq {"type": "text", "value": "益德成旗舰店"}
+PENDING ambiguous_meaning {"text": "半世纪", "start": 48, "end": 51}
+PENDING unverifiable_subjective {"text": "非遗手艺", "start": 41, "end": 45}
+PENDING unverifiable_subjective {"text": "特别点", "start": 7, "end": 10}
+
+TASK 11552 valid=True
+给我推荐一款防走失身份牌，适合给老年痴呆的老人使用，可以挂在老人脖子上，能够定制牌子上的内容，绳子要红色的，牌子要金色的，价格在40元左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "防走失身份牌"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 44.0, "unit": "CNY"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "防走失"}
+functions target_user/target_user @老年痴呆的老人 required eq {"type": "text", "value": "老年痴呆的老人"}
+functions use_environment/use_environment @主商品 required eq {"type": "text", "value": "挂在老人脖子上"}
+specifications customization/customization @主商品 required eq {"type": "text", "value": "定制牌子上的内容"}
+specifications color/color @绳子 required eq {"type": "text", "value": "红色"}
+specifications color/color @牌子 required eq {"type": "text", "value": "金色"}
+PENDING undefined_tolerance {"text": "价格在40元左右", "start": 61, "end": 69}
+
+TASK 11639 valid=False
+推荐一款家用纯铝制的蜂窝复合板，在室内外都可以用，具备降噪功能，能用于外部墙体和天花板上，也能拿来做门，要求工厂直营，可以跟客服沟通进行定制，价格不超过80元。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "蜂窝复合板"}
+budget total_price/total_price @本次订单 required eq {"type": "text", "value": "价格不超过80元"}
+functions function/function @主商品 required eq {"type": "text", "value": "降噪"}
+functions use_environment/use_environment @主商品 required eq {"type": "text", "value": "室内外"}
+specifications material/material @主商品 required eq {"type": "text", "value": "纯铝制"}
+specifications merchant/merchant @主商品 required eq {"type": "text", "value": "工厂直营"}
+specifications customization/customization @主商品 required eq {"type": "text", "value": "可以跟客服沟通进行定制"}
+PENDING ambiguous_meaning [{"text": "能用于外部墙体和天花板上"}, {"text": "也能拿来做门"}]
+ERROR [{'text': '能用于外部墙体和天花板上'}, {'text': '也能拿来做门'}] is not of type 'object'
+
+TASK 11955 valid=True
+大学好友准备结婚了，托我给她选一款可以装彩礼或礼金的手提包，要喜庆的红色，上面印有单独的福字，容量大的，材质为帆布，比较结实，预算在45元左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "手提包"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 49.5, "unit": "CNY"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "装彩礼或礼金"}
+specifications color/color @主商品 required eq {"type": "text", "value": "喜庆的红色"}
+specifications pattern/pattern @主商品 required eq {"type": "text", "value": "单独的福字"}
+specifications capacity/storage_capacity @主商品 required eq {"type": "text", "value": "容量大的"}
+specifications material/material @主商品 required eq {"type": "text", "value": "帆布"}
+specifications condition/condition @主商品 required eq {"type": "text", "value": "比较结实"}
+PENDING ambiguous_meaning {"text": "大学好友准备结婚了，托我给她选一款", "start": 0, "end": 17}
+
+TASK 12126 valid=True
+预算20元，需要买一米左右的细钢直条，要求带有弹性，数量需要5根，规格不超过0.5毫米，材质要求是硬碳钢的，还要包邮费的。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "细钢直条"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 20.0, "unit": "CNY"}
+budget shipping_fee/shipping_fee @本次订单 required at_most {"type": "number", "value": 0, "unit": "CNY"}
+functions function/function @主商品 required eq {"type": "text", "value": "带有弹性"}
+specifications dimensions/length @主商品 uncertain eq {"type": "text", "value": "一米左右"}
+specifications quantity/purchase_count @主商品 required eq {"type": "number", "value": 5, "unit": "piece"}
+specifications dimensions/diameter @主商品 required at_most {"type": "number", "value": 0.5, "unit": "mm"}
+specifications material/material @主商品 required eq {"type": "text", "value": "硬碳钢"}
+PENDING undefined_tolerance {"text": "一米左右", "start": 9, "end": 13}
+
+TASK 12134 valid=True
+帮我找一款可以在浴室洗澡时使用的面膜。要带有舒缓效果，用完皮肤不会红肿的。能够补充水分，把水分牢牢锁住，让皮肤变得水嫩有弹性，还能够提亮肤色，深层清洁。含量的话不超过80克，价格在150元左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "面膜"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 165.0, "unit": "CNY"}
+functions use_environment/use_environment @主商品 required eq {"type": "text", "value": "浴室洗澡时使用"}
+functions function/function @主商品 required eq {"type": "text", "value": "舒缓效果"}
+functions function/function @主商品 required eq {"type": "text", "value": "用完皮肤不会红肿"}
+functions function/function @主商品 required eq {"type": "text", "value": "补充水分"}
+functions function/function @主商品 required eq {"type": "text", "value": "把水分牢牢锁住"}
+functions function/function @主商品 required eq {"type": "text", "value": "让皮肤变得水嫩有弹性"}
+functions function/function @主商品 required eq {"type": "text", "value": "提亮肤色"}
+functions function/function @主商品 required eq {"type": "text", "value": "深层清洁"}
+specifications net_content/mass @主商品 required at_most {"type": "number", "value": 80, "unit": "g"}
+
+TASK 12459 valid=False
+急需一款适用于羽毛球馆、体育馆、篮球场及乒乓球场的窗帘，需具备光线遮挡和空间分隔功能，且支持个性化设计，可满足品牌或场景标识需求。主色调为蓝色，计价方式按长度计费，每米价格在50元左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "窗帘"}
+budget unit_price/unit_price @主商品 uncertain eq {"type": "text", "value": "每米价格在50元左右"}
+functions function/function @主商品 required eq {"type": "text", "value": "光线遮挡"}
+functions function/function @主商品 required eq {"type": "text", "value": "空间分隔"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "适用于羽毛球馆、体育馆、篮球场及乒乓球场"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "可满足品牌或场景标识需求"}
+specifications color/color @主商品 required eq {"type": "text", "value": "蓝色"}
+specifications customization/customization @主商品 required eq {"type": "text", "value": "支持个性化设计"}
+PENDING ambiguous_strength [{"text": "急需"}]
+PENDING undefined_tolerance [{"text": "每米价格在50元左右"}]
+ERROR Unit price denominator differs from original source phrase
+
+TASK 12697 valid=False
+找能治牛羊猪烂嘴、腐蹄病的喷剂，要那种直接喷伤口上的兽药，治口疮和蹄子发炎的外用喷雾，20元一瓶装的
+category product_category/product_category @主商品 required eq {"type": "text", "value": "喷剂"}
+budget unit_price/unit_price @本次订单 required eq {"type": "text", "value": "20元一瓶装的"}
+functions function/function @主商品 required eq {"type": "text", "value": "治牛羊猪烂嘴、腐蹄病"}
+functions function/function @主商品 required eq {"type": "text", "value": "直接喷伤口上"}
+functions function/function @主商品 required eq {"type": "text", "value": "治口疮和蹄子发炎"}
+specifications form_factor/form_factor @主商品 required eq {"type": "text", "value": "外用喷雾"}
+specifications packaging/pack_count @主商品 required eq {"type": "number", "value": 1, "unit": "bottle"}
+PENDING ambiguous_meaning [{"text": "兽药"}]
+ERROR Unit price denominator differs from original source phrase
+
+TASK 12748 valid=False
+求一款适合准孕妇的三件套化妆品，是水乳霜的组合，而且护肤水中含有羊的初乳，成分自然无添加，有补充和保持皮肤水分、改善皮肤发黄的功效，想要买一送一的，预算在660元左右的。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "化妆品"}
+budget total_price/total_price @本次订单 required eq {"type": "text", "value": "预算在660元左右的"}
+functions target_user/target_user @准孕妇 required eq {"type": "text", "value": "准孕妇"}
+functions function/function @主商品 required eq {"type": "text", "value": "补充和保持皮肤水分"}
+functions function/function @主商品 required eq {"type": "text", "value": "改善皮肤发黄"}
+specifications components/included_components @主商品 required contains_all {"type": "components", "items": [{"name": "水", "quantity": null, "unit": null}, {"name": "乳", "quantity": null, "unit": null}, {"name": "霜", "quantity": null, "unit": null}]}
+specifications components/included_components @护肤水 required contains_all {"type": "components", "items": [{"name": "羊的初乳", "quantity": null, "unit": null}]}
+specifications composition/composition @主商品 required eq {"type": "text", "value": "自然无添加"}
+specifications bundle/promotion @主商品 required matches_bundle {"type": "bundle", "paid_quantity": 1, "gift_quantity": 1, "received_quantity": null, "unit": "set", "same_item": true}
+PENDING unverifiable_subjective [{"text": "成分自然无添加"}]
+ERROR Semantic review flags: [{"code": "composition_atomicity", "location": "/specifications/2", "detail": "Separate subjective 自然 from the explicit additive constraint; do not conflate evidence standards"}]
+
+TASK 12769 valid=True
+想买一款带有全屏灯照明的电动晾衣架。杆子要可伸缩的，得是嵌入式安装，同时可以用远程控制器智能操作升降，升降杆的颜色要淡雅的象牙白色，整个架子要一体设计的薄款，要能帮忙组装并且有长时间质保的，再配置10多个铝制晾衣架，1500块以内有推荐的吗？
+category product_category/product_category @主商品 required eq {"type": "text", "value": "电动晾衣架"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 1500.0, "unit": "CNY"}
+functions function/function @主商品 required eq {"type": "text", "value": "全屏灯照明"}
+functions function/function @主商品 required eq {"type": "text", "value": "远程控制器智能操作升降"}
+specifications components/included_components @主商品 required contains_all {"type": "components", "items": [{"name": "杆子", "quantity": null, "unit": null}]}
+specifications form_factor/form_factor @杆子 required eq {"type": "text", "value": "可伸缩"}
+specifications installation_service/installation_service @主商品 required eq {"type": "text", "value": "嵌入式安装"}
+specifications color/color @升降杆 required eq {"type": "text", "value": "淡雅的象牙白色"}
+specifications form_factor/form_factor @主商品 required eq {"type": "text", "value": "一体设计的薄款"}
+specifications installation_service/installation_service @主商品 required eq {"type": "text", "value": "帮忙组装"}
+specifications warranty/warranty @主商品 required eq {"type": "text", "value": "长时间质保"}
+specifications components/included_components @主商品 required contains_all {"type": "components", "items": [{"name": "铝制晾衣架", "quantity": null, "unit": "piece"}]}
+specifications material/material @铝制晾衣架 required eq {"type": "text", "value": "铝制"}
+PENDING undefined_tolerance {"text": "10多个", "start": 98, "end": 102}
+
+TASK 12852 valid=True
+推荐一款蛋白肉，要那种豆子为原料制成的，是安徽阜阳的土特产，要商家自制的正宗产品，带有少量的盐，不要放添加剂，比较划算的五斤装就行，预算在二十五块钱左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "蛋白肉"}
+budget total_price/total_price @本次订单 uncertain at_most {"type": "number", "value": 27.5, "unit": "CNY"}
+specifications composition/composition @主商品 required eq {"type": "text", "value": "豆子为原料制成"}
+specifications origin/origin @主商品 required eq {"type": "text", "value": "安徽阜阳的土特产"}
+specifications craft/craft @主商品 required eq {"type": "text", "value": "商家自制的正宗产品"}
+specifications content/content @主商品 required eq {"type": "text", "value": "带有少量的盐"}
+specifications content/content @主商品 required eq {"type": "text", "value": "不要放添加剂"}
+specifications net_content/mass @主商品 required eq {"type": "number", "value": 5, "unit": "jin"}
+PENDING unverifiable_subjective {"text": "比较划算", "start": 55, "end": 59}
+
+TASK 13045 valid=False
+想买一个小型洗衣机，可以洗一些内裤袜子之类的小型衣物，随手折叠方便携带，一机多用，全程自动清洗和甩干，外表有一个可爱小黄鸭的图案，价格80元左右即可。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "小型洗衣机"}
+budget total_price/total_price @本次订单 uncertain eq {"type": "text", "value": "价格80元左右即可"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "洗一些内裤袜子之类的小型衣物"}
+functions function/function @主商品 required eq {"type": "text", "value": "全程自动清洗和甩干"}
+specifications form_factor/form_factor @主商品 required eq {"type": "text", "value": "随手折叠方便携带"}
+specifications function/function @主商品 required eq {"type": "text", "value": "一机多用"}
+specifications pattern/pattern @主商品 required eq {"type": "text", "value": "可爱小黄鸭的图案"}
+PENDING undefined_tolerance [{"text": "价格80元左右即可"}]
+ERROR Semantic review flags: [{"code": "purchase_quantity_coverage", "location": "/query", "source": {"role": "purchase", "count": 1, "unit": "piece", "name_context": "", "operator": "eq", "start": 2, "end": 4, "text": "一个", "source": "买一个", "ambiguous": false}, "detail": "Retain explicit purchase count 1 piece from 买一个; do not leave missing/null/text-only or bind to another object"}]
+
+TASK 13946 valid=False
+请帮我找一条适合春秋季日常穿的宽松运动裤，要是李宁最新出的款式，因为给男生穿，所以颜色选择黑色，要有新潮的设计和良好的散热效果，尺码为3XL，价格在600元左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "运动裤"}
+budget total_price/total_price @本次订单 required eq {"type": "text", "value": "价格在600元左右"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "适合春秋季日常穿"}
+functions target_user/target_user @男生 required eq {"type": "text", "value": "男生"}
+functions function/function @主商品 required eq {"type": "text", "value": "良好的散热效果"}
+specifications size/size_label @主商品 required eq {"type": "text", "value": "3XL"}
+specifications color/color @主商品 required eq {"type": "text", "value": "黑色"}
+specifications form_factor/form_factor @主商品 required eq {"type": "text", "value": "宽松"}
+specifications pattern/pattern @主商品 required eq {"type": "text", "value": "新潮的设计"}
+brand brand/brand @主商品 required eq {"type": "text", "value": "李宁"}
+PENDING missing_reference_time [{"text": "最新出的款式"}]
+ERROR Semantic review flags: [{"code": "purchase_quantity_coverage", "location": "/query", "source": {"role": "purchase", "count": 1, "unit": "piece", "name_context": "", "operator": "eq", "start": 4, "end": 6, "text": "一条", "source": "找一条", "ambiguous": false}, "detail": "Retain explicit purchase count 1 piece from 找一条; do not leave missing/null/text-only or bind to another object"}]
+
+TASK 14222 valid=False
+想买一件适宜户外运动穿的上衣，适合身高一米一左右的小孩穿的，要不区分性别的款式，材质要那种穿在身上感觉冰冰凉凉的，上身透气效果好的，颜色要绿色，希望是带有插肩设计的长袖，价格在35元左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "上衣"}
+budget total_price/total_price @本次订单 uncertain eq {"type": "text", "value": "价格在35元左右"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "适宜户外运动穿"}
+functions target_user/target_user @小孩 required eq {"type": "text", "value": "适合身高一米一左右的小孩穿的"}
+functions function/function @主商品 required eq {"type": "text", "value": "材质要那种穿在身上感觉冰冰凉凉的"}
+functions function/function @主商品 required eq {"type": "text", "value": "上身透气效果好的"}
+specifications quantity/purchase_count @主商品 required eq {"type": "number", "value": 1, "unit": "piece"}
+specifications size/wearer_height @小孩 required eq {"type": "text", "value": "身高一米一左右"}
+specifications style/style @主商品 required eq {"type": "text", "value": "不区分性别的款式"}
+specifications color/color @主商品 required eq {"type": "text", "value": "绿色"}
+specifications form_factor/form_factor @主商品 preference eq {"type": "text", "value": "带有插肩设计的长袖"}
+PENDING undefined_tolerance [{"text": "价格在35元左右"}]
+PENDING unverifiable_subjective [{"text": "材质要那种穿在身上感觉冰冰凉凉的"}]
+ERROR subject_evidence: quote the literal subject and attribute in separate evidence entries if needed; do not invent composite subject names
+
+TASK 14894 valid=True
+求推荐一款鞋帮在脚踝以下的运动鞋，适合青少年打棒球时穿着，要美津浓这个品牌的，颜色要包含白色和红色，尺码是190的，要售价在460元左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "运动鞋"}
+budget total_price/total_price @本次订单 uncertain at_most {"type": "number", "value": 506.0, "unit": "CNY"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "打棒球时穿着"}
+functions target_user/target_user @青少年 required eq {"type": "text", "value": "青少年"}
+specifications size/shoe_upper_height @主商品 required eq {"type": "text", "value": "鞋帮在脚踝以下"}
+specifications color/color @主商品 required contains_all {"type": "text_list", "values": ["白色", "红色"]}
+specifications size/size_label @主商品 required eq {"type": "text", "value": "190"}
+brand brand/brand @主商品 required eq {"type": "text", "value": "美津浓"}
+
+TASK 15032 valid=True
+我想买一款体积小巧的电吉他综合效果器，可以装在口袋里，方便随身携带，能够支持蓝牙连接，并且内置鼓机模块，提供节奏支持。颜色就要普通黑色。可以赠送耳机，转接头和OTG线，预算控制在500元以内。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "电吉他综合效果器"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 500.0, "unit": "CNY"}
+functions function/function @主商品 required eq {"type": "text", "value": "支持蓝牙连接"}
+functions function/function @主商品 required eq {"type": "text", "value": "内置鼓机模块，提供节奏支持"}
+specifications dimensions/dimensions @主商品 required eq {"type": "text", "value": "体积小巧"}
+specifications dimensions/dimensions @主商品 required eq {"type": "text", "value": "可以装在口袋里"}
+specifications color/color @主商品 required eq {"type": "text", "value": "普通黑色"}
+specifications components/gift_presence @主商品 uncertain contains_all {"type": "components", "items": [{"name": "耳机", "quantity": null, "unit": null}, {"name": "转接头", "quantity": null, "unit": null}, {"name": "OTG线", "quantity": null, "unit": null}]}
+PENDING ambiguous_meaning {"text": "方便随身携带", "start": 27, "end": 33}
+PENDING ambiguous_strength {"text": "可以赠送耳机", "start": 68, "end": 74}
+
+TASK 16177 valid=True
+筛选一双复古风格的中筒烟筒靴，带有厚底设计，颜色是淡灰色，尺码38码，适合秋冬季节穿着，价格在1900元左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "烟筒靴"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 2090.0, "unit": "CNY"}
+functions use_environment/use_environment @主商品 required eq {"type": "text", "value": "秋冬季节"}
+specifications quantity/purchase_count @主商品 required eq {"type": "number", "value": 1, "unit": "pair"}
+specifications style/style @主商品 uncertain eq {"type": "text", "value": "复古风格"}
+specifications size/size_label @主商品 required eq {"type": "text", "value": "中筒"}
+specifications form_factor/form_factor @主商品 required eq {"type": "text", "value": "厚底设计"}
+specifications color/color @主商品 required eq {"type": "text", "value": "淡灰色"}
+specifications size/size_label @主商品 required eq {"type": "text", "value": "38码"}
+PENDING unverifiable_subjective {"text": "复古风格", "start": 4, "end": 8}
+
+TASK 16609 valid=False
+我看上了徐璐的润唇膏，请帮我找一支同款的唇部精华，可以让嘴巴看起来又水又润，能够养护双唇，防止干裂起皮，我喜欢蓝莓味的，要求价格不超过20元。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "唇部精华"}
+budget total_price/total_price @本次订单 required eq {"type": "text", "value": "价格不超过20元"}
+functions function/function @主商品 required eq {"type": "text", "value": "让嘴巴看起来又水又润"}
+functions function/function @主商品 required eq {"type": "text", "value": "养护双唇"}
+functions function/function @主商品 required eq {"type": "text", "value": "防止干裂起皮"}
+specifications quantity/purchase_count @主商品 required eq {"type": "number", "value": 1, "unit": "piece"}
+specifications flavor/flavor @主商品 preference eq {"type": "text", "value": "蓝莓味"}
+PENDING missing_reference_time [{"text": "徐璐的润唇膏"}, {"text": "同款"}]
+ERROR [{'text': '徐璐的润唇膏'}, {'text': '同款'}] is not of type 'object'
+
+TASK 16730 valid=False
+最近开中华v3，空调压缩机泵头坏了，型号是H220，想换套三件套的配件，160块左右能帮忙推荐合适的吗？
+category product_category/product_category @主商品 required eq {"type": "text", "value": "配件"}
+budget total_price/total_price @本次订单 uncertain eq {"type": "text", "value": "160块左右"}
+specifications components/included_components @主商品 required contains_all {"type": "components", "items": [{"name": "三件套", "quantity": 1, "unit": "set"}]}
+specifications compatibility/compatibility @中华v3 required eq {"type": "text", "value": "中华v3"}
+specifications compatibility/compatibility @空调压缩机泵头 required eq {"type": "text", "value": "空调压缩机泵头"}
+model product_model/product_model @空调压缩机泵头 required eq {"type": "text", "value": "H220"}
+PENDING ambiguous_strength [{"text": "能帮忙推荐合适的吗"}]
+ERROR subject_evidence: quote the literal subject and attribute in separate evidence entries if needed; do not invent composite subject names
+
+TASK 17111 valid=True
+帮我搜一下适合夏天穿的雪纺衫，需要比较宽松可以适合微胖女生，上身效果能显瘦的。颜色要偏黄色，尺码能穿到140斤，我的预算在六十左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "雪纺衫"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 66.0, "unit": "CNY"}
+functions use_environment/use_environment @主商品 required eq {"type": "text", "value": "夏天"}
+functions target_user/target_user @微胖女生 required eq {"type": "text", "value": "微胖女生"}
+functions function/function @主商品 required eq {"type": "text", "value": "显瘦"}
+specifications size/size @主商品 required eq {"type": "text", "value": "宽松"}
+specifications size/wearer_weight_limit @主商品 required at_least {"type": "number", "value": 140, "unit": "jin"}
+specifications color/color @主商品 required eq {"type": "text", "value": "偏黄色"}
+PENDING unverifiable_subjective {"text": "上身效果能显瘦的", "start": 30, "end": 38}
+
+TASK 17803 valid=True
+我想买女士专用的厨房防护指套，用于切菜或者剥毛豆，最好是女款2个和10个装的指套，价格预算在5元以内。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "厨房防护指套"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 5.0, "unit": "CNY"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "用于切菜或者剥毛豆"}
+functions target_user/target_user @女士 required eq {"type": "text", "value": "女士专用"}
+specifications packaging/pack_count @主商品 preference eq {"type": "text", "value": "2个和10个装"}
+PENDING ambiguous_meaning {"text": "最好是女款2个和10个装的指套", "start": 25, "end": 40}
+
+TASK 18008 valid=True
+求推荐适合洗衣机用的洗衣凝珠，带除菌除螨功能的，量不用太多，20颗左右就够了，价格不要超过30。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "洗衣凝珠"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 30.0, "unit": "CNY"}
+functions function/function @主商品 required eq {"type": "text", "value": "除菌除螨"}
+functions use_environment/use_environment @主商品 required eq {"type": "text", "value": "洗衣机用"}
+specifications quantity/purchase_count @主商品 uncertain eq {"type": "text", "value": "20颗左右"}
+PENDING ambiguous_strength {"text": "量不用太多", "start": 24, "end": 29}
+PENDING undefined_tolerance {"text": "20颗左右", "start": 30, "end": 35}
+
+TASK 18609 valid=False
+从林氏家居官方旗舰店的产品中找一款带升降功能的学习椅，颜色要耐脏的蓝色，质量要好，预算700以内。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "学习椅"}
+budget total_price/total_price @本次订单 required eq {"type": "text", "value": "预算700以内"}
+functions function/function @主商品 required eq {"type": "text", "value": "升降功能"}
+specifications color/color @主商品 required eq {"type": "text", "value": "耐脏的蓝色"}
+specifications merchant/merchant @主商品 required eq {"type": "text", "value": "林氏家居官方旗舰店"}
+PENDING unverifiable_subjective [{"text": "质量要好"}]
+ERROR Semantic review flags: [{"code": "color_function_atomicity", "location": "/specifications/0", "detail": "Split color and performance, retaining unresolved evidence standards separately"}]
+
+TASK 19764 valid=True
+今天报考了英语四级考试，想买一本进口原版的1级课本，内容包含核心词汇，赠送APP和翻译练习册，也适合之后的六级、剑桥和雅思等考试。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "课本"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "适合之后的六级、剑桥和雅思等考试"}
+specifications quantity/purchase_count @主商品 required eq {"type": "number", "value": 1, "unit": "book"}
+specifications origin/origin @主商品 required eq {"type": "text", "value": "进口原版"}
+specifications size/size_label @主商品 required eq {"type": "text", "value": "1级"}
+specifications content/content @主商品 required contains_all {"type": "text_list", "values": ["核心词汇"]}
+specifications components/gift_presence @主商品 required contains_all {"type": "components", "items": [{"name": "APP", "quantity": null, "unit": null}, {"name": "翻译练习册", "quantity": null, "unit": null}]}
+PENDING ambiguous_meaning {"text": "今天报考了英语四级考试", "start": 0, "end": 11}
+
+TASK 20025 valid=True
+最近在检修吊车时，发现吊篮的旋转臂连接处有点松动，想换个能适配原厂吊篮结构的带自动调平功能的液压油缸+拐臂组合件，要能同时适配徐工、中联、三一这三个品牌的吊车的。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "液压油缸+拐臂组合件"}
+functions function/function @主商品 required eq {"type": "text", "value": "自动调平"}
+specifications compatibility/compatibility @主商品 required eq {"type": "text", "value": "适配原厂吊篮结构"}
+specifications compatibility/compatibility @主商品 required eq {"type": "text", "value": "同时适配徐工、中联、三一这三个品牌的吊车"}
+PENDING ambiguous_meaning {"text": "吊篮的旋转臂连接处有点松动", "start": 11, "end": 24}
+
+TASK 20229 valid=True
+我想给孩子买件紫色的保暖外套，要适合身高85左右的三合一可拆卸款，适合秋冬季穿的，价位在200以内的。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "外套"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 200.0, "unit": "CNY"}
+functions function/function @主商品 required eq {"type": "text", "value": "保暖"}
+functions use_environment/use_environment @主商品 required eq {"type": "text", "value": "秋冬季"}
+specifications color/color @主商品 required eq {"type": "text", "value": "紫色"}
+specifications size/wearer_height @主商品 uncertain eq {"type": "text", "value": "适合身高85左右"}
+specifications form_factor/form_factor @主商品 required eq {"type": "text", "value": "三合一可拆卸款"}
+PENDING undefined_tolerance {"text": "适合身高85左右", "start": 16, "end": 24}
+
+TASK 20357 valid=False
+我想找一个可以悬挂的收纳包，带有透明的小墨罐，尺寸大概是10*16cm，希望有毛球和挂绳的赠品可以送，预算在15元左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "收纳包"}
+budget total_price/total_price @本次订单 required eq {"type": "text", "value": "预算在15元左右"}
+functions function/function @主商品 required eq {"type": "text", "value": "可以悬挂"}
+specifications components/included_components @主商品 required contains_all {"type": "components", "items": [{"name": "透明的小墨罐", "quantity": null, "unit": null}]}
+specifications dimensions/dimensions @主商品 uncertain eq {"type": "text", "value": "10*16cm"}
+specifications components/gift_presence @主商品 preference contains_all {"type": "components", "items": [{"name": "毛球", "quantity": null, "unit": null}, {"name": "挂绳", "quantity": null, "unit": null}]}
+PENDING undefined_tolerance [{"text": "尺寸大概是10*16cm"}]
+PENDING ambiguous_strength [{"text": "希望有毛球和挂绳的赠品可以送"}]
+ERROR Semantic review flags: [{"code": "purchase_quantity_coverage", "location": "/query", "source": {"role": "purchase", "count": 1, "unit": "piece", "name_context": "", "operator": "eq", "start": 3, "end": 5, "text": "一个", "source": "找一个", "ambiguous": false}, "detail": "Retain explicit purchase count 1 piece from 找一个; do not leave missing/null/text-only or bind to another object"}]
+
+TASK 21051 valid=False
+帮我找一款大小10寸、双驱动气轮的电动转换套件，能方便轻松携带，承重范围大约200公斤，要有倒车功能，价格在500元左右。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "电动转换套件"}
+budget total_price/total_price @本次订单 required eq {"type": "text", "value": "价格在500元左右"}
+functions function/function @主商品 required eq {"type": "text", "value": "倒车功能"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "方便轻松携带"}
+specifications dimensions/diameter @主商品 required eq {"type": "number", "value": 10, "unit": "inch"}
+specifications form_factor/drive_structure @主商品 required eq {"type": "text", "value": "双驱动"}
+specifications form_factor/form_factor @主商品 required eq {"type": "text", "value": "气轮"}
+specifications capacity/load_capacity @主商品 uncertain eq {"type": "text", "value": "大约200公斤"}
+PENDING undefined_tolerance [{"text": "承重范围大约200公斤"}]
+ERROR Attribute does not match subtype
+
+TASK 21100 valid=True
+帮忙看看有没有新城疫C30株的单支装鸡用疫苗，最好是配稀释液的，要求适用于滴鼻、点眼、饮水等方式，还能预防禽流感、鸡痘、法氏囊和马立克支气管炎的，价格控制在二十块左右，听说兴牧康畜牧疫苗企业店不错，给我推荐一下呗。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "鸡用疫苗"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 22.0, "unit": "CNY"}
+functions function/function @主商品 required eq {"type": "text", "value": "适用于滴鼻、点眼、饮水等方式"}
+functions function/function @主商品 required eq {"type": "text", "value": "预防禽流感、鸡痘、法氏囊和马立克支气管炎"}
+specifications packaging/pack_count @主商品 required eq {"type": "number", "value": 1, "unit": "piece"}
+specifications components/included_components @主商品 preference contains_all {"type": "components", "items": [{"name": "稀释液", "quantity": null, "unit": null}]}
+specifications merchant/merchant @主商品 uncertain eq {"type": "text", "value": "兴牧康畜牧疫苗企业店"}
+model product_model/product_model @主商品 required eq {"type": "text", "value": "新城疫C30株"}
+PENDING ambiguous_strength {"text": "听说兴牧康畜牧疫苗企业店不错", "start": 84, "end": 98}
+
+TASK 21120 valid=True
+07年的Jeep指南者空调彻底不工作了，想换个靠谱的原装全新泵，质保久点的，最好是三年，2500 块左右能推荐吗？
+category product_category/product_category @主商品 required eq {"type": "text", "value": "泵"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 2750.0, "unit": "CNY"}
+specifications condition/condition @主商品 required eq {"type": "text", "value": "原装全新"}
+specifications warranty/warranty @主商品 required eq {"type": "text", "value": "质保久点的"}
+specifications warranty/warranty @主商品 preference eq {"type": "text", "value": "最好是三年"}
+specifications compatibility/compatibility @07年的Jeep指南者 required eq {"type": "text", "value": "07年的Jeep指南者"}
+PENDING unverifiable_subjective {"text": "靠谱", "start": 23, "end": 25}
+PENDING ambiguous_meaning {"text": "空调彻底不工作了", "start": 11, "end": 19}
+
+TASK 21576 valid=True
+帮我查下型号为DSC-RX0的索尼相机，适合在运动时使用，是迷你大小的，具备防水、防尘、防摔的功能。是第一代产品，价格差不多在1700元以内。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "相机"}
+budget total_price/total_price @本次订单 uncertain at_most {"type": "number", "value": 1700.0, "unit": "CNY"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "适合在运动时使用"}
+functions function/function @主商品 required eq {"type": "text", "value": "防水"}
+functions function/function @主商品 required eq {"type": "text", "value": "防尘"}
+functions function/function @主商品 required eq {"type": "text", "value": "防摔"}
+specifications form_factor/form_factor @主商品 required eq {"type": "text", "value": "迷你大小"}
+brand brand/brand @主商品 required eq {"type": "text", "value": "索尼"}
+model product_model/product_model @主商品 required eq {"type": "text", "value": "DSC-RX0"}
+model version/version @主商品 required eq {"type": "text", "value": "第一代"}
+PENDING undefined_tolerance {"text": "价格差不多在1700元以内", "start": 57, "end": 70}
+
+TASK 21998 valid=True
+找件退伍老兵穿的圆领T恤，经典的军绿色，要冰丝材质，价格在55元左右，XL码的就行，适合战友聚会穿。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "T恤"}
+budget total_price/total_price @本次订单 required at_most {"type": "number", "value": 60.5, "unit": "CNY"}
+functions target_user/target_user @退伍老兵 required eq {"type": "text", "value": "退伍老兵"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "适合战友聚会穿"}
+specifications size/size_label @主商品 required eq {"type": "text", "value": "XL码"}
+specifications color/color @主商品 required eq {"type": "text", "value": "军绿色"}
+specifications material/material @主商品 required eq {"type": "text", "value": "冰丝"}
+specifications form_factor/form_factor @主商品 required eq {"type": "text", "value": "圆领"}
+PENDING unverifiable_subjective {"text": "经典的", "start": 13, "end": 16}
+
+TASK 22210 valid=False
+查一下有没有能模仿大海场景的浮雕工艺装饰品，可以是石膏材质的，但装饰框要求是胡桃色实木的，尺寸在19x19cm左右，要能适合放在书桌上或玄关处，价格不要超过300元。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "浮雕工艺装饰品"}
+budget total_price/total_price @本次订单 required eq {"type": "text", "value": "价格不要超过300元"}
+functions purpose/purpose @主商品 required eq {"type": "text", "value": "能模仿大海场景"}
+functions use_environment/use_environment @主商品 required eq {"type": "text", "value": "适合放在书桌上或玄关处"}
+specifications material/material @主商品 uncertain eq {"type": "text", "value": "石膏"}
+specifications material/material @装饰框 required eq {"type": "text", "value": "胡桃色实木"}
+specifications dimensions/dimensions @主商品 uncertain eq {"type": "text", "value": "19x19cm左右"}
+PENDING ambiguous_strength [{"text": "可以是石膏材质的"}]
+PENDING undefined_tolerance [{"text": "尺寸在19x19cm左右"}]
+ERROR Semantic review flags: [{"code": "material_color_atomicity", "location": "/specifications/1", "detail": "Split material and color, keeping both bound to the same component"}]
+
+TASK 22560 valid=False
+求推荐适合小男孩出门穿的三合一冲锋衣，想要外层挡雨和挡风性能优秀，内层是不容易起静电的摇粒绒材质，颜色喜欢黑色，价格在500以内的。
+category product_category/product_category @主商品 required eq {"type": "text", "value": "三合一冲锋衣"}
+budget total_price/total_price @本次订单 required eq {"type": "text", "value": "价格在500以内的"}
+functions function/function @外层 required eq {"type": "text", "value": "挡雨和挡风性能优秀"}
+functions function/function @内层 required eq {"type": "text", "value": "不容易起静电"}
+functions target_user/target_user @小男孩 required eq {"type": "text", "value": "小男孩"}
+specifications material/material @内层 required eq {"type": "text", "value": "摇粒绒材质"}
+specifications color/color @主商品 preference eq {"type": "text", "value": "黑色"}
+ERROR subject_evidence: quote the literal subject and attribute in separate evidence entries if needed; do not invent composite subject names

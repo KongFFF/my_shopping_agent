@@ -1,0 +1,68 @@
+{
+  "date": "2026-11-02",
+  "policy": {
+    "version": "semantic-contract-v2-policy-20261102-r2",
+    "confirmed_by_user": true,
+    "budget_approximate_upper_factor": 1.1,
+    "budget_chutou": "two digits +4; >=3 digits +10**(digits-2)-1; upper only",
+    "budget_round_hundred_duo": "100..900 in whole hundreds +99; upper only; other duo phrases pending",
+    "bare_unit_price": "upper_bound",
+    "non_budget_approximation": "preserve_original_and_subject; tolerance pending; never apply budget factor",
+    "ambiguous_gift_or_merchant_strength": "uncertain_and_pending",
+    "subjective_quality_style_latest": "preserve_pending_until_evidence_standard_is_reviewed",
+    "hope_without_other_strength_marker": "uncertain_and_pending; not automatically preference or required"
+  },
+  "api_calls_made": 0,
+  "scope": "Offline regression over 5 saved responses, not new LLM outputs or accuracy.",
+  "cases": [
+    {
+      "task_id": 2547,
+      "source_attempt_line": 2,
+      "original_accepted": true,
+      "source_response_sha256": "8c0ee137aafbe8b9def6d9ee3f39b6c7a7dc7b6ba9cf242e5d377d8872517b2a",
+      "current_checks_passed": false,
+      "error": "Semantic review flags: [{\"code\": \"purchase_quantity_coverage\", \"location\": \"/query\", \"source\": {\"role\": \"purchase\", \"count\": 1, \"unit\": \"set\", \"name_context\": \"\", \"operator\": \"eq\", \"start\": 12, \"end\": 14, \"text\": \"一套\", \"source\": \"购买一套\", \"ambiguous\": false}, \"detail\": \"Retain explicit purchase count 1 set from 购买一套; do not leave missing/null/text-only or bind to another object\"}]"
+    },
+    {
+      "task_id": 3499,
+      "source_attempt_line": 3,
+      "original_accepted": false,
+      "source_response_sha256": "8ab82b10f10ce89f56f5889c66c6901ea1163dbac70760640e3fca8f3bf8e64e",
+      "current_checks_passed": false,
+      "error": "Semantic review flags: [{\"code\": \"component_quantity_coverage\", \"location\": \"/query\", \"source\": {\"role\": \"component\", \"count\": 1, \"unit\": \"piece\", \"name_context\": \"小压力表\", \"operator\": \"eq\", \"start\": 54, \"end\": 56, \"text\": \"一个\", \"source\": \"自带一个小压力表\", \"ambiguous\": false}, \"detail\": \"Retain explicit component count 1 piece from 自带一个小压力表; do not leave missing/null/text-only or bind to another object\"}, {\"code\": \"mixed_strength\", \"location\": \"/functions/1\", \"detail\": \"Split soft and separately explicit hard clauses into distinct requirements, or preserve the entire scope as uncertain with ambiguous_strength pending; never downgrade the whole group\", \"source\": \"希望水流能大一些，别卡水、憋水\"}, {\"code\": \"hard_clause_after_soft_uncovered\", \"location\": \"/query\", \"detail\": \"Later explicit directive needs its own mandatory requirement or an explicit pending-strength decision\", \"source\": \"别卡水、憋水\"}]"
+    },
+    {
+      "task_id": 3723,
+      "source_attempt_line": 6,
+      "original_accepted": true,
+      "source_response_sha256": "fa46aded74eaeb9b4497d8034116e95be91e8bb75fbb1a23266f3d12084f2fd5",
+      "current_checks_passed": true,
+      "pending_mentions": 1
+    },
+    {
+      "task_id": 3876,
+      "source_attempt_line": 7,
+      "original_accepted": true,
+      "source_response_sha256": "f8951ecdc68703cc18977d15dea1d0d44cc46de8a66373cccc1f2a7a3f8ff161",
+      "current_checks_passed": true,
+      "pending_mentions": 0
+    },
+    {
+      "task_id": 3885,
+      "source_attempt_line": 8,
+      "original_accepted": true,
+      "source_response_sha256": "62ad95d2ff0db66720c00cfc99f6ca1060c053a21611b3b7280ccc8d7b6ac64f",
+      "current_checks_passed": true,
+      "pending_mentions": 1
+    }
+  ],
+  "source_sha256": {
+    "run_manifest.json": "24b568c90af70fd12011097cbea19a13319a35564312f0754bf6ae71dae5b420",
+    "attempts.jsonl": "13605542502b9d161dc16e938e0891a51d4ecb62a2d9b19541e393bf4a6a1453",
+    "report.json": "536f5dd7321281fcd9e1b0829a5fe98ed908c33e8e2ed936094ede63d93d46a3"
+  },
+  "code_sha256": {
+    "tools/semantic_contract_v2.py": "c220c3ced7533c4367973c13d304313547eaca55371c604dfe2c157055fd0291",
+    "tools/semantic_coverage_v2.py": "161a83adef8ac32075dcc19ee94747add01f8813e977770c0217311f374476da"
+  }
+}

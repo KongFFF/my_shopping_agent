@@ -1,0 +1,129 @@
+{
+  "definitions": {
+    "bundle_words": "套餐|套装|组合装|组合套|组合包装",
+    "promotion_words": "买[0-9一二三四五六七八九十两]+.{0,8}(?:送|赠)[0-9一二三四五六七八九十两]+",
+    "gift_accessory_words": "赠送|附赠|加赠|附带",
+    "quantity_words": "[0-9一二三四五六七八九十两]+\\s*(?:瓶|包|盒|袋|支|只|个|件|套|对|片|把|卷|组|箱|双)"
+  },
+  "marker_candidates": [
+    "0lb",
+    "其他",
+    "其它",
+    "规格",
+    "默认",
+    "默认规格",
+    "默认选项"
+  ],
+  "counts": {
+    "train": {
+      "tasks": 1000,
+      "bundle_words": 44,
+      "promotion_words": 2,
+      "gift_accessory_words": 35,
+      "quantity_words": 294,
+      "bundle_promotion_accessory_union": 79,
+      "required_bundle_axis": 16,
+      "single_value_required_axis_tasks": 222,
+      "multiple_requirements_with_single_axis": 129,
+      "literal_marker_candidate_tasks": 3,
+      "numeric_model_token_tasks": 63,
+      "numeric_model_tokens": {
+        "24": 5,
+        "15": 1,
+        "90": 3,
+        "3080": 1,
+        "2025": 14,
+        "125": 1,
+        "45": 1,
+        "20": 6,
+        "48": 1,
+        "80": 1,
+        "42": 1,
+        "525": 1,
+        "52": 1,
+        "14": 1,
+        "2018": 1,
+        "100": 2,
+        "21": 1,
+        "19": 1,
+        "25": 4,
+        "39": 1,
+        "10": 3,
+        "16": 2,
+        "108": 1,
+        "2280": 1,
+        "13": 1,
+        "648": 1,
+        "523": 1,
+        "12": 2,
+        "18": 1,
+        "85": 1,
+        "110": 1,
+        "148": 1,
+        "180": 1,
+        "318": 1,
+        "200": 1,
+        "36": 1
+      }
+    },
+    "dev": {
+      "tasks": 50,
+      "bundle_words": 2,
+      "promotion_words": 1,
+      "gift_accessory_words": 1,
+      "quantity_words": 20,
+      "bundle_promotion_accessory_union": 4,
+      "required_bundle_axis": 0,
+      "single_value_required_axis_tasks": 11,
+      "multiple_requirements_with_single_axis": 7,
+      "literal_marker_candidate_tasks": 2,
+      "numeric_model_token_tasks": 2,
+      "numeric_model_tokens": {
+        "30": 1,
+        "10": 1
+      }
+    }
+  },
+  "task8666_counterfactuals": [
+    {
+      "options": {
+        "T168": "隐形单边拉链压脚1个"
+      },
+      "type": "partial_alternative_purchase",
+      "reward": 0.12307692307692308,
+      "score": 0.7692307692307692
+    },
+    {
+      "options": {
+        "T168": "隐形单边拉链压脚1个",
+        "颜色分类": "规格"
+      },
+      "type": "partial_alternative_purchase",
+      "reward": 0.1865384615384615,
+      "score": 0.8846153846153845
+    },
+    {
+      "options": {
+        "T168": "单边拉链压脚买10送1"
+      },
+      "type": "partial_alternative_purchase",
+      "reward": 0.1865384615384615,
+      "score": 0.8846153846153845
+    },
+    {
+      "options": {
+        "T168": "单边拉链压脚买10送1",
+        "颜色分类": "规格"
+      },
+      "type": "gold_purchase",
+      "reward": 1.0,
+      "score": 1.0
+    }
+  ],
+  "limitations": [
+    "Literal screening counts, not prevalence of semantic bundle tasks or reward defects.",
+    "Single-value axes can encode real user requirements; not automatically placeholders.",
+    "Pure numeric model tokens can be genuine models; candidates require contextual review.",
+    "Only original train1000 and Dev50; no Final data or scoring/data modifications."
+  ]
+}

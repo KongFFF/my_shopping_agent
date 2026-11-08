@@ -1,0 +1,148 @@
+{
+  "schema_version": "shopping-semantic-requirements-v2-r5-draft",
+  "task_id": 0,
+  "query": "买两套文具，最好蓝色，必须每套自带一个收纳盒，预算100元以内。",
+  "category": [
+    {
+      "subtype": "product_category",
+      "attribute": "product_category",
+      "subject": {
+        "kind": "primary_product",
+        "name": "主商品"
+      },
+      "importance": "required",
+      "operator": "eq",
+      "expected": {
+        "type": "text",
+        "value": "文具"
+      },
+      "price_basis": null,
+      "evidence": [
+        {
+          "text": "文具",
+          "start": 3,
+          "end": 5
+        }
+      ],
+      "review_status": "pending",
+      "id": "r002"
+    }
+  ],
+  "budget": [
+    {
+      "subtype": "total_price",
+      "attribute": "total_price",
+      "subject": {
+        "kind": "order",
+        "name": "本次订单"
+      },
+      "importance": "required",
+      "operator": "at_most",
+      "expected": {
+        "type": "number",
+        "value": 100.0,
+        "unit": "CNY"
+      },
+      "price_basis": null,
+      "evidence": [
+        {
+          "text": "预算100元以内",
+          "start": 23,
+          "end": 31
+        },
+        {
+          "text": "预算100元以内。",
+          "start": 23,
+          "end": 32
+        }
+      ],
+      "review_status": "pending",
+      "id": "r005"
+    }
+  ],
+  "functions": [],
+  "specifications": [
+    {
+      "subtype": "quantity",
+      "attribute": "purchase_count",
+      "subject": {
+        "kind": "primary_product",
+        "name": "主商品"
+      },
+      "importance": "required",
+      "operator": "eq",
+      "expected": {
+        "type": "number",
+        "value": 2,
+        "unit": "set"
+      },
+      "price_basis": null,
+      "evidence": [
+        {
+          "text": "买两套文具",
+          "start": 0,
+          "end": 5
+        }
+      ],
+      "review_status": "pending",
+      "id": "r001"
+    },
+    {
+      "subtype": "color",
+      "attribute": "color",
+      "subject": {
+        "kind": "primary_product",
+        "name": "主商品"
+      },
+      "importance": "preference",
+      "operator": "eq",
+      "expected": {
+        "type": "text",
+        "value": "蓝色"
+      },
+      "price_basis": null,
+      "evidence": [
+        {
+          "text": "最好蓝色",
+          "start": 6,
+          "end": 10
+        }
+      ],
+      "review_status": "pending",
+      "id": "r003"
+    },
+    {
+      "subtype": "components",
+      "attribute": "included_components",
+      "subject": {
+        "kind": "primary_product",
+        "name": "主商品"
+      },
+      "importance": "required",
+      "operator": "contains_all",
+      "expected": {
+        "type": "components",
+        "items": [
+          {
+            "name": "收纳盒",
+            "quantity": 1,
+            "unit": "piece"
+          }
+        ]
+      },
+      "price_basis": null,
+      "evidence": [
+        {
+          "text": "必须每套自带一个收纳盒",
+          "start": 11,
+          "end": 22
+        }
+      ],
+      "review_status": "pending",
+      "id": "r004"
+    }
+  ],
+  "brand": [],
+  "model": [],
+  "pending_mentions": []
+}
