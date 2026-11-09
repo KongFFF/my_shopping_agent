@@ -14,7 +14,7 @@ import unicodedata
 import copy
 from pathlib import Path
 
-VERSION = 'semantic-product-verifier-v4-public-matching-r2'
+VERSION = 'semantic-product-verifier-v4-pilot-evidence-r3'
 ROOT = Path(__file__).resolve().parents[1]
 ENGINE = ROOT/'upstream/shopping-grpo-longhorizon/environments/ShopSimulator/shop_env'
 if str(ENGINE) not in sys.path:
@@ -353,7 +353,7 @@ def compare_requirement(requirement,dimension,product,state,facts):
                         'evidence':[price]+[{'sale_quantity':q['evidence'],'sale_unit_quantity':u['evidence']} for _,q,u in candidates]}
             candidates=[]
             for f in facts:
-                if f['subject']==PRIMARY and (f['subtype'],f['attribute']) in (('quantity','purchase_count'),('packaging','pack_count')) and f['value']['type']=='number':
+                if f['subject']==PRIMARY and (f['subtype'],f['attribute']) in (('quantity','purchase_count'),('packaging','pack_count'),('transaction_terms','sale_quantity')) and f['value']['type']=='number':
                     family,amount=convert(f['value']['value'],f['value']['unit'])
                     other,denom=convert(basis['amount'],basis['unit'])
                     if family==other and amount>0:candidates.append((price['price']/amount*denom,f))

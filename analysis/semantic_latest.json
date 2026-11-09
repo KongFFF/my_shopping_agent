@@ -4,7 +4,7 @@
   "awaiting_user_decisions": 0,
   "program_valid": 1000,
   "contract_version": "shopping-semantic-requirements-v2-r7-final12-draft",
-  "contracts": "analysis/semantic_batch_acceptance_20261108/contracts1000.jsonl",
+  "contracts": "analysis/semantic_pilot30_evidence_20261109/contracts1000.jsonl",
   "raw_drafts": "analysis/semantic_training_revision_20261107/candidate_drafts1000.jsonl",
   "raw_drafts_scope": "historical extraction input; current contracts require the frozen offline migration and review pipeline, not a new LLM response",
   "policy_migration": {
@@ -25,10 +25,10 @@
   "confirmed_policy": "analysis/semantic_final12_20261107/confirmed_policy.json",
   "product_verifier": "tools/semantic_product_verifier_v4.py",
   "product_fact_extractor": "tools/extract_product_facts_v3.py",
-  "reviewed_pilot_fact_pack": "analysis/semantic_product_facts_v2_20261107/catalog_facts.jsonl",
+  "reviewed_pilot_fact_pack": "analysis/semantic_pilot30_evidence_20261109/catalog_facts.jsonl",
   "formal_training_ready": false,
-  "reason": "v3真实试跑完成1次更新后因连续3轮凑不齐组停止。商品核验通用修复已通过202项测试和离线回放；同批有效组5→7、未知571→449，尚未恢复GPU或放行正式训练。",
-  "report": "analysis/semantic_public_matching_fix_20261109/修复与离线验收.md",
+  "reason": "30商品/35实际SKU有限补核完成；新增75事实，176个独立未知解决73，剩余103保守保留。1295用途关系按用户答复修正。212项测试通过，可从SFT300做最多3次更新的小试跑；未启动GPU或放行正式训练。",
+  "report": "analysis/semantic_pilot30_evidence_20261109/补核结论与下一步.md",
   "history_acceptance": {
     "report": "analysis/semantic_history_closeout_20261107/验收收尾报告.md",
     "summary": "analysis/semantic_history_closeout_20261107/acceptance_summary.json",
@@ -54,8 +54,8 @@
     "source_contracts_approved": 14,
     "sample_guard_failures": 2,
     "sample_total_reward_valid": 28,
-    "current_code_revalidation": "passed_after_public_matching_repair",
-    "current_revalidation_summary": "analysis/semantic_public_matching_fix_20261109/history/acceptance_summary.json"
+    "current_code_revalidation": "passed_after_limited_pilot_evidence_review",
+    "current_revalidation_summary": "analysis/semantic_pilot30_evidence_20261109/history/acceptance_summary.json"
   },
   "previous_contracts": "analysis/semantic_remaining_final_20261108/validated1000.jsonl",
   "contract_schema_revision": "semantic-batch-accepted-20261108",
@@ -68,14 +68,14 @@
   "source_bound_review_decisions": "experiments/semantic_history_review_20261107/user_decisions.json",
   "evidence_reward_policy": "experiments/semantic_evidence_reward_v1/policy.json",
   "training_signoff": {
-    "manifest": "analysis/semantic_public_matching_fix_20261109/training_bundle/manifest.json",
-    "registry": "analysis/semantic_public_matching_fix_20261109/training_bundle/registry1000.jsonl",
-    "report": "analysis/semantic_public_matching_fix_20261109/修复与离线验收.md",
+    "manifest": "analysis/semantic_pilot30_evidence_20261109/training_bundle/manifest.json",
+    "registry": "analysis/semantic_pilot30_evidence_20261109/training_bundle/registry1000.jsonl",
+    "report": "analysis/semantic_pilot30_evidence_20261109/补核结论与下一步.md",
     "original_tasks": 1000,
     "program_valid": 1000,
     "whole_source_signed": 7,
-    "status": "product_matching_repair_cpu_verified_gpu_retry_pending",
-    "snapshot_contracts": "analysis/semantic_batch_acceptance_20261108/contracts1000.jsonl",
+    "status": "limited_evidence_review_passed_recommend_3_update_pilot",
+    "snapshot_contracts": "analysis/semantic_pilot30_evidence_20261109/contracts1000.jsonl",
     "batch_accepted_for_pilot": 981,
     "held_source_limitations": 19
   },
@@ -142,6 +142,19 @@
     "pilot_replay_summary": "analysis/semantic_public_matching_fix_20261109/pilot_replay/summary.json",
     "manifest": "analysis/semantic_public_matching_fix_20261109/training_bundle/manifest.json",
     "gpu_retry_recommended": false,
-    "real_pilot_completed_optimizer_updates": 1
+    "real_pilot_completed_optimizer_updates": 1,
+    "is_previous_stage": true
+  },
+  "limited_pilot_evidence_review": {
+    "status": "completed_for_limited_scope_next_3_update_pilot",
+    "manifest": "analysis/semantic_pilot30_evidence_20261109/training_bundle/manifest.json",
+    "review_summary": "analysis/semantic_pilot30_evidence_20261109/review_summary.json",
+    "verification": "analysis/semantic_pilot30_evidence_20261109/verification.json",
+    "commands": "analysis/semantic_pilot30_evidence_20261109/无卡预检与3步试跑命令.md",
+    "previous_contracts": "analysis/semantic_batch_acceptance_20261108/contracts1000.jsonl",
+    "source_amendment_task": 1295,
+    "gpu_retry_recommended": true,
+    "recommended_max_optimizer_steps": 3,
+    "full_training_released": false
   }
 }

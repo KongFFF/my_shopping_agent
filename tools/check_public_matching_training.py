@@ -11,17 +11,18 @@ import tempfile
 import time
 import unittest
 
-from semantic_training_bundle import ROOT, build_bundle, TrainingEvidenceBackend
+from semantic_training_bundle import ROOT, build_bundle, TrainingEvidenceBackend, sha256
 
 
-def check(output):
-    previous = ROOT / 'analysis/semantic_batch_acceptance_20261108/training_bundle/manifest.json'
+def check(output, previous=None, catalog_facts=None):
+    previous = previous or ROOT / 'analysis/semantic_batch_acceptance_20261108/training_bundle/manifest.json'
     old = json.loads(previous.read_text(encoding='utf-8'))
     contracts = ROOT / old['assets']['contracts']['path']
+    input_contract_hash = sha256(contracts)
     approvals = ROOT / old['assets']['whole_source_approvals']['path']
     release = ROOT / old['assets']['batch_release']['path']
     build_bundle(output / 'training_bundle', contracts_path=contracts,
-                 approvals_path=approvals, batch_release_path=release)
+                 approvals_path=approvals, batch_release_path=release, catalog_facts_path=catalog_facts)
     manifest = output / 'training_bundle/manifest.json'
     backend = TrainingEvidenceBackend(manifest)
     backend.require_ready()
@@ -36,7 +37,7 @@ def check(output):
             raise ValueError('Test workspace outside intended temporary root')
         integration.DEFAULT_OUTPUT = tmp / 'legacy'
         integration.build_bundle = lambda: build_bundle(
-            integration.DEFAULT_OUTPUT, contracts_path=contracts, approvals_path=approvals)
+            integration.DEFAULT_OUTPUT, contracts_path=contracts, approvals_path=approvals, catalog_facts_path=catalog_facts)
         batch.OUT = tmp / 'batch'
         (batch.OUT / 'training_bundle').mkdir(parents=True)
         shutil.copyfile(manifest, batch.OUT / 'training_bundle/manifest.json')
@@ -49,7 +50,7 @@ def check(output):
         'passed': result.wasSuccessful(), 'cpu_integration_tests': result.testsRun,
         'duration_seconds': round(time.monotonic()-started, 3),
         'manifest': str(manifest.relative_to(ROOT)),
-        'source_contracts_unchanged': True,
+        'input_contracts_preserved_during_tests': sha256(contracts) == input_contract_hash,
         'released_tasks': len(backend.released_ids), 'held_tasks': len(backend.held_ids),
         'generation_and_http': 'scripted; real backend, adapter and group selector',
         'gpu_training_executed': False, 'api_calls': 0,
@@ -63,5 +64,7 @@ def check(output):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--previous-manifest', type=Path)
+    parser.add_argument('--catalog-facts', type=Path)
     args = parser.parse_args()
-    check(args.output.resolve())
+    check(args.output.resolve(), args.previous_manifest, args.catalog_facts)

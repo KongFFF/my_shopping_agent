@@ -44,7 +44,7 @@ def dump(path, value):
     Path(path).write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 
 
-def build_bundle(output=DEFAULT_OUTPUT, *, approvals_path=None, contracts_path=None, batch_release_path=None):
+def build_bundle(output=DEFAULT_OUTPUT, *, approvals_path=None, contracts_path=None, batch_release_path=None, catalog_facts_path=None):
     output = Path(output).resolve()
     output.mkdir(parents=True, exist_ok=True)
     latest = json.loads((ROOT / 'analysis/semantic_latest.json').read_text(encoding='utf-8'))
@@ -131,7 +131,7 @@ def build_bundle(output=DEFAULT_OUTPUT, *, approvals_path=None, contracts_path=N
         'contracts': contracts_path, 'registry': registry_path, 'whole_source_approvals': approvals_path,
         'original_queries': query_path,
         'catalog': UPSTREAM / 'environments/ShopSimulator/shop_env/data/fine_items_eval_train_all.json.gz',
-        'catalog_facts': ROOT / latest['reviewed_pilot_fact_pack'],
+        'catalog_facts': Path(catalog_facts_path).resolve() if catalog_facts_path else ROOT / latest['reviewed_pilot_fact_pack'],
         'policy': ROOT / latest['evidence_reward_policy'],
         'train_ids': train_path, 'validation_ids': val_path, 'evaluation_ids': eval_path,
         'train_parquet': UPSTREAM / 'data/grpo/train.parquet',
@@ -343,6 +343,7 @@ def main():
     parser.add_argument('--approvals', type=Path, help='Exact whole-source approval ledger; never inferred from program_valid')
     parser.add_argument('--contracts', type=Path)
     parser.add_argument('--batch-release', type=Path)
+    parser.add_argument('--catalog-facts', type=Path, help='Explicit source-reviewed fact pack to freeze')
     parser.add_argument('--check', type=Path, help='Check existing bundle without API/GPU calls')
     args = parser.parse_args()
     if args.check:
@@ -357,7 +358,7 @@ def main():
                           'formal_training_ready': backend.approved_ids == backend.train_ids}))
     else:
         manifest = build_bundle(args.output, approvals_path=args.approvals, contracts_path=args.contracts,
-                                batch_release_path=args.batch_release)
+                                batch_release_path=args.batch_release, catalog_facts_path=args.catalog_facts)
         print(json.dumps({k: v for k, v in manifest.items() if k not in ('assets', 'dependencies', 'held_tasks')}, ensure_ascii=False))
 
 

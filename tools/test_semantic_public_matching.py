@@ -164,6 +164,23 @@ class PublicMatchingTests(unittest.TestCase):
             self.assertEqual(compare(product(title=title), text_req('material', want))['status'], 'unknown')
         self.assertEqual(compare(product(title='小羊皮'), text_req('material', '羊皮'))['status'], 'pass')
 
+    def test_unit_price_uses_proven_length_sale_unit(self):
+        p = product('每米单价', '尺寸')
+        s = v.snapshot(p, {'尺寸': '每米单价'})
+        r = requirement('unit_price', 'unit_price', dict(type='number', value=12, unit='CNY'),
+                        'at_most', v.ORDER)
+        r['price_basis'] = {'amount': 1, 'unit': 'm'}
+        facts = v.automatic_facts(p, s)
+        self.assertEqual(v.compare_requirement(r, 'budget', p, s, facts)['status'], 'unknown')
+        facts.append(v.fact('specifications', 'transaction_terms', 'sale_quantity',
+                           dict(type='number', value=1, unit='m'),
+                           [{'pointer': s['selected'][0]['pointer'], 'value': '每米单价'}]))
+        result = v.compare_requirement(r, 'budget', p, s, facts)
+        self.assertEqual(result['status'], 'pass')
+        self.assertEqual(result['actual']['value'], 10)
+        conflict = copy.deepcopy(facts[-1]); conflict['value']['value'] = 2
+        self.assertEqual(v.compare_requirement(r, 'budget', p, s, facts+[conflict])['status'], 'unknown')
+
 
 if __name__ == '__main__':
     unittest.main()
