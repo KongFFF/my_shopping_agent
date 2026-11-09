@@ -14,7 +14,7 @@ import unicodedata
 import copy
 from pathlib import Path
 
-VERSION = 'semantic-product-verifier-v4-representation-fix'
+VERSION = 'semantic-product-verifier-v4-public-matching-r2'
 ROOT = Path(__file__).resolve().parents[1]
 ENGINE = ROOT/'upstream/shopping-grpo-longhorizon/environments/ShopSimulator/shop_env'
 if str(ENGINE) not in sys.path:
@@ -148,6 +148,8 @@ def automatic_facts(product, state):
     facts.extend(selected_facts(product,state))
     from semantic_catalog_rules_v3 import extended_facts
     facts.extend(extended_facts(product,state))
+    from semantic_public_matching import automatic_pack_facts
+    facts.extend(automatic_pack_facts(product,state))
     return facts
 
 
@@ -226,6 +228,16 @@ def compare_value(requirement, actual, *, complete=True):
         if value['type']=='text':value['value']=canonical(subtype,value['value'])
         elif value['type']=='text_list':value['values']=[canonical(subtype,x) for x in value['values']]
     expected=requirement['expected']; op=requirement['operator']; kind=expected['type']
+    if (requirement.get('attribute')=='dimensions' and op=='eq'
+            and kind==actual.get('type')=='text'):
+        from semantic_public_matching import ordered_dimensions
+        if normalized(expected['value'])==normalized(actual['value']):return 'pass'
+        want,got=ordered_dimensions(expected['value']),ordered_dimensions(actual['value'])
+        return 'pass' if want is not None and got is not None and want==got else 'unknown'
+    if (kind==actual.get('type')=='range' and op=='approximately'
+            and requirement.get('attribute') in ('wearer_height','wearer_weight_limit')):
+        probe={**requirement,'operator':'covers_range'}
+        return 'pass' if compare_value(probe,actual,complete=complete)=='pass' else 'unknown'
     if op=='covers_range':
         if actual.get('type')!='range' or not complete:return 'unknown'
         for name,is_lower in (('lower',True),('upper',False)):
@@ -354,8 +366,11 @@ def compare_requirement(requirement,dimension,product,state,facts):
             return {'status':'unknown','reason':'unsupported_price_scope','evidence':[]}
         actual={'type':'number','value':price['price'],'unit':'CNY'}
         return {'status':compare_value(requirement,actual),'reason':'resolved_selected_variant_price','actual':actual,'evidence':[price]}
-    matches=[f for f in facts if (f['dimension'],f['subtype'],f['attribute'],f['subject'])==
-             (dimension,requirement['subtype'],requirement['attribute'],requirement['subject'])]
+    from semantic_public_matching import subject_matches, public_claim, selected_component_claim
+    matches=[f for f in facts if (f['dimension'],f['subtype'],f['attribute'])==
+             (dimension,requirement['subtype'],requirement['attribute']) and subject_matches(requirement,f)]
+    gift=selected_component_claim(requirement,product,state)
+    if gift is not None and not matches:return gift
     if requirement['subtype']=='components':
         from semantic_component_comparison import compare_components
         joined=compare_components(requirement,matches)
@@ -411,6 +426,8 @@ def compare_requirement(requirement,dimension,product,state,facts):
     known={x['status'] for x in decisions if x['status']!='unknown'}
     if len(known)>1:return {'status':'unknown','reason':'conflicting_facts','evidence':decisions}
     if known:return {'status':next(iter(known)),'reason':'typed_source_fact','evidence':decisions}
+    literal=public_claim(requirement,dimension,product,state)
+    if literal is not None:return literal
     # Taxonomy membership supports exact category names only. Absence is not
     # a mismatch without a reviewed semantic category mapping.
     if dimension=='category' and requirement['expected']['type']=='text' and requirement['operator']=='eq':
@@ -419,7 +436,9 @@ def compare_requirement(requirement,dimension,product,state,facts):
             return {'status':'pass','reason':'literal_category_node','evidence':[source('/category',value)]}
     # Product attributes are explicit common claims, not the title containing
     # every available variant. Only exact whole-value equality is supported.
-    if requirement['subject']==PRIMARY and requirement['subtype'] in ('function','material') and requirement['expected']['type']=='text' and requirement['operator']=='eq':
+    if (requirement['subject']==PRIMARY and requirement['subtype'] in ('function','material')
+            and requirement['expected']['type']=='text' and requirement['operator']=='eq'
+            and normalized(requirement['expected']['value']) not in ('配件齐全','全套配件','全套附件')):
         for i,value in enumerate(product.get('attribute') or []):
             if isinstance(value,str) and normalized(value)==normalized(requirement['expected']['value']):
                 return {'status':'pass','reason':'literal_structured_attribute','evidence':[source(f'/attribute/{i}',value)]}

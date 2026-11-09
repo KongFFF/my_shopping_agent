@@ -6,7 +6,7 @@ NUMBER=r'(?:\d+(?:\.\d+)?|[零〇一二两三四五六七八九十百千万]+)'
 UNITS={'g':'g','克':'g','kg':'kg','千克':'kg','公斤':'kg','ml':'ml','毫升':'ml','l':'l','升':'l',
        'mm':'mm','毫米':'mm','cm':'cm','厘米':'cm','公分':'cm','m':'m','米':'m','斤':'jin'}
 COUNT_UNITS={'瓶':'bottle','袋':'bag','包':'bag','盒':'box','支':'piece','个':'piece','件':'piece','片':'piece','只':'piece','本':'book','套':'set'}
-COLORS=('浅灰色','深灰色','暗蓝色','米白色','象牙色','自然色','森林绿','古铜色','橙色','桔色','黑色','白色','红色','蓝色','绿色','黄色','金色','银色','粉色','灰色','紫色','棕色')
+from semantic_public_matching import COLORS
 PRIMARY={'kind':'primary_product','name':'主商品'}
 
 
@@ -60,8 +60,8 @@ def selected_facts(product,state):
         # Only explicit labels, not title-wide brand or color guesses. 白光
         # remains a light source color and never becomes a white body color.
         if axis in ('颜色','颜色分类','color'):
-            colors=[color for color in COLORS if color in text]
-            colors=[c for c in colors if not any(c!=other and c in other for other in colors)]
+            from semantic_public_matching import selected_colors
+            colors=selected_colors(text)
             if len(colors)==1:
                 pos=text.index(colors[0]);prefix=text[max(0,pos-3):pos]
                 if not re.search(r'非|不|无|不要',prefix):emit('color','color',{'type':'text','value':colors[0]},selected)

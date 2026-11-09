@@ -16,7 +16,7 @@ from pathlib import Path
 from semantic_contract_v2_r7_final12 import DIMENSIONS, validate
 from semantic_evidence_reward import VERSION, score_terminal_failure, score_training_verified
 from semantic_history_adapter import canonicalize_purchase
-from semantic_product_verifier_v4 import verify
+from semantic_product_verifier_v4 import verify, VERSION as VERIFIER_VERSION
 
 ROOT = Path(__file__).resolve().parents[1]
 UPSTREAM = ROOT / 'upstream/shopping-grpo-longhorizon'
@@ -159,6 +159,7 @@ def build_bundle(output=DEFAULT_OUTPUT, *, approvals_path=None, contracts_path=N
     dependencies += [UPSTREAM / 'scripts/check_grpo_runtime.py']
     dependencies += list((UPSTREAM / 'environments/ShopSimulator/shop_env/web_agent_site/engine').glob('*.py'))
     manifest = {'version': 'semantic-training-signoff-v1', 'reward_version': VERSION,
+                'product_verifier_version': VERIFIER_VERSION,
                 'hash_policy': 'sha256_text_lf_for_py_json_jsonl_yaml_toml; binary_bytes_otherwise',
                 'objective': 'verified_public_evidence_satisfaction', 'original_training_tasks': 1000,
                 'signed_tasks': sum(r['whole_source_approved'] for r in registry),

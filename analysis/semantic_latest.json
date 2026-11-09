@@ -1,5 +1,5 @@
 {
-  "date": "2026-11-08",
+  "date": "2026-11-09",
   "known12_closeout": "completed",
   "awaiting_user_decisions": 0,
   "program_valid": 1000,
@@ -27,8 +27,8 @@
   "product_fact_extractor": "tools/extract_product_facts_v3.py",
   "reviewed_pilot_fact_pack": "analysis/semantic_product_facts_v2_20261107/catalog_facts.jsonl",
   "formal_training_ready": false,
-  "reason": "981题已放行20步试跑，19题整组不可评分。最新云端日志进入环境reset，5700连接被拒绝；需在实际训练实例启动并实测ShopSimulator，再用v3新目录重试。",
-  "report": "analysis/semantic_batch_acceptance_20261108/批次验收与训练放行报告.md",
+  "reason": "v3真实试跑完成1次更新后因连续3轮凑不齐组停止。商品核验通用修复已通过202项测试和离线回放；同批有效组5→7、未知571→449，尚未恢复GPU或放行正式训练。",
+  "report": "analysis/semantic_public_matching_fix_20261109/修复与离线验收.md",
   "history_acceptance": {
     "report": "analysis/semantic_history_closeout_20261107/验收收尾报告.md",
     "summary": "analysis/semantic_history_closeout_20261107/acceptance_summary.json",
@@ -54,8 +54,8 @@
     "source_contracts_approved": 14,
     "sample_guard_failures": 2,
     "sample_total_reward_valid": 28,
-    "current_code_revalidation": "passed_in_batch_acceptance",
-    "current_revalidation_summary": "analysis/semantic_batch_acceptance_20261108/history/acceptance_summary.json"
+    "current_code_revalidation": "passed_after_public_matching_repair",
+    "current_revalidation_summary": "analysis/semantic_public_matching_fix_20261109/history/acceptance_summary.json"
   },
   "previous_contracts": "analysis/semantic_remaining_final_20261108/validated1000.jsonl",
   "contract_schema_revision": "semantic-batch-accepted-20261108",
@@ -68,13 +68,13 @@
   "source_bound_review_decisions": "experiments/semantic_history_review_20261107/user_decisions.json",
   "evidence_reward_policy": "experiments/semantic_evidence_reward_v1/policy.json",
   "training_signoff": {
-    "manifest": "analysis/semantic_batch_acceptance_20261108/training_bundle/manifest.json",
-    "registry": "analysis/semantic_batch_acceptance_20261108/training_bundle/registry1000.jsonl",
-    "report": "analysis/semantic_batch_acceptance_20261108/批次验收与训练放行报告.md",
+    "manifest": "analysis/semantic_public_matching_fix_20261109/training_bundle/manifest.json",
+    "registry": "analysis/semantic_public_matching_fix_20261109/training_bundle/registry1000.jsonl",
+    "report": "analysis/semantic_public_matching_fix_20261109/修复与离线验收.md",
     "original_tasks": 1000,
     "program_valid": 1000,
     "whole_source_signed": 7,
-    "status": "bounded_pilot_released",
+    "status": "product_matching_repair_cpu_verified_gpu_retry_pending",
     "snapshot_contracts": "analysis/semantic_batch_acceptance_20261108/contracts1000.jsonl",
     "batch_accepted_for_pilot": 981,
     "held_source_limitations": 19
@@ -133,5 +133,15 @@
     "sample_reviews": "analysis/semantic_batch_acceptance_20261108/sample_reviews60.jsonl",
     "data_edits": "analysis/semantic_batch_acceptance_20261108/data_edits.jsonl",
     "verification": "analysis/semantic_batch_acceptance_20261108/verification.json"
+  },
+  "product_matching_fix": {
+    "status": "cpu_and_offline_verified_remaining_evidence_and_sampling_pending",
+    "verifier_version": "semantic-product-verifier-v4-public-matching-r2",
+    "report": "analysis/semantic_public_matching_fix_20261109/修复与离线验收.md",
+    "verification": "analysis/semantic_public_matching_fix_20261109/verification.json",
+    "pilot_replay_summary": "analysis/semantic_public_matching_fix_20261109/pilot_replay/summary.json",
+    "manifest": "analysis/semantic_public_matching_fix_20261109/training_bundle/manifest.json",
+    "gpu_retry_recommended": false,
+    "real_pilot_completed_optimizer_updates": 1
   }
 }
