@@ -1,0 +1,129 @@
+{
+  "version": "purchase-judge-benchmark-v1",
+  "api_calls": 93,
+  "valid_requests": 87,
+  "total_requests": 88,
+  "complete": false,
+  "accuracy": {
+    "reference_atoms": 244,
+    "judged_reference_atoms": 244,
+    "reference_label_counts": {
+      "pass": 166,
+      "unknown": 72,
+      "fail": 6
+    },
+    "rule_accuracy": 0.45491803278688525,
+    "judge_accuracy": 0.8811475409836066,
+    "hybrid_accuracy": 0.8770491803278688,
+    "false_pass_count": 25,
+    "false_pass_denominator_nonpass": 78,
+    "confusion": {
+      "pass->pass": 165,
+      "unknown->unknown": 46,
+      "unknown->fail": 2,
+      "fail->pass": 1,
+      "unknown->pass": 24,
+      "fail->fail": 4,
+      "pass->unknown": 1,
+      "fail->unknown": 1
+    },
+    "reference_author": "assistant_source_review_not_user_whole_query_signoff",
+    "scope": "stratified_train_purchase_atoms; not_train1000_accuracy; not_reward_formula_accuracy"
+  },
+  "api_attempt_seconds": {
+    "n": 93,
+    "mean": 16.80736228279592,
+    "p50": 9.799741300001187,
+    "p95": 56.30800800000361,
+    "max": 60.05021470000065
+  },
+  "valid_request_seconds_including_retries": {
+    "n": 87,
+    "mean": 16.446102875861868,
+    "p50": 9.799851799998578,
+    "p95": 46.07774209999843,
+    "max": 88.96845289999692
+  },
+  "complete_cold_batch_wait_seconds": {
+    "n": 32,
+    "mean": 26.47676070937473,
+    "p50": 20.933854249999058,
+    "p95": 66.05865989999802,
+    "max": 88.96972150000147
+  },
+  "batch_timing_scope": "CPU-client barrier replay; not_measured_GPU_idle_time; no_overlap_with_actual_rollout",
+  "http_or_validation_errors": {
+    "ValueError: Evidence must exactly match an allowed selected-SKU public scalar": 3,
+    "TimeoutError: timed out": 3
+  },
+  "usage_all_attempts_with_reported_usage": {
+    "completion_tokens": 61476,
+    "prompt_tokens": 143931,
+    "total_tokens": 205407
+  },
+  "currency_cost": null,
+  "ranking_checks": [
+    {
+      "left_case_id": "fc3b26a0ea790a9a6bedb9abd6b6a6a557a143a31d188435826d25f3fcd6e45d",
+      "reason": "243：同样的未知项不凭空得分，五档完整组合必须高于缺72段的四档组合。",
+      "relation": "gt",
+      "reviewed_before_model": true,
+      "right_case_id": "372fe77057576ec98e245460ed0196bcf187e23edb6588c9772b2c05aac4bafb",
+      "rule_pass": false,
+      "hybrid_pass": false
+    },
+    {
+      "left_case_id": "ef2ae5a4a9ec2d170767ded012eafc202715a59815450cb5032216a95e1826c9",
+      "reason": "19082：乳胶/海绵不是用户区分条件，其他相关条件相同。",
+      "relation": "eq",
+      "reviewed_before_model": true,
+      "right_case_id": "95873ed75d1270c33cdacf1c3200a1ccd41c6ac20a70d969ad0cea4e244bfb3b",
+      "rule_pass": true,
+      "hybrid_pass": true
+    },
+    {
+      "left_case_id": "44fbc92cb1b9b2f96896765527a0cfa89514aa04bbc4431c4ce4aea14352c50a",
+      "reason": "23022：实际组件一致，是否点击套餐一占位轴不应单独加分。",
+      "relation": "eq",
+      "reviewed_before_model": true,
+      "right_case_id": "df21dfa77c613cc9601a8a124146f3b06bdad666666e587c1ef29fc32f32626c",
+      "rule_pass": true,
+      "hybrid_pass": true
+    },
+    {
+      "left_case_id": "869c4a47fbf337f8078fafa42c6853f796610dd4b910d3d8fa0d735dcc03867f",
+      "reason": "3562：明示软头、两本填色本和勾线笔的套餐，应高于这些证据不完整的选项。",
+      "relation": "gt",
+      "reviewed_before_model": true,
+      "right_case_id": "248728181cfb9aea29f317103f3f2cec8754dfd43a01f3cb61aef78e944f1a84",
+      "rule_pass": true,
+      "hybrid_pass": true
+    }
+  ],
+  "group_counts": {
+    "tie->tie": 44,
+    "eligible->eligible": 18,
+    "tie->judge_unavailable": 2,
+    "original_execution_invalid->original_execution_invalid": 5,
+    "tie->eligible": 1
+  },
+  "holdout_group_counts": {
+    "tie->tie": 24,
+    "original_execution_invalid->original_execution_invalid": 3,
+    "eligible->eligible": 7
+  },
+  "provisional_engineering_gates_not_reward_policy": {
+    "responses_complete": false,
+    "reference_minimum_100_atoms": true,
+    "reference_has_at_least_10_fail_20_unknown": false,
+    "hybrid_accuracy_at_least_95pct": false,
+    "no_false_pass_in_audited_nonpass": false,
+    "reviewed_rankings_all_passed": false,
+    "real_grpo_overlap_and_wait_budget_measured": false
+  },
+  "recommendation": "incomplete_benchmark; do_not_start_gpu_training",
+  "training_assets_modified": false,
+  "human_wait_in_runtime": false,
+  "native_reward_used_as_truth": false,
+  "new_policy_training_performed": false
+}

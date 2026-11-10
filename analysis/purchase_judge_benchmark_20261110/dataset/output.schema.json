@@ -1,0 +1,72 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "decisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "pass",
+              "fail",
+              "unknown"
+            ]
+          },
+          "reason_code": {
+            "enum": [
+              "supported",
+              "contradicted",
+              "not_stated",
+              "ambiguous_scope",
+              "conflicting_evidence"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "pointer": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": [
+                    "string",
+                    "number",
+                    "boolean",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "pointer",
+                "value"
+              ]
+            }
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "reason_code",
+          "reason",
+          "evidence"
+        ]
+      }
+    }
+  },
+  "required": [
+    "decisions"
+  ]
+}
