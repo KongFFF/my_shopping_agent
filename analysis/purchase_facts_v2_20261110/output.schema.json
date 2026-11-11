@@ -1,0 +1,291 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "facts": {
+      "type": "array",
+      "maxItems": 60,
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "const": "claim"
+              },
+              "role": {
+                "enum": [
+                  "declaration"
+                ]
+              },
+              "subject": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "pointer": {
+                "type": "string"
+              },
+              "quote": {
+                "type": "string",
+                "minLength": 1
+              },
+              "actual": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "text"
+                ]
+              }
+            },
+            "required": [
+              "kind",
+              "role",
+              "subject",
+              "pointer",
+              "quote",
+              "actual"
+            ]
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "const": "label"
+              },
+              "role": {
+                "enum": [
+                  "size_label",
+                  "color",
+                  "model"
+                ]
+              },
+              "subject": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "pointer": {
+                "type": "string"
+              },
+              "quote": {
+                "type": "string",
+                "minLength": 1
+              },
+              "actual": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "text"
+                ]
+              }
+            },
+            "required": [
+              "kind",
+              "role",
+              "subject",
+              "pointer",
+              "quote",
+              "actual"
+            ]
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "const": "scalar"
+              },
+              "role": {
+                "enum": [
+                  "quantity",
+                  "net_content",
+                  "capacity",
+                  "power",
+                  "length",
+                  "width",
+                  "height",
+                  "diameter"
+                ]
+              },
+              "subject": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "pointer": {
+                "type": "string"
+              },
+              "quote": {
+                "type": "string",
+                "minLength": 1
+              },
+              "actual": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "unit": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value",
+                  "unit"
+                ]
+              }
+            },
+            "required": [
+              "kind",
+              "role",
+              "subject",
+              "pointer",
+              "quote",
+              "actual"
+            ]
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "const": "members"
+              },
+              "role": {
+                "enum": [
+                  "variant_members"
+                ]
+              },
+              "subject": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "pointer": {
+                "type": "string"
+              },
+              "quote": {
+                "type": "string",
+                "minLength": 1
+              },
+              "actual": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "values": {
+                    "type": "array",
+                    "minItems": 2,
+                    "items": {
+                      "type": "number"
+                    }
+                  },
+                  "unit": {
+                    "const": "count"
+                  }
+                },
+                "required": [
+                  "values",
+                  "unit"
+                ]
+              }
+            },
+            "required": [
+              "kind",
+              "role",
+              "subject",
+              "pointer",
+              "quote",
+              "actual"
+            ]
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "const": "component"
+              },
+              "role": {
+                "enum": [
+                  "component"
+                ]
+              },
+              "subject": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "pointer": {
+                "type": "string"
+              },
+              "quote": {
+                "type": "string",
+                "minLength": 1
+              },
+              "actual": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "quantity": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "unit": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "name",
+                  "quantity",
+                  "unit"
+                ]
+              }
+            },
+            "required": [
+              "kind",
+              "role",
+              "subject",
+              "pointer",
+              "quote",
+              "actual"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "required": [
+    "facts"
+  ]
+}
