@@ -1,0 +1,2369 @@
+{
+  "attempt_index": 3,
+  "blocked_tool_calls": [],
+  "context_compactions": [],
+  "context_turn_tokens": [
+    {
+      "input_tokens": 2063,
+      "step_index": 0
+    },
+    {
+      "input_tokens": 3637,
+      "step_index": 1
+    },
+    {
+      "input_tokens": 3886,
+      "step_index": 2
+    },
+    {
+      "input_tokens": 4183,
+      "step_index": 3
+    },
+    {
+      "input_tokens": 4425,
+      "step_index": 4
+    },
+    {
+      "input_tokens": 4677,
+      "step_index": 5
+    },
+    {
+      "input_tokens": 4918,
+      "step_index": 6
+    },
+    {
+      "input_tokens": 5161,
+      "step_index": 7
+    }
+  ],
+  "created_at": "2026-11-11T16:20:19.342267+00:00",
+  "done": true,
+  "error": null,
+  "final_reward": 1.0,
+  "initial_result": {
+    "env_idx": 0,
+    "environment_version": "shopsimulator-environment-v2.1",
+    "goal_options": [
+      "情侣对戒【酒红色欧式对戒盒一个】"
+    ],
+    "idx": 7553,
+    "instruction": "Instruction: 我需要一对在求婚仪式上用的仿真钻戒道具，情侣款，带一个红色欧式对戒盒，戒圈是开口的可以自由调节，价格在40左右。",
+    "instruction_simple": null,
+    "message": "Task 7553 started",
+    "observation_state": {
+      "actions": [
+        "search"
+      ],
+      "observation_version": "shopping-observation-v2",
+      "page_type": "search_home",
+      "search_available": true
+    },
+    "reason_key": null,
+    "user_persona": {
+      "交易特征": {
+        "优惠券使用率": 0.3,
+        "复购率": 0.6,
+        "平均客单价": 375,
+        "支付方式偏好": "微信支付",
+        "是否促销敏感": false,
+        "近30天消费金额": 4500,
+        "近90天订单数": 12
+      },
+      "人口属性": {
+        "会员等级": "黄金会员",
+        "年龄段": "30-35, ",
+        "性别": "女",
+        "消费等级": "中"
+      },
+      "兴趣偏好": {
+        "品牌偏好": [
+          {
+            "偏好程度": "高",
+            "品牌名称": "追觅"
+          },
+          {
+            "偏好程度": "中",
+            "品牌名称": "小米"
+          },
+          {
+            "偏好程度": "低",
+            "品牌名称": "美的"
+          }
+        ],
+        "商品属性偏好": {
+          "价格区间": {
+            "最大值": 3000,
+            "最小值": 2000
+          },
+          "功能": [
+            "智能",
+            "无线",
+            "除螨",
+            "长续航"
+          ],
+          "尺码偏好": {
+            "上衣": ", ",
+            "内衣": ", ",
+            "裙装": ", ",
+            "裤子": ", ",
+            "鞋码": ", "
+          },
+          "材质": [
+            "金属",
+            "塑料"
+          ],
+          "颜色": [
+            "白色",
+            "灰色"
+          ],
+          "风格": [
+            "简约",
+            "现代"
+          ]
+        },
+        "类目偏好": {
+          "家居生活": "高",
+          "家电数码": "高",
+          "服饰鞋包": "低",
+          "美妆护肤": "中"
+        }
+      },
+      "地区信息": {
+        "区县": "南山区",
+        "城市": "深圳市",
+        "时区": "UTC+8, ",
+        "省份": "广东省"
+      },
+      "最后更新时间": "2023-04-20T09:15:00Z",
+      "注册时间": "2022-08-15T14:25:00Z",
+      "注册渠道": "App",
+      "用户ID": "U864108836670, ",
+      "用户标签": [
+        "品质生活追求者",
+        "科技爱好者",
+        "家居清洁达人",
+        "中产家庭主妇",
+        "追觅V12S系列爱好者"
+      ],
+      "行为特征": {
+        "常用设备": "iOS手机",
+        "日均浏览时长": 1200,
+        "最近14天关注店铺": [],
+        "最近14天加购商品": [],
+        "最近14天搜索关键词": [
+          "最新升级无线吸尘器",
+          "手持立式大功率吸尘器",
+          "智能除螨长续航吸尘器"
+        ],
+        "最近14天收藏商品": [],
+        "活跃时间段": [
+          20,
+          21,
+          22
+        ],
+        "近7天访问次数": 8
+      }
+    }
+  },
+  "messages": [
+    {
+      "content": "你是一个购物 Agent，负责在 ShopSimulator 中替用户完成一次单轮购物任务。\n\n用户的完整需求只会在开头给出。不得向用户追问、确认、告别，也不要假设存在用户对话工具。你只能调用提供的标准工具与商店交互。目标是在有限步骤内找到整体最符合需求的可购买商品；精确满足全部要求的商品最好，经过有效探索仍无法完成时应合理结束，不能错误购买或无效循环。\n\n执行规则：\n1. 动作合法性与历史比较。当前页面是动作合法性的唯一依据；历史 observation 可以用于记住和比较候选，但不能直接点击历史页面中的 ASIN、按钮或规格。每次工具返回后先阅读最新 observation 中的“可点击的按钮”，每个 assistant 回合只调用一个工具。\n2. 页面状态与参数。Description、Features、Reviews、Attributes 都是信息子页：一旦进入这类子页，必须先调用当前页面可见的 `prev_page` 或 `back_to_search` 返回；不得直接切换到另一个信息子页、选择规格、购买或搜索。无参数工具（查看、翻页、返回、购买）必须传严格的 `{}`；只有 `search_products` 使用 `query`、`open_product` 使用 `asin`、`select_option` 使用 `value`。\n3. 搜索与候选探索。查询应简洁，优先使用品类和最有区分度的品牌、型号、核心功能或规格，不要机械复制整段需求。结果不理想时，缩短查询、更换真正不同的关键词或翻页；出现有希望的商品时应打开核验。不要重复相同查询，也不要只做同义改写却反复得到相同候选。\n4. 固定选择优先级。按“品类 > 预算 > 品牌 > 型号与核心功能 > 规格属性”比较候选。品类必须正确；选择具体规格后的实际价格不得超过用户明确预算。品类不符、价格未知或超预算时绝不能购买。在通过这两个门槛的候选中，依次优先满足品牌、型号与核心功能、规格属性；全部要求都满足的候选最好。\n5. 证据、规格与购买。品牌、型号、规格、功能和价格优先依据结构化字段、商品详情、Description、Features 和 Attributes；Reviews 只用于辅助判断使用体验，不能用于确认型号、官方功能、规格或价格。先完成必要的商品核验，再为最终候选补齐当前商品所有影响可购买 variant 的必要规格轴；不要为了临时浏览而随意选择规格。同一规格轴只选择一个当前页面可见的值，并以完整 variant 的实际价格判断预算。只有 `Buy Now` 当前可见，且商品通过品类和预算门槛，并在其余维度上是已核验候选中的最佳选择时，才调用 `buy_now`。\n6. 主动结束。经过多次有实质差异的搜索和多个候选核验，仍没有可接受商品，并且当前没有明显值得继续核验的候选时，调用 `finish_without_purchase`。不得过早结束，也不要为了增加搜索次数继续无效探索；是否达到结束资格由环境判断。\n7. 防止循环和非法动作。不要连续重复同一动作，也不要在相同结果、商品或子页之间无目的往返；后续操作应带来新候选、新商品信息、新规格选择或新的需求证据。不要调用 `think` 工具。若 tool 返回“本地动作守卫拒绝，未执行”，依据错误消息和最新 observation 改为一个合法动作，不要重复被拒绝的调用。不要在任务结束前输出最终答复或推荐总结；只有环境报告任务结束后才停止。\n",
+      "role": "system"
+    },
+    {
+      "content": "Instruction: 我需要一对在求婚仪式上用的仿真钻戒道具，情侣款，带一个红色欧式对戒盒，戒圈是开口的可以自由调节，价格在40左右。",
+      "role": "user"
+    },
+    {
+      "annotations": null,
+      "audio": null,
+      "content": null,
+      "function_call": null,
+      "reasoning": null,
+      "refusal": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "function": {
+            "arguments": "{\"query\": \"仿真钻戒道具 情侣款 对戒盒\"}",
+            "name": "search_products"
+          },
+          "id": "chatcmpl-tool-b8543a8c975aee7f",
+          "type": "function"
+        }
+      ]
+    },
+    {
+      "content": "[SHOPPING_OBSERVATION_V2]\npage_type: search_results\nquery: 仿真钻戒道具 情侣款 对戒盒\nnormalized_query: 仿真钻戒道具 情侣款 对戒盒\nPage 1 of 8 (Total results: 150; ranks 1-20)\n格式: rank|asin|price|brand|category|key_attributes|title\n1|706474481748|20.0 to 39.0|zlvoey旗舰店|节庆用品/礼品…新娘配件|仿真,钻戒,求…,可调节|仿真假钻戒婚礼…钻石婚戒\n2|619442324641|9.0|欧童旗舰店|节庆用品/礼品…新娘配件|仿真,钻戒,婚…,不锈钢|仿真假钻戒对戒…用品大全\n3|940715808315|1623.0|兴隆黄金集市店|珠宝/钻石/翡…宝石戒指|足金999,新…,送女友|兴隆黄金lov…戒送女友\n4|898846469307|78.0 to 88.0|花亦原创|节庆用品/礼品…新娘配件|戒指盒,原创,…黑胡桃木|原创手作复古永…婚对戒盒\n5|690135367661|5425.0 …36.0|老庙官方旗舰店|黄金›工艺黄金…黄金戒指|足金,可调节,结婚送礼|老庙黄金龙凤足…官方正品\n6|735198813680|1699.0|BOYLONDON旗舰店|男装›棉衣|春季,情侣款,…尚,保暖|【朋克少年】B…9004\n7|913669426928|3718.0 …24.0|七七珠宝代购|珠宝/钻石/翡…宝石戒指|情侣,对戒,蝴蝶|周大福MONO…情侣对戒\n8|926324306777|158.0|tb98237…3611|服饰配件/皮带…饰›指环|情侣款,时尚,…调节圈口|FORHUG … 情侣款\n9|912784013629|2160.0 …80.0|水贝珠宝旗舰店|黄金›黄金首饰…黄金吊坠|999足金,八…,情侣款|水贝黄金官方旗…饰情侣款\n10|537820292012|22.0 to 58.0|木缘木语佛珠|饰品/流行首饰…品›崖柏|太行,男女情侣…珠,老料|正宗太行崖柏手…念珠老料\n11|829572329048|468.0|六桂福旗舰店|珠宝/钻石/翡…宝石手链|情侣款,男,女…礼物场景|六桂福珠宝黄金…生日礼物\n12|820983777473|199.0|16年潮流男包…高质价比|箱包皮具/热销…包›胸包|休闲,运动,时…行背挎包|休闲运动时尚情…后背挎包\n13|936462313680|450.0|时尚潮依|运动服/休闲服…运动套装|情侣款,夏季,…后薇薇安|现货2025夏…短袖T恤\n14|942162479009|219.0 t…37.0|人防二分二分二|运动鞋new›羽毛球鞋|情侣款,专业,…弹,透气|李宁羽毛球鞋 …业比赛鞋\n15|779884137025|39.0|搞钱做慈善工作室|服饰配件/皮带…饰›指环|美式,复古风,…,情侣款|搞钱做慈善 2…短袖T恤\n16|704517626369|288.0|津门范儿|男装›夹克|明星潮流元素,…春夏适用|津范陈冠希潮牌…夹克春夏\n17|765579512356|6159.0 …73.0|六福珠宝官方旗舰店|黄金›工艺黄金…黄金戒指|光影金,水月纹,女,实心|六福珠宝光影金…0015\n18|757393998986|51.0|周大大金店|服饰配件/皮带…饰›指环|情侣款,简约|越南沙金指环传…素圈戒指\n19|675084327328|79.0|人文之宝旗舰店|节庆用品/礼品…›文化衫|夏季|人文之宝堂吉诃…时尚潮流\n20|922721299048|179.0|特步悠悠专卖店|运动服/休闲服…运动套装|特步品牌,情侣…干,透气|特步夏季运动套…短袖短裤\n[TRUNCATED_BY_SHOPPING_PROJECTOR] product_fields_compacted=true\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"next >\", \"706474481748\", \"619442324641\", \"940715808315\", \"898846469307\", \"690135367661\", \"735198813680\", \"913669426928\", \"926324306777\", \"912784013629\", \"537820292012\", \"829572329048\", \"820983777473\", \"936462313680\", \"942162479009\", \"779884137025\", \"704517626369\", \"765579512356\", \"757393998986\", \"675084327328\", \"922721299048\"]",
+      "name": "search_products",
+      "role": "tool",
+      "tool_call_id": "chatcmpl-tool-b8543a8c975aee7f"
+    },
+    {
+      "annotations": null,
+      "audio": null,
+      "content": null,
+      "function_call": null,
+      "reasoning": null,
+      "refusal": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "function": {
+            "arguments": "{\"asin\": \"706474481748\"}",
+            "name": "open_product"
+          },
+          "id": "chatcmpl-tool-8739e71744cd07de",
+          "type": "function"
+        }
+      ]
+    },
+    {
+      "content": "[SHOPPING_OBSERVATION_V2]\npage_type: product_detail\nasin: 706474481748\ntitle: 仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒\nbrand: zlvoey旗舰店\ncategory: 节庆用品/礼品›婚庆用品›新娘配件\nprice: 20.0 to 39.0\nkey_attributes: 仿真, 钻戒, 求婚仪式, 道具, 开口, 可调节\nselected_options: {}\navailable_options: {\"颜色分类\": [\"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]}\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]",
+      "name": "open_product",
+      "role": "tool",
+      "tool_call_id": "chatcmpl-tool-8739e71744cd07de"
+    },
+    {
+      "annotations": null,
+      "audio": null,
+      "content": "这个候选非常匹配：仿真假钻戒求婚道具、情侣对戒、带酒红色欧式对戒盒、开口可调节。先选择情侣对戒规格确认价格。",
+      "function_call": null,
+      "reasoning": null,
+      "refusal": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "function": {
+            "arguments": "{\"value\": \"情侣对戒【酒红色欧式对戒盒一个】\"}",
+            "name": "select_option"
+          },
+          "id": "chatcmpl-tool-8136198dbe63bf6a",
+          "type": "function"
+        }
+      ]
+    },
+    {
+      "content": "[SHOPPING_OBSERVATION_V2]\npage_type: product_detail\nasin: 706474481748\ntitle: 仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒\nbrand: zlvoey旗舰店\ncategory: 节庆用品/礼品›婚庆用品›新娘配件\nprice: 39.0\nkey_attributes: 仿真, 钻戒, 求婚仪式, 道具, 开口, 可调节\nselected_options: {\"颜色分类\": \"情侣对戒【酒红色欧式对戒盒一个】\"}\navailable_options: {\"颜色分类\": [\"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]}\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]",
+      "name": "select_option",
+      "role": "tool",
+      "tool_call_id": "chatcmpl-tool-8136198dbe63bf6a"
+    },
+    {
+      "annotations": null,
+      "audio": null,
+      "content": "价格确认为 39.0 元，在预算内。再核验一下核心功能（开口可调节）。",
+      "function_call": null,
+      "reasoning": null,
+      "refusal": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "function": {
+            "arguments": "{}",
+            "name": "view_features"
+          },
+          "id": "chatcmpl-tool-adf045d5a724b129",
+          "type": "function"
+        }
+      ]
+    },
+    {
+      "content": "[SHOPPING_OBSERVATION_V2]\npage_type: information_subpage\nasin: 706474481748\ntitle: 仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒\nbrand: zlvoey旗舰店\ncategory: 节庆用品/礼品›婚庆用品›新娘配件\nprice: 39.0\nkey_attributes: 仿真, 钻戒, 求婚仪式, 道具, 开口, 可调节\nselected_options: {\"颜色分类\": \"情侣对戒【酒红色欧式对戒盒一个】\"}\navailable_options: {\"颜色分类\": [\"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]}\nsubpage: Features\ncontent: ['']\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\"]",
+      "name": "view_features",
+      "role": "tool",
+      "tool_call_id": "chatcmpl-tool-adf045d5a724b129"
+    },
+    {
+      "annotations": null,
+      "audio": null,
+      "content": "Features 子页内容为空，返回商品页继续核验。",
+      "function_call": null,
+      "reasoning": null,
+      "refusal": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "function": {
+            "arguments": "{}",
+            "name": "prev_page"
+          },
+          "id": "chatcmpl-tool-9c78a79f0c16591f",
+          "type": "function"
+        }
+      ]
+    },
+    {
+      "content": "[SHOPPING_OBSERVATION_V2]\npage_type: product_detail\nasin: 706474481748\ntitle: 仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒\nbrand: zlvoey旗舰店\ncategory: 节庆用品/礼品›婚庆用品›新娘配件\nprice: 39.0\nkey_attributes: 仿真, 钻戒, 求婚仪式, 道具, 开口, 可调节\nselected_options: {\"颜色分类\": \"情侣对戒【酒红色欧式对戒盒一个】\"}\navailable_options: {\"颜色分类\": [\"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]}\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]",
+      "name": "prev_page",
+      "role": "tool",
+      "tool_call_id": "chatcmpl-tool-9c78a79f0c16591f"
+    },
+    {
+      "annotations": null,
+      "audio": null,
+      "content": "查看 Description 进一步核验道具细节。",
+      "function_call": null,
+      "reasoning": null,
+      "refusal": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "function": {
+            "arguments": "{}",
+            "name": "view_description"
+          },
+          "id": "chatcmpl-tool-ac0106ea820bcb54",
+          "type": "function"
+        }
+      ]
+    },
+    {
+      "content": "[SHOPPING_OBSERVATION_V2]\npage_type: information_subpage\nasin: 706474481748\ntitle: 仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒\nbrand: zlvoey旗舰店\ncategory: 节庆用品/礼品›婚庆用品›新娘配件\nprice: 39.0\nkey_attributes: 仿真, 钻戒, 求婚仪式, 道具, 开口, 可调节\nselected_options: {\"颜色分类\": \"情侣对戒【酒红色欧式对戒盒一个】\"}\navailable_options: {\"颜色分类\": [\"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]}\nsubpage: Description\ncontent: 仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\"]",
+      "name": "view_description",
+      "role": "tool",
+      "tool_call_id": "chatcmpl-tool-ac0106ea820bcb54"
+    },
+    {
+      "annotations": null,
+      "audio": null,
+      "content": "返回商品页。",
+      "function_call": null,
+      "reasoning": null,
+      "refusal": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "function": {
+            "arguments": "{}",
+            "name": "prev_page"
+          },
+          "id": "chatcmpl-tool-82081f184ab53d64",
+          "type": "function"
+        }
+      ]
+    },
+    {
+      "content": "[SHOPPING_OBSERVATION_V2]\npage_type: product_detail\nasin: 706474481748\ntitle: 仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒\nbrand: zlvoey旗舰店\ncategory: 节庆用品/礼品›婚庆用品›新娘配件\nprice: 39.0\nkey_attributes: 仿真, 钻戒, 求婚仪式, 道具, 开口, 可调节\nselected_options: {\"颜色分类\": \"情侣对戒【酒红色欧式对戒盒一个】\"}\navailable_options: {\"颜色分类\": [\"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]}\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]",
+      "name": "prev_page",
+      "role": "tool",
+      "tool_call_id": "chatcmpl-tool-82081f184ab53d64"
+    },
+    {
+      "annotations": null,
+      "audio": null,
+      "content": "商品核验完成：品类正确（婚庆用品/新娘配件）、价格 39.0 元在预算内、情侣对戒、酒红色欧式对戒盒、开口可调节，完全符合需求。购买。",
+      "function_call": null,
+      "reasoning": null,
+      "refusal": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "function": {
+            "arguments": "{}",
+            "name": "buy_now"
+          },
+          "id": "chatcmpl-tool-92e07be987c6e516",
+          "type": "function"
+        }
+      ]
+    },
+    {
+      "content": "[SHOPPING_OBSERVATION_V2]\npage_type: terminal\n\n搜索功能是否可用: False\n可点击的按钮: []",
+      "name": "buy_now",
+      "role": "tool",
+      "tool_call_id": "chatcmpl-tool-92e07be987c6e516"
+    }
+  ],
+  "release_error": null,
+  "status": "done",
+  "steps": [
+    {
+      "done": false,
+      "env_action": "search[仿真钻戒道具 情侣款 对戒盒]",
+      "observation": "[SHOPPING_OBSERVATION_V2]\npage_type: search_results\nquery: 仿真钻戒道具 情侣款 对戒盒\nnormalized_query: 仿真钻戒道具 情侣款 对戒盒\nPage 1 of 8 (Total results: 150; ranks 1-20)\n格式: rank|asin|price|brand|category|key_attributes|title\n1|706474481748|20.0 to 39.0|zlvoey旗舰店|节庆用品/礼品…新娘配件|仿真,钻戒,求…,可调节|仿真假钻戒婚礼…钻石婚戒\n2|619442324641|9.0|欧童旗舰店|节庆用品/礼品…新娘配件|仿真,钻戒,婚…,不锈钢|仿真假钻戒对戒…用品大全\n3|940715808315|1623.0|兴隆黄金集市店|珠宝/钻石/翡…宝石戒指|足金999,新…,送女友|兴隆黄金lov…戒送女友\n4|898846469307|78.0 to 88.0|花亦原创|节庆用品/礼品…新娘配件|戒指盒,原创,…黑胡桃木|原创手作复古永…婚对戒盒\n5|690135367661|5425.0 …36.0|老庙官方旗舰店|黄金›工艺黄金…黄金戒指|足金,可调节,结婚送礼|老庙黄金龙凤足…官方正品\n6|735198813680|1699.0|BOYLONDON旗舰店|男装›棉衣|春季,情侣款,…尚,保暖|【朋克少年】B…9004\n7|913669426928|3718.0 …24.0|七七珠宝代购|珠宝/钻石/翡…宝石戒指|情侣,对戒,蝴蝶|周大福MONO…情侣对戒\n8|926324306777|158.0|tb98237…3611|服饰配件/皮带…饰›指环|情侣款,时尚,…调节圈口|FORHUG … 情侣款\n9|912784013629|2160.0 …80.0|水贝珠宝旗舰店|黄金›黄金首饰…黄金吊坠|999足金,八…,情侣款|水贝黄金官方旗…饰情侣款\n10|537820292012|22.0 to 58.0|木缘木语佛珠|饰品/流行首饰…品›崖柏|太行,男女情侣…珠,老料|正宗太行崖柏手…念珠老料\n11|829572329048|468.0|六桂福旗舰店|珠宝/钻石/翡…宝石手链|情侣款,男,女…礼物场景|六桂福珠宝黄金…生日礼物\n12|820983777473|199.0|16年潮流男包…高质价比|箱包皮具/热销…包›胸包|休闲,运动,时…行背挎包|休闲运动时尚情…后背挎包\n13|936462313680|450.0|时尚潮依|运动服/休闲服…运动套装|情侣款,夏季,…后薇薇安|现货2025夏…短袖T恤\n14|942162479009|219.0 t…37.0|人防二分二分二|运动鞋new›羽毛球鞋|情侣款,专业,…弹,透气|李宁羽毛球鞋 …业比赛鞋\n15|779884137025|39.0|搞钱做慈善工作室|服饰配件/皮带…饰›指环|美式,复古风,…,情侣款|搞钱做慈善 2…短袖T恤\n16|704517626369|288.0|津门范儿|男装›夹克|明星潮流元素,…春夏适用|津范陈冠希潮牌…夹克春夏\n17|765579512356|6159.0 …73.0|六福珠宝官方旗舰店|黄金›工艺黄金…黄金戒指|光影金,水月纹,女,实心|六福珠宝光影金…0015\n18|757393998986|51.0|周大大金店|服饰配件/皮带…饰›指环|情侣款,简约|越南沙金指环传…素圈戒指\n19|675084327328|79.0|人文之宝旗舰店|节庆用品/礼品…›文化衫|夏季|人文之宝堂吉诃…时尚潮流\n20|922721299048|179.0|特步悠悠专卖店|运动服/休闲服…运动套装|特步品牌,情侣…干,透气|特步夏季运动套…短袖短裤\n[TRUNCATED_BY_SHOPPING_PROJECTOR] product_fields_compacted=true\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"next >\", \"706474481748\", \"619442324641\", \"940715808315\", \"898846469307\", \"690135367661\", \"735198813680\", \"913669426928\", \"926324306777\", \"912784013629\", \"537820292012\", \"829572329048\", \"820983777473\", \"936462313680\", \"942162479009\", \"779884137025\", \"704517626369\", \"765579512356\", \"757393998986\", \"675084327328\", \"922721299048\"]",
+      "parameters": {
+        "query": "仿真钻戒道具 情侣款 对戒盒"
+      },
+      "projection": {
+        "critical_footer_preserved": true,
+        "page_type": "search_results",
+        "raw_asin_count": 20,
+        "raw_button_count": 22,
+        "raw_tokens": 2005,
+        "token_budget": 1536,
+        "tool_name": "search_products",
+        "truncated": true,
+        "truncation_ratio": 0.7596009975062344,
+        "visible_asin_count": 20,
+        "visible_button_count": 22,
+        "visible_tokens": 1523
+      },
+      "raw_observation": "[SHOPPING_OBSERVATION_V2]\npage_type: search_results\nquery: 仿真钻戒道具 情侣款 对戒盒\nnormalized_query: 仿真钻戒道具 情侣款 对戒盒\nPage 1 of 8 (Total results: 150; ranks 1-20)\n格式: rank|asin|price|brand|category|key_attributes|title\n1|706474481748|20.0 to 39.0|zlvoey旗舰店|节庆用品/礼品›婚庆用品›新娘配件|仿真,钻戒,求婚仪式,道具,开口,可调节|仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒\n2|619442324641|9.0|欧童旗舰店|节庆用品/礼品›婚庆用品›新娘配件|仿真,钻戒,婚礼道具,一对,开口,可以调节,不锈钢|仿真假钻戒对戒婚礼道具婚戒情侣戒指一对开口首饰结婚庆用品大全\n3|940715808315|1623.0|兴隆黄金集市店|珠宝/钻石/翡翠›黄金镶嵌首饰›黄金镶宝石›黄金镶宝石戒指|足金999,新款,时尚,百搭,送女友|兴隆黄金love排钻戒指 5D足金999新款时尚百搭男女情侣对戒送女友\n4|898846469307|78.0 to 88.0|花亦原创|节庆用品/礼品›婚庆用品›新娘配件|戒指盒,原创,手作,复古,实木,结婚,永生花,黑胡桃木|原创手作复古永生花婚礼戒指盒收纳盒实木黑胡桃木创意结婚对戒盒\n5|690135367661|5425.0 to 8536.0|老庙官方旗舰店|黄金›工艺黄金›细金工艺计价黄金›细金工艺计价黄金戒指|足金,可调节,结婚送礼|老庙黄金龙凤足金对戒可调节情侣款戒指套戒结婚送礼男女官方正品\n6|735198813680|1699.0|BOYLONDON旗舰店|男装›棉衣|春季,情侣款,朋克,时尚,保暖|【朋克少年】BOYLONDON春季情侣款外套朋克时尚保暖棉服N29004\n7|913669426928|3718.0 to 8924.0|七七珠宝代购|珠宝/钻石/翡翠›黄金镶嵌首饰›黄金镶宝石›黄金镶宝石戒指|情侣,对戒,蝴蝶|周大福MONOLOGUE独白罗密欧与朱丽叶玫瑰爱心蝴蝶黄金情侣对戒\n8|926324306777|158.0|tb982372828423611|服饰配件/皮带/帽子/围巾›运动首饰›指环|情侣款,时尚,简约,潮流,夜光,可调节圈口|FORHUG 破败王戒夜光戒指 简约时尚潮流开口可调节 银色 情侣款\n9|912784013629|2160.0 to 5580.0|水贝珠宝旗舰店|黄金›黄金首饰（新）›小克重定价黄金›小克重定价黄金吊坠|999足金,八宝罗盘,情侣款|水贝黄金官方旗舰店999足金八宝罗盘吊坠女小克重黄金首饰情侣款\n10|537820292012|22.0 to 58.0|木缘木语佛珠|饰品/流行首饰/时尚饰品新›木作制品›崖柏|太行,男女情侣款,6/8/10/12佛珠,老料|正宗太行崖柏手串108颗手链男女项链情侣款6/8/10/12佛珠念珠老料\n11|829572329048|468.0|六桂福旗舰店|珠宝/钻石/翡翠›黄金镶嵌首饰›黄金镶宝石›黄金镶宝石手链|情侣款,男,女,五福财神图案,送生日礼物场景|六桂福珠宝黄金镶玉手链男女情侣款五福财神足金手串送生日礼物\n12|820983777473|199.0|16年潮流男包厂家店十年潮包高质价比|箱包皮具/热销女包/男包›胸包|休闲,运动,时尚,情侣款,帆布料,斜挎包,简约潮牌,潮男,骑行背挎包|休闲运动时尚情侣款帆布斜挎包 简约潮牌胸前包潮男骑行后背挎包\n13|936462313680|450.0|时尚潮依|运动服/休闲服装›运动套装|情侣款,夏季,短袖,前卫个性,星球印花,时尚潮流,西太后薇薇安|现货2025夏季新西太后薇薇安土星蛇形环绕星球印花情侣款短袖T恤\n14|942162479009|219.0 to 337.0|人防二分二分二|运动鞋new›羽毛球鞋|情侣款,专业,减震,回弹,透气|李宁羽毛球鞋 音爆系列 男女情侣款减震回弹舒适透气专业比赛鞋\n15|779884137025|39.0|搞钱做慈善工作室|服饰配件/皮带/帽子/围巾›运动首饰›指环|美式,复古风,人像图案,男女同款,情侣款|搞钱做慈善 260克重磅纯棉！美式人像男女情侣款小众纯棉短袖T恤\n16|704517626369|288.0|津门范儿|男装›夹克|明星潮流元素,动物图案,情侣适用,中国风设计,无领剪裁,春夏适用|津范陈冠希潮牌同款豹纹宽松外套男情侣款中国风无领休闲夹克春夏\n17|765579512356|6159.0 to 6773.0|六福珠宝官方旗舰店|黄金›工艺黄金›细金工艺计价黄金›细金工艺计价黄金戒指|光影金,水月纹,女,实心|六福珠宝光影金水月纹黄金戒指女5G实心情侣对戒计价GJGTBR0015\n18|757393998986|51.0|周大大金店|服饰配件/皮带/帽子/围巾›运动首饰›指环|情侣款,简约|越南沙金指环传承古法磨砂永久不掉色爆款简约时尚情侣款素圈戒指\n19|675084327328|79.0|人文之宝旗舰店|节庆用品/礼品›文化创意用品›文化衫|夏季|人文之宝堂吉诃德圆领T恤短袖半袖情侣款夏季文化衫简约时尚潮流\n20|922721299048|179.0|特步悠悠专卖店|运动服/休闲服装›运动套装|特步品牌,情侣款,宽松,休闲,速干,透气|特步夏季运动套装运动服情侣款宽松休闲速干透气跑步体测短袖短裤\nproducts_shown: 20\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"next >\", \"706474481748\", \"619442324641\", \"940715808315\", \"898846469307\", \"690135367661\", \"735198813680\", \"913669426928\", \"926324306777\", \"912784013629\", \"537820292012\", \"829572329048\", \"820983777473\", \"936462313680\", \"942162479009\", \"779884137025\", \"704517626369\", \"765579512356\", \"757393998986\", \"675084327328\", \"922721299048\"]",
+      "result": {
+        "done": false,
+        "env_idx": 0,
+        "goal": {},
+        "idx": "slot-0-7553",
+        "instruction": "Instruction: [SEP] 我需要一对在求婚仪式上用的仿真钻戒道具，情侣款，带一个红色欧式对戒盒，戒圈是开口的可以自由调节，价格在40左右。 [SEP] Back to Search [SEP] Page 1 of 8 (Total results: 150) [SEP] Query: 仿真钻戒道具 情侣款 对戒盒 | Normalized query: 仿真钻戒道具 情侣款 对戒盒 [SEP] Next > [SEP] 706474481748 [SEP] 仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒 [SEP] 20.0 to 39.0 [SEP] 619442324641 [SEP] 仿真假钻戒对戒婚礼道具婚戒情侣戒指一对开口首饰结婚庆用品大全 [SEP] 9.0 [SEP] 940715808315 [SEP] 兴隆黄金love排钻戒指 5D足金999新款时尚百搭男女情侣对戒送女友 [SEP] 1623.0 [SEP] 898846469307 [SEP] 原创手作复古永生花婚礼戒指盒收纳盒实木黑胡桃木创意结婚对戒盒 [SEP] 78.0 to 88.0 [SEP] 690135367661 [SEP] 老庙黄金龙凤足金对戒可调节情侣款戒指套戒结婚送礼男女官方正品 [SEP] 5425.0 to 8536.0 [SEP] 735198813680 [SEP] 【朋克少年】BOYLONDON春季情侣款外套朋克时尚保暖棉服N29004 [SEP] 1699.0 [SEP] 913669426928 [SEP] 周大福MONOLOGUE独白罗密欧与朱丽叶玫瑰爱心蝴蝶黄金情侣对戒 [SEP] 3718.0 to 8924.0 [SEP] 926324306777 [SEP] FORHUG 破败王戒夜光戒指 简约时尚潮流开口可调节 银色 情侣款 [SEP] 158.0 [SEP] 912784013629 [SEP] 水贝黄金官方旗舰店999足金八宝罗盘吊坠女小克重黄金首饰情侣款 [SEP] 2160.0 to 5580.0 [SEP] 537820292012 [SEP] 正宗太行崖柏手串108颗手链男女项链情侣款6/8/10/12佛珠念珠老料 [SEP] 22.0 to 58.0 [SEP] 829572329048 [SEP] 六桂福珠宝黄金镶玉手链男女情侣款五福财神足金手串送生日礼物 [SEP] 468.0 [SEP] 820983777473 [SEP] 休闲运动时尚情侣款帆布斜挎包 简约潮牌胸前包潮男骑行后背挎包 [SEP] 199.0 [SEP] 936462313680 [SEP] 现货2025夏季新西太后薇薇安土星蛇形环绕星球印花情侣款短袖T恤 [SEP] 450.0 [SEP] 942162479009 [SEP] 李宁羽毛球鞋 音爆系列 男女情侣款减震回弹舒适透气专业比赛鞋 [SEP] 219.0 to 337.0 [SEP] 779884137025 [SEP] 搞钱做慈善 260克重磅纯棉！美式人像男女情侣款小众纯棉短袖T恤 [SEP] 39.0 [SEP] 704517626369 [SEP] 津范陈冠希潮牌同款豹纹宽松外套男情侣款中国风无领休闲夹克春夏 [SEP] 288.0 [SEP] 765579512356 [SEP] 六福珠宝光影金水月纹黄金戒指女5G实心情侣对戒计价GJGTBR0015 [SEP] 6159.0 to 6773.0 [SEP] 757393998986 [SEP] 越南沙金指环传承古法磨砂永久不掉色爆款简约时尚情侣款素圈戒指 [SEP] 51.0 [SEP] 675084327328 [SEP] 人文之宝堂吉诃德圆领T恤短袖半袖情侣款夏季文化衫简约时尚潮流 [SEP] 79.0 [SEP] 922721299048 [SEP] 特步夏季运动套装运动服情侣款宽松休闲速干透气跑步体测短袖短裤 [SEP] 179.0\n\n搜索功能是否可用: False\n\n可点击的按钮: [\"back to search\", \"next >\", \"706474481748\", \"619442324641\", \"940715808315\", \"898846469307\", \"690135367661\", \"735198813680\", \"913669426928\", \"926324306777\", \"912784013629\", \"537820292012\", \"829572329048\", \"820983777473\", \"936462313680\", \"942162479009\", \"779884137025\", \"704517626369\", \"765579512356\", \"757393998986\", \"675084327328\", \"922721299048\"]",
+        "message": "Continue interaction",
+        "observation_state": {
+          "actions": [
+            "back to search",
+            "next >",
+            "706474481748",
+            "619442324641",
+            "940715808315",
+            "898846469307",
+            "690135367661",
+            "735198813680",
+            "913669426928",
+            "926324306777",
+            "912784013629",
+            "537820292012",
+            "829572329048",
+            "820983777473",
+            "936462313680",
+            "942162479009",
+            "779884137025",
+            "704517626369",
+            "765579512356",
+            "757393998986",
+            "675084327328",
+            "922721299048"
+          ],
+          "normalized_query": "仿真钻戒道具 情侣款 对戒盒",
+          "observation_version": "shopping-observation-v2",
+          "page": 1,
+          "page_type": "search_results",
+          "products": [
+            {
+              "asin": "706474481748",
+              "brand": "zlvoey旗舰店",
+              "category": "节庆用品/礼品›婚庆用品›新娘配件",
+              "key_attributes": [
+                "仿真",
+                "钻戒",
+                "求婚仪式",
+                "道具",
+                "开口",
+                "可调节"
+              ],
+              "price": "20.0 to 39.0",
+              "rank": 1,
+              "title": "仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒"
+            },
+            {
+              "asin": "619442324641",
+              "brand": "欧童旗舰店",
+              "category": "节庆用品/礼品›婚庆用品›新娘配件",
+              "key_attributes": [
+                "仿真",
+                "钻戒",
+                "婚礼道具",
+                "一对",
+                "开口",
+                "可以调节",
+                "不锈钢"
+              ],
+              "price": "9.0",
+              "rank": 2,
+              "title": "仿真假钻戒对戒婚礼道具婚戒情侣戒指一对开口首饰结婚庆用品大全"
+            },
+            {
+              "asin": "940715808315",
+              "brand": "兴隆黄金集市店",
+              "category": "珠宝/钻石/翡翠›黄金镶嵌首饰›黄金镶宝石›黄金镶宝石戒指",
+              "key_attributes": [
+                "足金999",
+                "新款",
+                "时尚",
+                "百搭",
+                "送女友"
+              ],
+              "price": "1623.0",
+              "rank": 3,
+              "title": "兴隆黄金love排钻戒指 5D足金999新款时尚百搭男女情侣对戒送女友"
+            },
+            {
+              "asin": "898846469307",
+              "brand": "花亦原创",
+              "category": "节庆用品/礼品›婚庆用品›新娘配件",
+              "key_attributes": [
+                "戒指盒",
+                "原创",
+                "手作",
+                "复古",
+                "实木",
+                "结婚",
+                "永生花",
+                "黑胡桃木"
+              ],
+              "price": "78.0 to 88.0",
+              "rank": 4,
+              "title": "原创手作复古永生花婚礼戒指盒收纳盒实木黑胡桃木创意结婚对戒盒"
+            },
+            {
+              "asin": "690135367661",
+              "brand": "老庙官方旗舰店",
+              "category": "黄金›工艺黄金›细金工艺计价黄金›细金工艺计价黄金戒指",
+              "key_attributes": [
+                "足金",
+                "可调节",
+                "结婚送礼"
+              ],
+              "price": "5425.0 to 8536.0",
+              "rank": 5,
+              "title": "老庙黄金龙凤足金对戒可调节情侣款戒指套戒结婚送礼男女官方正品"
+            },
+            {
+              "asin": "735198813680",
+              "brand": "BOYLONDON旗舰店",
+              "category": "男装›棉衣",
+              "key_attributes": [
+                "春季",
+                "情侣款",
+                "朋克",
+                "时尚",
+                "保暖"
+              ],
+              "price": "1699.0",
+              "rank": 6,
+              "title": "【朋克少年】BOYLONDON春季情侣款外套朋克时尚保暖棉服N29004"
+            },
+            {
+              "asin": "913669426928",
+              "brand": "七七珠宝代购",
+              "category": "珠宝/钻石/翡翠›黄金镶嵌首饰›黄金镶宝石›黄金镶宝石戒指",
+              "key_attributes": [
+                "情侣",
+                "对戒",
+                "蝴蝶"
+              ],
+              "price": "3718.0 to 8924.0",
+              "rank": 7,
+              "title": "周大福MONOLOGUE独白罗密欧与朱丽叶玫瑰爱心蝴蝶黄金情侣对戒"
+            },
+            {
+              "asin": "926324306777",
+              "brand": "tb982372828423611",
+              "category": "服饰配件/皮带/帽子/围巾›运动首饰›指环",
+              "key_attributes": [
+                "情侣款",
+                "时尚",
+                "简约",
+                "潮流",
+                "夜光",
+                "可调节圈口"
+              ],
+              "price": "158.0",
+              "rank": 8,
+              "title": "FORHUG 破败王戒夜光戒指 简约时尚潮流开口可调节 银色 情侣款"
+            },
+            {
+              "asin": "912784013629",
+              "brand": "水贝珠宝旗舰店",
+              "category": "黄金›黄金首饰（新）›小克重定价黄金›小克重定价黄金吊坠",
+              "key_attributes": [
+                "999足金",
+                "八宝罗盘",
+                "情侣款"
+              ],
+              "price": "2160.0 to 5580.0",
+              "rank": 9,
+              "title": "水贝黄金官方旗舰店999足金八宝罗盘吊坠女小克重黄金首饰情侣款"
+            },
+            {
+              "asin": "537820292012",
+              "brand": "木缘木语佛珠",
+              "category": "饰品/流行首饰/时尚饰品新›木作制品›崖柏",
+              "key_attributes": [
+                "太行",
+                "男女情侣款",
+                "6/8/10/12佛珠",
+                "老料"
+              ],
+              "price": "22.0 to 58.0",
+              "rank": 10,
+              "title": "正宗太行崖柏手串108颗手链男女项链情侣款6/8/10/12佛珠念珠老料"
+            },
+            {
+              "asin": "829572329048",
+              "brand": "六桂福旗舰店",
+              "category": "珠宝/钻石/翡翠›黄金镶嵌首饰›黄金镶宝石›黄金镶宝石手链",
+              "key_attributes": [
+                "情侣款",
+                "男",
+                "女",
+                "五福财神图案",
+                "送生日礼物场景"
+              ],
+              "price": "468.0",
+              "rank": 11,
+              "title": "六桂福珠宝黄金镶玉手链男女情侣款五福财神足金手串送生日礼物"
+            },
+            {
+              "asin": "820983777473",
+              "brand": "16年潮流男包厂家店十年潮包高质价比",
+              "category": "箱包皮具/热销女包/男包›胸包",
+              "key_attributes": [
+                "休闲",
+                "运动",
+                "时尚",
+                "情侣款",
+                "帆布料",
+                "斜挎包",
+                "简约潮牌",
+                "潮男",
+                "骑行背挎包"
+              ],
+              "price": "199.0",
+              "rank": 12,
+              "title": "休闲运动时尚情侣款帆布斜挎包 简约潮牌胸前包潮男骑行后背挎包"
+            },
+            {
+              "asin": "936462313680",
+              "brand": "时尚潮依",
+              "category": "运动服/休闲服装›运动套装",
+              "key_attributes": [
+                "情侣款",
+                "夏季",
+                "短袖",
+                "前卫个性",
+                "星球印花",
+                "时尚潮流",
+                "西太后薇薇安"
+              ],
+              "price": "450.0",
+              "rank": 13,
+              "title": "现货2025夏季新西太后薇薇安土星蛇形环绕星球印花情侣款短袖T恤"
+            },
+            {
+              "asin": "942162479009",
+              "brand": "人防二分二分二",
+              "category": "运动鞋new›羽毛球鞋",
+              "key_attributes": [
+                "情侣款",
+                "专业",
+                "减震",
+                "回弹",
+                "透气"
+              ],
+              "price": "219.0 to 337.0",
+              "rank": 14,
+              "title": "李宁羽毛球鞋 音爆系列 男女情侣款减震回弹舒适透气专业比赛鞋"
+            },
+            {
+              "asin": "779884137025",
+              "brand": "搞钱做慈善工作室",
+              "category": "服饰配件/皮带/帽子/围巾›运动首饰›指环",
+              "key_attributes": [
+                "美式",
+                "复古风",
+                "人像图案",
+                "男女同款",
+                "情侣款"
+              ],
+              "price": "39.0",
+              "rank": 15,
+              "title": "搞钱做慈善 260克重磅纯棉！美式人像男女情侣款小众纯棉短袖T恤"
+            },
+            {
+              "asin": "704517626369",
+              "brand": "津门范儿",
+              "category": "男装›夹克",
+              "key_attributes": [
+                "明星潮流元素",
+                "动物图案",
+                "情侣适用",
+                "中国风设计",
+                "无领剪裁",
+                "春夏适用"
+              ],
+              "price": "288.0",
+              "rank": 16,
+              "title": "津范陈冠希潮牌同款豹纹宽松外套男情侣款中国风无领休闲夹克春夏"
+            },
+            {
+              "asin": "765579512356",
+              "brand": "六福珠宝官方旗舰店",
+              "category": "黄金›工艺黄金›细金工艺计价黄金›细金工艺计价黄金戒指",
+              "key_attributes": [
+                "光影金",
+                "水月纹",
+                "女",
+                "实心"
+              ],
+              "price": "6159.0 to 6773.0",
+              "rank": 17,
+              "title": "六福珠宝光影金水月纹黄金戒指女5G实心情侣对戒计价GJGTBR0015"
+            },
+            {
+              "asin": "757393998986",
+              "brand": "周大大金店",
+              "category": "服饰配件/皮带/帽子/围巾›运动首饰›指环",
+              "key_attributes": [
+                "情侣款",
+                "简约"
+              ],
+              "price": "51.0",
+              "rank": 18,
+              "title": "越南沙金指环传承古法磨砂永久不掉色爆款简约时尚情侣款素圈戒指"
+            },
+            {
+              "asin": "675084327328",
+              "brand": "人文之宝旗舰店",
+              "category": "节庆用品/礼品›文化创意用品›文化衫",
+              "key_attributes": [
+                "夏季"
+              ],
+              "price": "79.0",
+              "rank": 19,
+              "title": "人文之宝堂吉诃德圆领T恤短袖半袖情侣款夏季文化衫简约时尚潮流"
+            },
+            {
+              "asin": "922721299048",
+              "brand": "特步悠悠专卖店",
+              "category": "运动服/休闲服装›运动套装",
+              "key_attributes": [
+                "特步品牌",
+                "情侣款",
+                "宽松",
+                "休闲",
+                "速干",
+                "透气"
+              ],
+              "price": "179.0",
+              "rank": 20,
+              "title": "特步夏季运动套装运动服情侣款宽松休闲速干透气跑步体测短袖短裤"
+            }
+          ],
+          "query": "仿真钻戒道具 情侣款 对戒盒",
+          "rank_end": 20,
+          "rank_start": 1,
+          "search_available": false,
+          "total_pages": 8,
+          "total_results": 150
+        },
+        "over": false,
+        "progress": {
+          "action_signature": "{\"action\":\"search\",\"argument\":\"仿真钻戒道具 情侣款 对戒盒\"}",
+          "consecutive_repeats": 0,
+          "credited_evidence_added": [
+            "result_set:8fa2a07f0c5fd66023b6b3442613a98518775268cc517c5020a28a567b043ec0"
+          ],
+          "effective_result_sets": 1,
+          "evidence_added": [
+            "result_set:8fa2a07f0c5fd66023b6b3442613a98518775268cc517c5020a28a567b043ec0"
+          ],
+          "evidence_counts": {
+            "constraint": 0,
+            "option": 0,
+            "product": 0,
+            "result_set": 1,
+            "subpage": 0
+          },
+          "new_asin_count": 20,
+          "no_progress_steps": 0,
+          "opened_candidate_count": 0,
+          "runtime_evidence_counts": {
+            "constraint": 0,
+            "option": 0,
+            "product": 0,
+            "result_set": 1,
+            "subpage": 0
+          },
+          "runtime_progress_added": [
+            "result_set:8fa2a07f0c5fd66023b6b3442613a98518775268cc517c5020a28a567b043ec0"
+          ],
+          "seen_asin_count": 20,
+          "step_count": 1,
+          "termination_reason": null,
+          "termination_version": "shopping-termination-v3"
+        },
+        "purchase": {},
+        "reward": 0.0,
+        "reward_detail": {}
+      },
+      "reward": 0.0,
+      "step_index": 0,
+      "tool_call": {
+        "function": {
+          "arguments": "{\"query\": \"仿真钻戒道具 情侣款 对戒盒\"}",
+          "name": "search_products"
+        },
+        "id": "chatcmpl-tool-b8543a8c975aee7f",
+        "type": "function"
+      },
+      "tool_name": "search_products"
+    },
+    {
+      "done": false,
+      "env_action": "click[706474481748]",
+      "observation": "[SHOPPING_OBSERVATION_V2]\npage_type: product_detail\nasin: 706474481748\ntitle: 仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒\nbrand: zlvoey旗舰店\ncategory: 节庆用品/礼品›婚庆用品›新娘配件\nprice: 20.0 to 39.0\nkey_attributes: 仿真, 钻戒, 求婚仪式, 道具, 开口, 可调节\nselected_options: {}\navailable_options: {\"颜色分类\": [\"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]}\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]",
+      "parameters": {
+        "asin": "706474481748"
+      },
+      "projection": {
+        "critical_footer_preserved": true,
+        "page_type": "product_detail",
+        "raw_asin_count": 0,
+        "raw_button_count": 8,
+        "raw_tokens": 195,
+        "token_budget": 4096,
+        "tool_name": "open_product",
+        "truncated": false,
+        "truncation_ratio": 1.0,
+        "visible_asin_count": 0,
+        "visible_button_count": 8,
+        "visible_tokens": 195
+      },
+      "raw_observation": "[SHOPPING_OBSERVATION_V2]\npage_type: product_detail\nasin: 706474481748\ntitle: 仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒\nbrand: zlvoey旗舰店\ncategory: 节庆用品/礼品›婚庆用品›新娘配件\nprice: 20.0 to 39.0\nkey_attributes: 仿真, 钻戒, 求婚仪式, 道具, 开口, 可调节\nselected_options: {}\navailable_options: {\"颜色分类\": [\"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]}\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]",
+      "result": {
+        "done": false,
+        "env_idx": 0,
+        "goal": {},
+        "idx": "slot-0-7553",
+        "instruction": "Instruction: [SEP] 我需要一对在求婚仪式上用的仿真钻戒道具，情侣款，带一个红色欧式对戒盒，戒圈是开口的可以自由调节，价格在40左右。 [SEP] Back to Search [SEP] < Prev [SEP] 颜色分类 [SEP] 单女戒 [SEP] 情侣对戒【酒红色欧式对戒盒一个】 [SEP] 仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒 [SEP] 价格: 20.0 to 39.0 [SEP] 店铺: zlvoey旗舰店 [SEP] Description [SEP] Features [SEP] Reviews [SEP] Buy Now\n\n搜索功能是否可用: False\n\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]",
+        "message": "Continue interaction",
+        "observation_state": {
+          "actions": [
+            "back to search",
+            "< prev",
+            "description",
+            "features",
+            "reviews",
+            "buy now",
+            "单女戒",
+            "情侣对戒【酒红色欧式对戒盒一个】"
+          ],
+          "available_options": {
+            "颜色分类": [
+              "单女戒",
+              "情侣对戒【酒红色欧式对戒盒一个】"
+            ]
+          },
+          "observation_version": "shopping-observation-v2",
+          "page_type": "product_detail",
+          "product": {
+            "asin": "706474481748",
+            "brand": "zlvoey旗舰店",
+            "category": "节庆用品/礼品›婚庆用品›新娘配件",
+            "key_attributes": [
+              "仿真",
+              "钻戒",
+              "求婚仪式",
+              "道具",
+              "开口",
+              "可调节"
+            ],
+            "price": "20.0 to 39.0",
+            "title": "仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒"
+          },
+          "search_available": false,
+          "selected_options": {}
+        },
+        "over": false,
+        "progress": {
+          "action_signature": "{\"action\":\"click\",\"argument\":\"706474481748\"}",
+          "consecutive_repeats": 0,
+          "credited_evidence_added": [
+            "product:706474481748",
+            "constraint:706474481748:category:pass",
+            "constraint:706474481748:budget:pass"
+          ],
+          "effective_result_sets": 1,
+          "evidence_added": [
+            "product:706474481748",
+            "constraint:706474481748:category:pass",
+            "constraint:706474481748:budget:pass"
+          ],
+          "evidence_counts": {
+            "constraint": 2,
+            "option": 0,
+            "product": 1,
+            "result_set": 1,
+            "subpage": 0
+          },
+          "new_asin_count": 0,
+          "no_progress_steps": 0,
+          "opened_candidate_count": 1,
+          "runtime_evidence_counts": {
+            "constraint": 2,
+            "option": 0,
+            "product": 1,
+            "result_set": 1,
+            "subpage": 0
+          },
+          "runtime_progress_added": [
+            "product:706474481748",
+            "constraint:706474481748:category:pass",
+            "constraint:706474481748:budget:pass"
+          ],
+          "seen_asin_count": 20,
+          "step_count": 2,
+          "termination_reason": null,
+          "termination_version": "shopping-termination-v3"
+        },
+        "purchase": {},
+        "reward": 0.0,
+        "reward_detail": {}
+      },
+      "reward": 0.0,
+      "step_index": 1,
+      "tool_call": {
+        "function": {
+          "arguments": "{\"asin\": \"706474481748\"}",
+          "name": "open_product"
+        },
+        "id": "chatcmpl-tool-8739e71744cd07de",
+        "type": "function"
+      },
+      "tool_name": "open_product"
+    },
+    {
+      "done": false,
+      "env_action": "click[情侣对戒【酒红色欧式对戒盒一个】]",
+      "observation": "[SHOPPING_OBSERVATION_V2]\npage_type: product_detail\nasin: 706474481748\ntitle: 仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒\nbrand: zlvoey旗舰店\ncategory: 节庆用品/礼品›婚庆用品›新娘配件\nprice: 39.0\nkey_attributes: 仿真, 钻戒, 求婚仪式, 道具, 开口, 可调节\nselected_options: {\"颜色分类\": \"情侣对戒【酒红色欧式对戒盒一个】\"}\navailable_options: {\"颜色分类\": [\"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]}\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]",
+      "parameters": {
+        "value": "情侣对戒【酒红色欧式对戒盒一个】"
+      },
+      "projection": {
+        "critical_footer_preserved": true,
+        "page_type": "product_detail",
+        "raw_asin_count": 0,
+        "raw_button_count": 8,
+        "raw_tokens": 206,
+        "token_budget": 4096,
+        "tool_name": "select_option",
+        "truncated": false,
+        "truncation_ratio": 1.0,
+        "visible_asin_count": 0,
+        "visible_button_count": 8,
+        "visible_tokens": 206
+      },
+      "raw_observation": "[SHOPPING_OBSERVATION_V2]\npage_type: product_detail\nasin: 706474481748\ntitle: 仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒\nbrand: zlvoey旗舰店\ncategory: 节庆用品/礼品›婚庆用品›新娘配件\nprice: 39.0\nkey_attributes: 仿真, 钻戒, 求婚仪式, 道具, 开口, 可调节\nselected_options: {\"颜色分类\": \"情侣对戒【酒红色欧式对戒盒一个】\"}\navailable_options: {\"颜色分类\": [\"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]}\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]",
+      "result": {
+        "done": false,
+        "env_idx": 0,
+        "goal": {},
+        "idx": "slot-0-7553",
+        "instruction": "Instruction: [SEP] 我需要一对在求婚仪式上用的仿真钻戒道具，情侣款，带一个红色欧式对戒盒，戒圈是开口的可以自由调节，价格在40左右。 [SEP] Back to Search [SEP] < Prev [SEP] 颜色分类 [SEP] 单女戒 [SEP] 情侣对戒【酒红色欧式对戒盒一个】 [SEP] 仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒 [SEP] 价格: 39.0 [SEP] 店铺: zlvoey旗舰店 [SEP] Description [SEP] Features [SEP] Reviews [SEP] Buy Now\n\n搜索功能是否可用: False\n\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]",
+        "message": "Continue interaction",
+        "observation_state": {
+          "actions": [
+            "back to search",
+            "< prev",
+            "description",
+            "features",
+            "reviews",
+            "buy now",
+            "单女戒",
+            "情侣对戒【酒红色欧式对戒盒一个】"
+          ],
+          "available_options": {
+            "颜色分类": [
+              "单女戒",
+              "情侣对戒【酒红色欧式对戒盒一个】"
+            ]
+          },
+          "observation_version": "shopping-observation-v2",
+          "page_type": "product_detail",
+          "product": {
+            "asin": "706474481748",
+            "brand": "zlvoey旗舰店",
+            "category": "节庆用品/礼品›婚庆用品›新娘配件",
+            "key_attributes": [
+              "仿真",
+              "钻戒",
+              "求婚仪式",
+              "道具",
+              "开口",
+              "可调节"
+            ],
+            "price": "20.0 to 39.0",
+            "title": "仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒"
+          },
+          "search_available": false,
+          "selected_options": {
+            "颜色分类": "情侣对戒【酒红色欧式对戒盒一个】"
+          },
+          "selected_price": 39.0
+        },
+        "over": false,
+        "progress": {
+          "action_signature": "{\"action\":\"click\",\"argument\":\"情侣对戒【酒红色欧式对戒盒一个】\"}",
+          "consecutive_repeats": 0,
+          "credited_evidence_added": [
+            "option:706474481748:color:情侣对戒【酒红色欧式对戒盒一个】"
+          ],
+          "effective_result_sets": 1,
+          "evidence_added": [
+            "option:706474481748:color:情侣对戒【酒红色欧式对戒盒一个】"
+          ],
+          "evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 1,
+            "subpage": 0
+          },
+          "new_asin_count": 0,
+          "no_progress_steps": 0,
+          "opened_candidate_count": 1,
+          "runtime_evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 1,
+            "subpage": 0
+          },
+          "runtime_progress_added": [
+            "option:706474481748:color:情侣对戒【酒红色欧式对戒盒一个】"
+          ],
+          "seen_asin_count": 20,
+          "step_count": 3,
+          "termination_reason": null,
+          "termination_version": "shopping-termination-v3"
+        },
+        "purchase": {},
+        "reward": 0.0,
+        "reward_detail": {}
+      },
+      "reward": 0.0,
+      "step_index": 2,
+      "tool_call": {
+        "function": {
+          "arguments": "{\"value\": \"情侣对戒【酒红色欧式对戒盒一个】\"}",
+          "name": "select_option"
+        },
+        "id": "chatcmpl-tool-8136198dbe63bf6a",
+        "type": "function"
+      },
+      "tool_name": "select_option"
+    },
+    {
+      "done": false,
+      "env_action": "click[Features]",
+      "observation": "[SHOPPING_OBSERVATION_V2]\npage_type: information_subpage\nasin: 706474481748\ntitle: 仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒\nbrand: zlvoey旗舰店\ncategory: 节庆用品/礼品›婚庆用品›新娘配件\nprice: 39.0\nkey_attributes: 仿真, 钻戒, 求婚仪式, 道具, 开口, 可调节\nselected_options: {\"颜色分类\": \"情侣对戒【酒红色欧式对戒盒一个】\"}\navailable_options: {\"颜色分类\": [\"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]}\nsubpage: Features\ncontent: ['']\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\"]",
+      "parameters": {},
+      "projection": {
+        "critical_footer_preserved": true,
+        "page_type": "information_subpage",
+        "raw_asin_count": 0,
+        "raw_button_count": 2,
+        "raw_tokens": 185,
+        "token_budget": 768,
+        "tool_name": "view_features",
+        "truncated": false,
+        "truncation_ratio": 1.0,
+        "visible_asin_count": 0,
+        "visible_button_count": 2,
+        "visible_tokens": 185
+      },
+      "raw_observation": "[SHOPPING_OBSERVATION_V2]\npage_type: information_subpage\nasin: 706474481748\ntitle: 仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒\nbrand: zlvoey旗舰店\ncategory: 节庆用品/礼品›婚庆用品›新娘配件\nprice: 39.0\nkey_attributes: 仿真, 钻戒, 求婚仪式, 道具, 开口, 可调节\nselected_options: {\"颜色分类\": \"情侣对戒【酒红色欧式对戒盒一个】\"}\navailable_options: {\"颜色分类\": [\"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]}\nsubpage: Features\ncontent: ['']\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\"]",
+      "result": {
+        "done": false,
+        "env_idx": 0,
+        "goal": {},
+        "idx": "slot-0-7553",
+        "instruction": "Instruction: [SEP] 我需要一对在求婚仪式上用的仿真钻戒道具，情侣款，带一个红色欧式对戒盒，戒圈是开口的可以自由调节，价格在40左右。 [SEP] Back to Search [SEP] < Prev [SEP] \n\n搜索功能是否可用: False\n\n可点击的按钮: [\"back to search\", \"< prev\"]",
+        "message": "Continue interaction",
+        "observation_state": {
+          "actions": [
+            "back to search",
+            "< prev"
+          ],
+          "available_options": {
+            "颜色分类": [
+              "单女戒",
+              "情侣对戒【酒红色欧式对戒盒一个】"
+            ]
+          },
+          "content": [
+            ""
+          ],
+          "observation_version": "shopping-observation-v2",
+          "page_type": "information_subpage",
+          "product": {
+            "asin": "706474481748",
+            "brand": "zlvoey旗舰店",
+            "category": "节庆用品/礼品›婚庆用品›新娘配件",
+            "key_attributes": [
+              "仿真",
+              "钻戒",
+              "求婚仪式",
+              "道具",
+              "开口",
+              "可调节"
+            ],
+            "price": "20.0 to 39.0",
+            "title": "仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒"
+          },
+          "search_available": false,
+          "selected_options": {
+            "颜色分类": "情侣对戒【酒红色欧式对戒盒一个】"
+          },
+          "selected_price": 39.0,
+          "subpage": "Features"
+        },
+        "over": false,
+        "progress": {
+          "action_signature": "{\"action\":\"click\",\"argument\":\"features\"}",
+          "consecutive_repeats": 0,
+          "credited_evidence_added": [
+            "subpage:706474481748:features"
+          ],
+          "effective_result_sets": 1,
+          "evidence_added": [
+            "subpage:706474481748:features"
+          ],
+          "evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 1,
+            "subpage": 1
+          },
+          "new_asin_count": 0,
+          "no_progress_steps": 0,
+          "opened_candidate_count": 1,
+          "runtime_evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 1,
+            "subpage": 1
+          },
+          "runtime_progress_added": [
+            "subpage:706474481748:features"
+          ],
+          "seen_asin_count": 20,
+          "step_count": 4,
+          "termination_reason": null,
+          "termination_version": "shopping-termination-v3"
+        },
+        "purchase": {},
+        "reward": 0.0,
+        "reward_detail": {}
+      },
+      "reward": 0.0,
+      "step_index": 3,
+      "tool_call": {
+        "function": {
+          "arguments": "{}",
+          "name": "view_features"
+        },
+        "id": "chatcmpl-tool-adf045d5a724b129",
+        "type": "function"
+      },
+      "tool_name": "view_features"
+    },
+    {
+      "done": false,
+      "env_action": "click[< Prev]",
+      "observation": "[SHOPPING_OBSERVATION_V2]\npage_type: product_detail\nasin: 706474481748\ntitle: 仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒\nbrand: zlvoey旗舰店\ncategory: 节庆用品/礼品›婚庆用品›新娘配件\nprice: 39.0\nkey_attributes: 仿真, 钻戒, 求婚仪式, 道具, 开口, 可调节\nselected_options: {\"颜色分类\": \"情侣对戒【酒红色欧式对戒盒一个】\"}\navailable_options: {\"颜色分类\": [\"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]}\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]",
+      "parameters": {},
+      "projection": {
+        "critical_footer_preserved": true,
+        "page_type": "product_detail",
+        "raw_asin_count": 0,
+        "raw_button_count": 8,
+        "raw_tokens": 206,
+        "token_budget": 4096,
+        "tool_name": "prev_page",
+        "truncated": false,
+        "truncation_ratio": 1.0,
+        "visible_asin_count": 0,
+        "visible_button_count": 8,
+        "visible_tokens": 206
+      },
+      "raw_observation": "[SHOPPING_OBSERVATION_V2]\npage_type: product_detail\nasin: 706474481748\ntitle: 仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒\nbrand: zlvoey旗舰店\ncategory: 节庆用品/礼品›婚庆用品›新娘配件\nprice: 39.0\nkey_attributes: 仿真, 钻戒, 求婚仪式, 道具, 开口, 可调节\nselected_options: {\"颜色分类\": \"情侣对戒【酒红色欧式对戒盒一个】\"}\navailable_options: {\"颜色分类\": [\"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]}\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]",
+      "result": {
+        "done": false,
+        "env_idx": 0,
+        "goal": {},
+        "idx": "slot-0-7553",
+        "instruction": "Instruction: [SEP] 我需要一对在求婚仪式上用的仿真钻戒道具，情侣款，带一个红色欧式对戒盒，戒圈是开口的可以自由调节，价格在40左右。 [SEP] Back to Search [SEP] < Prev [SEP] 颜色分类 [SEP] 单女戒 [SEP] 情侣对戒【酒红色欧式对戒盒一个】 [SEP] 仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒 [SEP] 价格: 39.0 [SEP] 店铺: zlvoey旗舰店 [SEP] Description [SEP] Features [SEP] Reviews [SEP] Buy Now\n\n搜索功能是否可用: False\n\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]",
+        "message": "Continue interaction",
+        "observation_state": {
+          "actions": [
+            "back to search",
+            "< prev",
+            "description",
+            "features",
+            "reviews",
+            "buy now",
+            "单女戒",
+            "情侣对戒【酒红色欧式对戒盒一个】"
+          ],
+          "available_options": {
+            "颜色分类": [
+              "单女戒",
+              "情侣对戒【酒红色欧式对戒盒一个】"
+            ]
+          },
+          "observation_version": "shopping-observation-v2",
+          "page_type": "product_detail",
+          "product": {
+            "asin": "706474481748",
+            "brand": "zlvoey旗舰店",
+            "category": "节庆用品/礼品›婚庆用品›新娘配件",
+            "key_attributes": [
+              "仿真",
+              "钻戒",
+              "求婚仪式",
+              "道具",
+              "开口",
+              "可调节"
+            ],
+            "price": "20.0 to 39.0",
+            "title": "仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒"
+          },
+          "search_available": false,
+          "selected_options": {
+            "颜色分类": "情侣对戒【酒红色欧式对戒盒一个】"
+          },
+          "selected_price": 39.0
+        },
+        "over": false,
+        "progress": {
+          "action_signature": "{\"action\":\"click\",\"argument\":\"< prev\"}",
+          "consecutive_repeats": 0,
+          "credited_evidence_added": [],
+          "effective_result_sets": 1,
+          "evidence_added": [],
+          "evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 1,
+            "subpage": 1
+          },
+          "new_asin_count": 0,
+          "no_progress_steps": 1,
+          "opened_candidate_count": 1,
+          "runtime_evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 2,
+            "subpage": 1
+          },
+          "runtime_progress_added": [],
+          "seen_asin_count": 20,
+          "step_count": 5,
+          "termination_reason": null,
+          "termination_version": "shopping-termination-v3"
+        },
+        "purchase": {},
+        "reward": 0.0,
+        "reward_detail": {}
+      },
+      "reward": 0.0,
+      "step_index": 4,
+      "tool_call": {
+        "function": {
+          "arguments": "{}",
+          "name": "prev_page"
+        },
+        "id": "chatcmpl-tool-9c78a79f0c16591f",
+        "type": "function"
+      },
+      "tool_name": "prev_page"
+    },
+    {
+      "done": false,
+      "env_action": "click[Description]",
+      "observation": "[SHOPPING_OBSERVATION_V2]\npage_type: information_subpage\nasin: 706474481748\ntitle: 仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒\nbrand: zlvoey旗舰店\ncategory: 节庆用品/礼品›婚庆用品›新娘配件\nprice: 39.0\nkey_attributes: 仿真, 钻戒, 求婚仪式, 道具, 开口, 可调节\nselected_options: {\"颜色分类\": \"情侣对戒【酒红色欧式对戒盒一个】\"}\navailable_options: {\"颜色分类\": [\"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]}\nsubpage: Description\ncontent: 仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\"]",
+      "parameters": {},
+      "projection": {
+        "critical_footer_preserved": true,
+        "page_type": "information_subpage",
+        "raw_asin_count": 0,
+        "raw_button_count": 2,
+        "raw_tokens": 201,
+        "token_budget": 768,
+        "tool_name": "view_description",
+        "truncated": false,
+        "truncation_ratio": 1.0,
+        "visible_asin_count": 0,
+        "visible_button_count": 2,
+        "visible_tokens": 201
+      },
+      "raw_observation": "[SHOPPING_OBSERVATION_V2]\npage_type: information_subpage\nasin: 706474481748\ntitle: 仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒\nbrand: zlvoey旗舰店\ncategory: 节庆用品/礼品›婚庆用品›新娘配件\nprice: 39.0\nkey_attributes: 仿真, 钻戒, 求婚仪式, 道具, 开口, 可调节\nselected_options: {\"颜色分类\": \"情侣对戒【酒红色欧式对戒盒一个】\"}\navailable_options: {\"颜色分类\": [\"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]}\nsubpage: Description\ncontent: 仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\"]",
+      "result": {
+        "done": false,
+        "env_idx": 0,
+        "goal": {},
+        "idx": "slot-0-7553",
+        "instruction": "Instruction: [SEP] 我需要一对在求婚仪式上用的仿真钻戒道具，情侣款，带一个红色欧式对戒盒，戒圈是开口的可以自由调节，价格在40左右。 [SEP] Back to Search [SEP] < Prev [SEP] 仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒\n\n搜索功能是否可用: False\n\n可点击的按钮: [\"back to search\", \"< prev\"]",
+        "message": "Continue interaction",
+        "observation_state": {
+          "actions": [
+            "back to search",
+            "< prev"
+          ],
+          "available_options": {
+            "颜色分类": [
+              "单女戒",
+              "情侣对戒【酒红色欧式对戒盒一个】"
+            ]
+          },
+          "content": "仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒",
+          "observation_version": "shopping-observation-v2",
+          "page_type": "information_subpage",
+          "product": {
+            "asin": "706474481748",
+            "brand": "zlvoey旗舰店",
+            "category": "节庆用品/礼品›婚庆用品›新娘配件",
+            "key_attributes": [
+              "仿真",
+              "钻戒",
+              "求婚仪式",
+              "道具",
+              "开口",
+              "可调节"
+            ],
+            "price": "20.0 to 39.0",
+            "title": "仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒"
+          },
+          "search_available": false,
+          "selected_options": {
+            "颜色分类": "情侣对戒【酒红色欧式对戒盒一个】"
+          },
+          "selected_price": 39.0,
+          "subpage": "Description"
+        },
+        "over": false,
+        "progress": {
+          "action_signature": "{\"action\":\"click\",\"argument\":\"description\"}",
+          "consecutive_repeats": 0,
+          "credited_evidence_added": [
+            "subpage:706474481748:description"
+          ],
+          "effective_result_sets": 1,
+          "evidence_added": [
+            "subpage:706474481748:description"
+          ],
+          "evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 1,
+            "subpage": 2
+          },
+          "new_asin_count": 0,
+          "no_progress_steps": 0,
+          "opened_candidate_count": 1,
+          "runtime_evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 2,
+            "subpage": 2
+          },
+          "runtime_progress_added": [
+            "subpage:706474481748:description"
+          ],
+          "seen_asin_count": 20,
+          "step_count": 6,
+          "termination_reason": null,
+          "termination_version": "shopping-termination-v3"
+        },
+        "purchase": {},
+        "reward": 0.0,
+        "reward_detail": {}
+      },
+      "reward": 0.0,
+      "step_index": 5,
+      "tool_call": {
+        "function": {
+          "arguments": "{}",
+          "name": "view_description"
+        },
+        "id": "chatcmpl-tool-ac0106ea820bcb54",
+        "type": "function"
+      },
+      "tool_name": "view_description"
+    },
+    {
+      "done": false,
+      "env_action": "click[< Prev]",
+      "observation": "[SHOPPING_OBSERVATION_V2]\npage_type: product_detail\nasin: 706474481748\ntitle: 仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒\nbrand: zlvoey旗舰店\ncategory: 节庆用品/礼品›婚庆用品›新娘配件\nprice: 39.0\nkey_attributes: 仿真, 钻戒, 求婚仪式, 道具, 开口, 可调节\nselected_options: {\"颜色分类\": \"情侣对戒【酒红色欧式对戒盒一个】\"}\navailable_options: {\"颜色分类\": [\"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]}\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]",
+      "parameters": {},
+      "projection": {
+        "critical_footer_preserved": true,
+        "page_type": "product_detail",
+        "raw_asin_count": 0,
+        "raw_button_count": 8,
+        "raw_tokens": 206,
+        "token_budget": 4096,
+        "tool_name": "prev_page",
+        "truncated": false,
+        "truncation_ratio": 1.0,
+        "visible_asin_count": 0,
+        "visible_button_count": 8,
+        "visible_tokens": 206
+      },
+      "raw_observation": "[SHOPPING_OBSERVATION_V2]\npage_type: product_detail\nasin: 706474481748\ntitle: 仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒\nbrand: zlvoey旗舰店\ncategory: 节庆用品/礼品›婚庆用品›新娘配件\nprice: 39.0\nkey_attributes: 仿真, 钻戒, 求婚仪式, 道具, 开口, 可调节\nselected_options: {\"颜色分类\": \"情侣对戒【酒红色欧式对戒盒一个】\"}\navailable_options: {\"颜色分类\": [\"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]}\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]",
+      "result": {
+        "done": false,
+        "env_idx": 0,
+        "goal": {},
+        "idx": "slot-0-7553",
+        "instruction": "Instruction: [SEP] 我需要一对在求婚仪式上用的仿真钻戒道具，情侣款，带一个红色欧式对戒盒，戒圈是开口的可以自由调节，价格在40左右。 [SEP] Back to Search [SEP] < Prev [SEP] 颜色分类 [SEP] 单女戒 [SEP] 情侣对戒【酒红色欧式对戒盒一个】 [SEP] 仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒 [SEP] 价格: 39.0 [SEP] 店铺: zlvoey旗舰店 [SEP] Description [SEP] Features [SEP] Reviews [SEP] Buy Now\n\n搜索功能是否可用: False\n\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"单女戒\", \"情侣对戒【酒红色欧式对戒盒一个】\"]",
+        "message": "Continue interaction",
+        "observation_state": {
+          "actions": [
+            "back to search",
+            "< prev",
+            "description",
+            "features",
+            "reviews",
+            "buy now",
+            "单女戒",
+            "情侣对戒【酒红色欧式对戒盒一个】"
+          ],
+          "available_options": {
+            "颜色分类": [
+              "单女戒",
+              "情侣对戒【酒红色欧式对戒盒一个】"
+            ]
+          },
+          "observation_version": "shopping-observation-v2",
+          "page_type": "product_detail",
+          "product": {
+            "asin": "706474481748",
+            "brand": "zlvoey旗舰店",
+            "category": "节庆用品/礼品›婚庆用品›新娘配件",
+            "key_attributes": [
+              "仿真",
+              "钻戒",
+              "求婚仪式",
+              "道具",
+              "开口",
+              "可调节"
+            ],
+            "price": "20.0 to 39.0",
+            "title": "仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒"
+          },
+          "search_available": false,
+          "selected_options": {
+            "颜色分类": "情侣对戒【酒红色欧式对戒盒一个】"
+          },
+          "selected_price": 39.0
+        },
+        "over": false,
+        "progress": {
+          "action_signature": "{\"action\":\"click\",\"argument\":\"< prev\"}",
+          "consecutive_repeats": 0,
+          "credited_evidence_added": [],
+          "effective_result_sets": 1,
+          "evidence_added": [],
+          "evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 1,
+            "subpage": 2
+          },
+          "new_asin_count": 0,
+          "no_progress_steps": 1,
+          "opened_candidate_count": 1,
+          "runtime_evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 2,
+            "subpage": 2
+          },
+          "runtime_progress_added": [],
+          "seen_asin_count": 20,
+          "step_count": 7,
+          "termination_reason": null,
+          "termination_version": "shopping-termination-v3"
+        },
+        "purchase": {},
+        "reward": 0.0,
+        "reward_detail": {}
+      },
+      "reward": 0.0,
+      "step_index": 6,
+      "tool_call": {
+        "function": {
+          "arguments": "{}",
+          "name": "prev_page"
+        },
+        "id": "chatcmpl-tool-82081f184ab53d64",
+        "type": "function"
+      },
+      "tool_name": "prev_page"
+    },
+    {
+      "done": true,
+      "env_action": "click[Buy Now]",
+      "observation": "[SHOPPING_OBSERVATION_V2]\npage_type: terminal\n\n搜索功能是否可用: False\n可点击的按钮: []",
+      "parameters": {},
+      "projection": {
+        "critical_footer_preserved": true,
+        "page_type": "generic",
+        "raw_asin_count": 0,
+        "raw_button_count": 0,
+        "raw_tokens": 28,
+        "token_budget": 768,
+        "tool_name": "buy_now",
+        "truncated": false,
+        "truncation_ratio": 1.0,
+        "visible_asin_count": 0,
+        "visible_button_count": 0,
+        "visible_tokens": 28
+      },
+      "raw_observation": "[SHOPPING_OBSERVATION_V2]\npage_type: terminal\n\n搜索功能是否可用: False\n可点击的按钮: []",
+      "result": {
+        "done": true,
+        "env_idx": 0,
+        "goal": {
+          "asin": "706474481748",
+          "attributes": [
+            "仿真",
+            "钻戒",
+            "求婚仪式",
+            "道具",
+            "开口",
+            "可调节"
+          ],
+          "category": "节庆用品/礼品›婚庆用品›新娘配件",
+          "expected_brand": [],
+          "expected_core_functions": [
+            "仿真",
+            "钻戒",
+            "求婚仪式",
+            "道具",
+            "开口",
+            "可调节"
+          ],
+          "expected_model": [],
+          "feature_sources": {
+            "brand": "instruction_explicit_alias",
+            "category": "task.target_product.category",
+            "core_functions": "instruction.attributes",
+            "model": "instruction_target_token_intersection",
+            "options": "instruction.instruction_options"
+          },
+          "goal_options": [
+            "情侣对戒【酒红色欧式对戒盒一个】"
+          ],
+          "instruction_simple": null,
+          "instruction_text": "我需要一对在求婚仪式上用的仿真钻戒道具，情侣款，带一个红色欧式对戒盒，戒圈是开口的可以自由调节，价格在40左右。",
+          "name": "仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒",
+          "option_axis_version": "option-axis-v1",
+          "price_upper": 44.0,
+          "query": "",
+          "reason_key": null,
+          "required_options_by_key": {
+            "color": {
+              "source": "instruction.instruction_options",
+              "source_axis": "颜色分类",
+              "value": "情侣对戒【酒红色欧式对戒盒一个】"
+            }
+          },
+          "reward_feature_version": "shopping-reward-features-v1",
+          "unresolved_option_requirements": [],
+          "user_persona": {},
+          "weight": 1
+        },
+        "idx": "slot-0-7553",
+        "instruction": "Thank you for shopping with us! [SEP] Your code: [SEP] None [SEP] (Paste it in your MTurk interface.) [SEP] Purchased [SEP] asin [SEP] 706474481748 [SEP] options [SEP] {\"\\u989c\\u8272\\u5206\\u7c7b\": \"\\u60c5\\u4fa3\\u5bf9\\u6212\\u3010\\u9152\\u7ea2\\u8272\\u6b27\\u5f0f\\u5bf9\\u6212\\u76d2\\u4e00\\u4e2a\\u3011\"} [SEP] attrs [SEP] None [SEP] category [SEP] None [SEP] query [SEP] None [SEP] product category [SEP] None [SEP] Target [SEP] asin [SEP] options [SEP] attrs [SEP] price upper [SEP] instuction text [SEP] category [SEP] product category [SEP] query [SEP] Goal [SEP] None [SEP] Reward [SEP] Your score (min 0.0, max 1.0) [SEP] 1.0 [SEP] Reward Details [SEP] None\n\n搜索功能是否可用: False\n\n可点击的按钮: []",
+        "message": "Continue interaction",
+        "observation_state": {
+          "actions": [],
+          "observation_version": "shopping-observation-v2",
+          "page_type": "terminal",
+          "search_available": false
+        },
+        "over": true,
+        "purchase": {
+          "asin": "706474481748",
+          "attributes": [
+            "仿真",
+            "钻戒",
+            "求婚仪式",
+            "道具",
+            "开口",
+            "可调节"
+          ],
+          "category": "节庆用品/礼品›婚庆用品›新娘配件",
+          "instruction_text": "我需要一对在求婚仪式上用的仿真钻戒道具，情侣款，带一个红色欧式对戒盒，戒圈是开口的可以自由调节，价格在40左右。",
+          "name": "仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒",
+          "options": {
+            "颜色分类": "情侣对戒【酒红色欧式对戒盒一个】"
+          },
+          "price": 39.0,
+          "product_category": "",
+          "query": ""
+        },
+        "reward": 1.0,
+        "reward_detail": {
+          "dimension_scores": {
+            "brand": 0.0,
+            "core_functions": 1.0,
+            "key_options": 1.0,
+            "model": 0.0
+          },
+          "evidence": {
+            "comparator_version": "shopping-comparators-v1",
+            "expected_reward_feature_version": "shopping-reward-features-v1",
+            "preference_scoring": {
+              "active_weight": 0.4,
+              "all_satisfied": true,
+              "dimensions": {
+                "brand": {
+                  "active": false,
+                  "coverage": 0.0,
+                  "passed_count": 0,
+                  "required_count": 0,
+                  "results": [],
+                  "score": 0.0,
+                  "verifiable_count": 0
+                },
+                "core_functions": {
+                  "active": true,
+                  "coverage": 1.0,
+                  "passed_count": 6,
+                  "required_count": 6,
+                  "results": [
+                    {
+                      "actual": [
+                        "仿真",
+                        "钻戒",
+                        "求婚仪式",
+                        "道具",
+                        "开口",
+                        "可调节"
+                      ],
+                      "comparator": "structured_attribute_with_polarity_fallback",
+                      "evidence": {
+                        "matched": [
+                          {
+                            "source": "attribute",
+                            "value": "仿真"
+                          }
+                        ],
+                        "missing": [],
+                        "negated": []
+                      },
+                      "passed": true,
+                      "required": [
+                        "仿真"
+                      ],
+                      "source_field": "attribute|description",
+                      "status": "pass",
+                      "verifiable": true
+                    },
+                    {
+                      "actual": [
+                        "仿真",
+                        "钻戒",
+                        "求婚仪式",
+                        "道具",
+                        "开口",
+                        "可调节"
+                      ],
+                      "comparator": "structured_attribute_with_polarity_fallback",
+                      "evidence": {
+                        "matched": [
+                          {
+                            "source": "attribute",
+                            "value": "钻戒"
+                          }
+                        ],
+                        "missing": [],
+                        "negated": []
+                      },
+                      "passed": true,
+                      "required": [
+                        "钻戒"
+                      ],
+                      "source_field": "attribute|description",
+                      "status": "pass",
+                      "verifiable": true
+                    },
+                    {
+                      "actual": [
+                        "仿真",
+                        "钻戒",
+                        "求婚仪式",
+                        "道具",
+                        "开口",
+                        "可调节"
+                      ],
+                      "comparator": "structured_attribute_with_polarity_fallback",
+                      "evidence": {
+                        "matched": [
+                          {
+                            "source": "attribute",
+                            "value": "求婚仪式"
+                          }
+                        ],
+                        "missing": [],
+                        "negated": []
+                      },
+                      "passed": true,
+                      "required": [
+                        "求婚仪式"
+                      ],
+                      "source_field": "attribute|description",
+                      "status": "pass",
+                      "verifiable": true
+                    },
+                    {
+                      "actual": [
+                        "仿真",
+                        "钻戒",
+                        "求婚仪式",
+                        "道具",
+                        "开口",
+                        "可调节"
+                      ],
+                      "comparator": "structured_attribute_with_polarity_fallback",
+                      "evidence": {
+                        "matched": [
+                          {
+                            "source": "attribute",
+                            "value": "道具"
+                          }
+                        ],
+                        "missing": [],
+                        "negated": []
+                      },
+                      "passed": true,
+                      "required": [
+                        "道具"
+                      ],
+                      "source_field": "attribute|description",
+                      "status": "pass",
+                      "verifiable": true
+                    },
+                    {
+                      "actual": [
+                        "仿真",
+                        "钻戒",
+                        "求婚仪式",
+                        "道具",
+                        "开口",
+                        "可调节"
+                      ],
+                      "comparator": "structured_attribute_with_polarity_fallback",
+                      "evidence": {
+                        "matched": [
+                          {
+                            "source": "attribute",
+                            "value": "开口"
+                          }
+                        ],
+                        "missing": [],
+                        "negated": []
+                      },
+                      "passed": true,
+                      "required": [
+                        "开口"
+                      ],
+                      "source_field": "attribute|description",
+                      "status": "pass",
+                      "verifiable": true
+                    },
+                    {
+                      "actual": [
+                        "仿真",
+                        "钻戒",
+                        "求婚仪式",
+                        "道具",
+                        "开口",
+                        "可调节"
+                      ],
+                      "comparator": "structured_attribute_with_polarity_fallback",
+                      "evidence": {
+                        "matched": [
+                          {
+                            "source": "attribute",
+                            "value": "可调节"
+                          }
+                        ],
+                        "missing": [],
+                        "negated": []
+                      },
+                      "passed": true,
+                      "required": [
+                        "可调节"
+                      ],
+                      "source_field": "attribute|description",
+                      "status": "pass",
+                      "verifiable": true
+                    }
+                  ],
+                  "score": 1.0,
+                  "verifiable_count": 6
+                },
+                "key_options": {
+                  "active": true,
+                  "coverage": 1.0,
+                  "passed_count": 1,
+                  "required_count": 1,
+                  "results": [
+                    {
+                      "actual": {
+                        "颜色分类": "情侣对戒【酒红色欧式对戒盒一个】"
+                      },
+                      "comparator": "option_key_value_v1",
+                      "evidence": {
+                        "axis_version": "option-axis-v1",
+                        "matched": [
+                          {
+                            "axis": "color",
+                            "source_axis": "颜色分类",
+                            "value": "情侣对戒【酒红色欧式对戒盒一个】"
+                          }
+                        ],
+                        "missing_axes": [],
+                        "unavailable_values": [],
+                        "wrong_values": []
+                      },
+                      "passed": true,
+                      "required": {
+                        "color": {
+                          "source": "instruction.instruction_options",
+                          "source_axis": "颜色分类",
+                          "value": "情侣对戒【酒红色欧式对戒盒一个】"
+                        }
+                      },
+                      "source_field": "customization_options",
+                      "status": "pass",
+                      "verifiable": true
+                    }
+                  ],
+                  "score": 1.0,
+                  "verifiable_count": 1
+                },
+                "model": {
+                  "active": false,
+                  "coverage": 0.0,
+                  "passed_count": 0,
+                  "required_count": 0,
+                  "results": [],
+                  "score": 0.0,
+                  "verifiable_count": 0
+                }
+              },
+              "evidence_coverage": 1.0,
+              "match_score": 1.0,
+              "weights": {
+                "brand": 0.35,
+                "core_functions": 0.25,
+                "key_options": 0.15,
+                "model": 0.25
+              }
+            },
+            "price_resolution": {
+              "evidence": {
+                "effective_price_axis": "color"
+              },
+              "method": "unique_effective_price_axis",
+              "price": 39.0,
+              "status": "pass",
+              "version": "variant-price-v1"
+            },
+            "reward_feature_version": "shopping-reward-features-v1",
+            "variant_price_version": "variant-price-v1"
+          },
+          "evidence_coverage": 1.0,
+          "hard_gates": {
+            "budget": {
+              "actual": 39.0,
+              "comparator": "variant_price_budget_v1",
+              "evidence": {
+                "evidence": {
+                  "effective_price_axis": "color"
+                },
+                "method": "unique_effective_price_axis",
+                "price": 39.0,
+                "status": "pass",
+                "version": "variant-price-v1"
+              },
+              "passed": true,
+              "required": 44.0,
+              "source_field": "variant_price",
+              "status": "pass",
+              "verifiable": true
+            },
+            "category": {
+              "actual": "节庆用品/礼品›婚庆用品›新娘配件",
+              "comparator": "category_leaf_ancestor_chain",
+              "evidence": {
+                "comparisons": [
+                  {
+                    "ancestor_match": true,
+                    "leaf_match": true,
+                    "required": [
+                      "节庆用品/礼品",
+                      "婚庆用品",
+                      "新娘配件"
+                    ]
+                  }
+                ]
+              },
+              "passed": true,
+              "required": [
+                "节庆用品/礼品›婚庆用品›新娘配件"
+              ],
+              "source_field": "category",
+              "status": "pass",
+              "verifiable": true
+            }
+          },
+          "purchase_success": true,
+          "reward": 1.0,
+          "reward_type": "gold_purchase",
+          "reward_valid": true,
+          "reward_version": "shopsimulator-reward-v3",
+          "sampling_invalid": false,
+          "target_asin_match": true,
+          "terminal_utility": 1.0,
+          "termination_reason": "gold_purchase",
+          "weighted_score": 1.0
+        },
+        "reward_valid": true,
+        "termination_reason": "gold_purchase"
+      },
+      "reward": 1.0,
+      "step_index": 7,
+      "tool_call": {
+        "function": {
+          "arguments": "{}",
+          "name": "buy_now"
+        },
+        "id": "chatcmpl-tool-92e07be987c6e516",
+        "type": "function"
+      },
+      "tool_name": "buy_now"
+    }
+  ],
+  "task_id": 7553,
+  "terminal_result": {
+    "done": true,
+    "env_idx": 0,
+    "goal": {
+      "asin": "706474481748",
+      "attributes": [
+        "仿真",
+        "钻戒",
+        "求婚仪式",
+        "道具",
+        "开口",
+        "可调节"
+      ],
+      "category": "节庆用品/礼品›婚庆用品›新娘配件",
+      "expected_brand": [],
+      "expected_core_functions": [
+        "仿真",
+        "钻戒",
+        "求婚仪式",
+        "道具",
+        "开口",
+        "可调节"
+      ],
+      "expected_model": [],
+      "feature_sources": {
+        "brand": "instruction_explicit_alias",
+        "category": "task.target_product.category",
+        "core_functions": "instruction.attributes",
+        "model": "instruction_target_token_intersection",
+        "options": "instruction.instruction_options"
+      },
+      "goal_options": [
+        "情侣对戒【酒红色欧式对戒盒一个】"
+      ],
+      "instruction_simple": null,
+      "instruction_text": "我需要一对在求婚仪式上用的仿真钻戒道具，情侣款，带一个红色欧式对戒盒，戒圈是开口的可以自由调节，价格在40左右。",
+      "name": "仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒",
+      "option_axis_version": "option-axis-v1",
+      "price_upper": 44.0,
+      "query": "",
+      "reason_key": null,
+      "required_options_by_key": {
+        "color": {
+          "source": "instruction.instruction_options",
+          "source_axis": "颜色分类",
+          "value": "情侣对戒【酒红色欧式对戒盒一个】"
+        }
+      },
+      "reward_feature_version": "shopping-reward-features-v1",
+      "unresolved_option_requirements": [],
+      "user_persona": {},
+      "weight": 1
+    },
+    "idx": "slot-0-7553",
+    "instruction": "Thank you for shopping with us! [SEP] Your code: [SEP] None [SEP] (Paste it in your MTurk interface.) [SEP] Purchased [SEP] asin [SEP] 706474481748 [SEP] options [SEP] {\"\\u989c\\u8272\\u5206\\u7c7b\": \"\\u60c5\\u4fa3\\u5bf9\\u6212\\u3010\\u9152\\u7ea2\\u8272\\u6b27\\u5f0f\\u5bf9\\u6212\\u76d2\\u4e00\\u4e2a\\u3011\"} [SEP] attrs [SEP] None [SEP] category [SEP] None [SEP] query [SEP] None [SEP] product category [SEP] None [SEP] Target [SEP] asin [SEP] options [SEP] attrs [SEP] price upper [SEP] instuction text [SEP] category [SEP] product category [SEP] query [SEP] Goal [SEP] None [SEP] Reward [SEP] Your score (min 0.0, max 1.0) [SEP] 1.0 [SEP] Reward Details [SEP] None\n\n搜索功能是否可用: False\n\n可点击的按钮: []",
+    "message": "Continue interaction",
+    "observation_state": {
+      "actions": [],
+      "observation_version": "shopping-observation-v2",
+      "page_type": "terminal",
+      "search_available": false
+    },
+    "over": true,
+    "purchase": {
+      "asin": "706474481748",
+      "attributes": [
+        "仿真",
+        "钻戒",
+        "求婚仪式",
+        "道具",
+        "开口",
+        "可调节"
+      ],
+      "category": "节庆用品/礼品›婚庆用品›新娘配件",
+      "instruction_text": "我需要一对在求婚仪式上用的仿真钻戒道具，情侣款，带一个红色欧式对戒盒，戒圈是开口的可以自由调节，价格在40左右。",
+      "name": "仿真假钻戒婚礼道具结婚对戒新娘情侣戒指一对求婚仪式钻石婚戒",
+      "options": {
+        "颜色分类": "情侣对戒【酒红色欧式对戒盒一个】"
+      },
+      "price": 39.0,
+      "product_category": "",
+      "query": ""
+    },
+    "reward": 1.0,
+    "reward_detail": {
+      "dimension_scores": {
+        "brand": 0.0,
+        "core_functions": 1.0,
+        "key_options": 1.0,
+        "model": 0.0
+      },
+      "evidence": {
+        "comparator_version": "shopping-comparators-v1",
+        "expected_reward_feature_version": "shopping-reward-features-v1",
+        "preference_scoring": {
+          "active_weight": 0.4,
+          "all_satisfied": true,
+          "dimensions": {
+            "brand": {
+              "active": false,
+              "coverage": 0.0,
+              "passed_count": 0,
+              "required_count": 0,
+              "results": [],
+              "score": 0.0,
+              "verifiable_count": 0
+            },
+            "core_functions": {
+              "active": true,
+              "coverage": 1.0,
+              "passed_count": 6,
+              "required_count": 6,
+              "results": [
+                {
+                  "actual": [
+                    "仿真",
+                    "钻戒",
+                    "求婚仪式",
+                    "道具",
+                    "开口",
+                    "可调节"
+                  ],
+                  "comparator": "structured_attribute_with_polarity_fallback",
+                  "evidence": {
+                    "matched": [
+                      {
+                        "source": "attribute",
+                        "value": "仿真"
+                      }
+                    ],
+                    "missing": [],
+                    "negated": []
+                  },
+                  "passed": true,
+                  "required": [
+                    "仿真"
+                  ],
+                  "source_field": "attribute|description",
+                  "status": "pass",
+                  "verifiable": true
+                },
+                {
+                  "actual": [
+                    "仿真",
+                    "钻戒",
+                    "求婚仪式",
+                    "道具",
+                    "开口",
+                    "可调节"
+                  ],
+                  "comparator": "structured_attribute_with_polarity_fallback",
+                  "evidence": {
+                    "matched": [
+                      {
+                        "source": "attribute",
+                        "value": "钻戒"
+                      }
+                    ],
+                    "missing": [],
+                    "negated": []
+                  },
+                  "passed": true,
+                  "required": [
+                    "钻戒"
+                  ],
+                  "source_field": "attribute|description",
+                  "status": "pass",
+                  "verifiable": true
+                },
+                {
+                  "actual": [
+                    "仿真",
+                    "钻戒",
+                    "求婚仪式",
+                    "道具",
+                    "开口",
+                    "可调节"
+                  ],
+                  "comparator": "structured_attribute_with_polarity_fallback",
+                  "evidence": {
+                    "matched": [
+                      {
+                        "source": "attribute",
+                        "value": "求婚仪式"
+                      }
+                    ],
+                    "missing": [],
+                    "negated": []
+                  },
+                  "passed": true,
+                  "required": [
+                    "求婚仪式"
+                  ],
+                  "source_field": "attribute|description",
+                  "status": "pass",
+                  "verifiable": true
+                },
+                {
+                  "actual": [
+                    "仿真",
+                    "钻戒",
+                    "求婚仪式",
+                    "道具",
+                    "开口",
+                    "可调节"
+                  ],
+                  "comparator": "structured_attribute_with_polarity_fallback",
+                  "evidence": {
+                    "matched": [
+                      {
+                        "source": "attribute",
+                        "value": "道具"
+                      }
+                    ],
+                    "missing": [],
+                    "negated": []
+                  },
+                  "passed": true,
+                  "required": [
+                    "道具"
+                  ],
+                  "source_field": "attribute|description",
+                  "status": "pass",
+                  "verifiable": true
+                },
+                {
+                  "actual": [
+                    "仿真",
+                    "钻戒",
+                    "求婚仪式",
+                    "道具",
+                    "开口",
+                    "可调节"
+                  ],
+                  "comparator": "structured_attribute_with_polarity_fallback",
+                  "evidence": {
+                    "matched": [
+                      {
+                        "source": "attribute",
+                        "value": "开口"
+                      }
+                    ],
+                    "missing": [],
+                    "negated": []
+                  },
+                  "passed": true,
+                  "required": [
+                    "开口"
+                  ],
+                  "source_field": "attribute|description",
+                  "status": "pass",
+                  "verifiable": true
+                },
+                {
+                  "actual": [
+                    "仿真",
+                    "钻戒",
+                    "求婚仪式",
+                    "道具",
+                    "开口",
+                    "可调节"
+                  ],
+                  "comparator": "structured_attribute_with_polarity_fallback",
+                  "evidence": {
+                    "matched": [
+                      {
+                        "source": "attribute",
+                        "value": "可调节"
+                      }
+                    ],
+                    "missing": [],
+                    "negated": []
+                  },
+                  "passed": true,
+                  "required": [
+                    "可调节"
+                  ],
+                  "source_field": "attribute|description",
+                  "status": "pass",
+                  "verifiable": true
+                }
+              ],
+              "score": 1.0,
+              "verifiable_count": 6
+            },
+            "key_options": {
+              "active": true,
+              "coverage": 1.0,
+              "passed_count": 1,
+              "required_count": 1,
+              "results": [
+                {
+                  "actual": {
+                    "颜色分类": "情侣对戒【酒红色欧式对戒盒一个】"
+                  },
+                  "comparator": "option_key_value_v1",
+                  "evidence": {
+                    "axis_version": "option-axis-v1",
+                    "matched": [
+                      {
+                        "axis": "color",
+                        "source_axis": "颜色分类",
+                        "value": "情侣对戒【酒红色欧式对戒盒一个】"
+                      }
+                    ],
+                    "missing_axes": [],
+                    "unavailable_values": [],
+                    "wrong_values": []
+                  },
+                  "passed": true,
+                  "required": {
+                    "color": {
+                      "source": "instruction.instruction_options",
+                      "source_axis": "颜色分类",
+                      "value": "情侣对戒【酒红色欧式对戒盒一个】"
+                    }
+                  },
+                  "source_field": "customization_options",
+                  "status": "pass",
+                  "verifiable": true
+                }
+              ],
+              "score": 1.0,
+              "verifiable_count": 1
+            },
+            "model": {
+              "active": false,
+              "coverage": 0.0,
+              "passed_count": 0,
+              "required_count": 0,
+              "results": [],
+              "score": 0.0,
+              "verifiable_count": 0
+            }
+          },
+          "evidence_coverage": 1.0,
+          "match_score": 1.0,
+          "weights": {
+            "brand": 0.35,
+            "core_functions": 0.25,
+            "key_options": 0.15,
+            "model": 0.25
+          }
+        },
+        "price_resolution": {
+          "evidence": {
+            "effective_price_axis": "color"
+          },
+          "method": "unique_effective_price_axis",
+          "price": 39.0,
+          "status": "pass",
+          "version": "variant-price-v1"
+        },
+        "reward_feature_version": "shopping-reward-features-v1",
+        "variant_price_version": "variant-price-v1"
+      },
+      "evidence_coverage": 1.0,
+      "hard_gates": {
+        "budget": {
+          "actual": 39.0,
+          "comparator": "variant_price_budget_v1",
+          "evidence": {
+            "evidence": {
+              "effective_price_axis": "color"
+            },
+            "method": "unique_effective_price_axis",
+            "price": 39.0,
+            "status": "pass",
+            "version": "variant-price-v1"
+          },
+          "passed": true,
+          "required": 44.0,
+          "source_field": "variant_price",
+          "status": "pass",
+          "verifiable": true
+        },
+        "category": {
+          "actual": "节庆用品/礼品›婚庆用品›新娘配件",
+          "comparator": "category_leaf_ancestor_chain",
+          "evidence": {
+            "comparisons": [
+              {
+                "ancestor_match": true,
+                "leaf_match": true,
+                "required": [
+                  "节庆用品/礼品",
+                  "婚庆用品",
+                  "新娘配件"
+                ]
+              }
+            ]
+          },
+          "passed": true,
+          "required": [
+            "节庆用品/礼品›婚庆用品›新娘配件"
+          ],
+          "source_field": "category",
+          "status": "pass",
+          "verifiable": true
+        }
+      },
+      "purchase_success": true,
+      "reward": 1.0,
+      "reward_type": "gold_purchase",
+      "reward_valid": true,
+      "reward_version": "shopsimulator-reward-v3",
+      "sampling_invalid": false,
+      "target_asin_match": true,
+      "terminal_utility": 1.0,
+      "termination_reason": "gold_purchase",
+      "weighted_score": 1.0
+    },
+    "reward_valid": true,
+    "termination_reason": "gold_purchase"
+  },
+  "tool_call_truncations": [],
+  "trajectory_id": "5c86b46b-ca0d-4335-964b-1afa35b0436c"
+}

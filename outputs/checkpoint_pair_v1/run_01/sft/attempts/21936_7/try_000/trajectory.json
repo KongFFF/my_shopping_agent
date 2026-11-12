@@ -1,0 +1,3275 @@
+{
+  "attempt_index": 7,
+  "blocked_tool_calls": [],
+  "context_compactions": [],
+  "context_turn_tokens": [
+    {
+      "input_tokens": 2071,
+      "step_index": 0
+    },
+    {
+      "input_tokens": 3638,
+      "step_index": 1
+    },
+    {
+      "input_tokens": 4056,
+      "step_index": 2
+    },
+    {
+      "input_tokens": 4516,
+      "step_index": 3
+    },
+    {
+      "input_tokens": 4631,
+      "step_index": 4
+    },
+    {
+      "input_tokens": 6195,
+      "step_index": 5
+    },
+    {
+      "input_tokens": 6654,
+      "step_index": 6
+    },
+    {
+      "input_tokens": 6952,
+      "step_index": 7
+    },
+    {
+      "input_tokens": 7368,
+      "step_index": 8
+    },
+    {
+      "input_tokens": 7694,
+      "step_index": 9
+    },
+    {
+      "input_tokens": 8138,
+      "step_index": 10
+    },
+    {
+      "input_tokens": 8557,
+      "step_index": 11
+    },
+    {
+      "input_tokens": 8687,
+      "step_index": 12
+    }
+  ],
+  "created_at": "2026-11-11T16:33:14.455694+00:00",
+  "done": true,
+  "error": null,
+  "final_reward": -0.65,
+  "initial_result": {
+    "env_idx": 4,
+    "environment_version": "shopsimulator-environment-v2.1",
+    "goal_options": [
+      "guess what一级别"
+    ],
+    "idx": 21936,
+    "instruction": "Instruction: 表妹想拥有剑桥少儿英语Guess What系列第一级的套装，要原版进口的主课本和练习册合订的，带英式发音的，特适合一年级孩子用的，价格在250左右。",
+    "instruction_simple": null,
+    "message": "Task 21936 started",
+    "observation_state": {
+      "actions": [
+        "search"
+      ],
+      "observation_version": "shopping-observation-v2",
+      "page_type": "search_home",
+      "search_available": true
+    },
+    "reason_key": null,
+    "user_persona": {
+      "交易特征": {
+        "优惠券使用率": 0.75,
+        "复购率": 0.6,
+        "平均客单价": 83.33,
+        "支付方式偏好": "微信支付",
+        "是否促销敏感": true,
+        "近30天消费金额": 1250,
+        "近90天订单数": 15
+      },
+      "人口属性": {
+        "会员等级": "黄金会员",
+        "年龄段": "30-35, ",
+        "性别": "女",
+        "消费等级": "中"
+      },
+      "兴趣偏好": {
+        "品牌偏好": [
+          {
+            "偏好程度": "高",
+            "品牌名称": "雀巢"
+          },
+          {
+            "偏好程度": "中",
+            "品牌名称": "安佳"
+          },
+          {
+            "偏好程度": "中",
+            "品牌名称": "三花"
+          }
+        ],
+        "商品属性偏好": {
+          "价格区间": {
+            "最大值": 100,
+            "最小值": 20
+          },
+          "功能": [
+            "烘焙"
+          ],
+          "尺码偏好": {
+            "上衣": ", ",
+            "内衣": ", ",
+            "裙装": ", ",
+            "裤子": ", ",
+            "鞋码": ", "
+          },
+          "材质": [
+            ", "
+          ],
+          "颜色": [
+            "白色",
+            "黄色"
+          ],
+          "风格": [
+            "实用"
+          ]
+        },
+        "类目偏好": {
+          "家居生活": "高",
+          "母婴用品": "中",
+          "美妆护肤": "低",
+          "食品饮料": "高"
+        }
+      },
+      "地区信息": {
+        "区县": "天河区",
+        "城市": "广州市",
+        "时区": "UTC+8, ",
+        "省份": "广东省"
+      },
+      "最后更新时间": "2023-04-10T09:15:00Z",
+      "注册时间": "2022-03-15T14:22:00Z",
+      "注册渠道": "App",
+      "用户ID": "U901964804605, ",
+      "用户标签": [
+        "烘焙爱好者",
+        "家庭主妇",
+        "实用主义消费者",
+        "黄金会员"
+      ],
+      "行为特征": {
+        "常用设备": "安卓手机",
+        "日均浏览时长": 1200,
+        "最近14天关注店铺": [],
+        "最近14天加购商品": [],
+        "最近14天搜索关键词": [
+          "5支185g咖啡伴侣炼乳",
+          "黄金小馒头蛋挞专用炼乳",
+          "挤压瓶装烘焙用炼乳"
+        ],
+        "最近14天收藏商品": [],
+        "活跃时间段": [
+          19,
+          20,
+          21
+        ],
+        "近7天访问次数": 8
+      }
+    }
+  },
+  "messages": [
+    {
+      "content": "你是一个购物 Agent，负责在 ShopSimulator 中替用户完成一次单轮购物任务。\n\n用户的完整需求只会在开头给出。不得向用户追问、确认、告别，也不要假设存在用户对话工具。你只能调用提供的标准工具与商店交互。目标是在有限步骤内找到整体最符合需求的可购买商品；精确满足全部要求的商品最好，经过有效探索仍无法完成时应合理结束，不能错误购买或无效循环。\n\n执行规则：\n1. 动作合法性与历史比较。当前页面是动作合法性的唯一依据；历史 observation 可以用于记住和比较候选，但不能直接点击历史页面中的 ASIN、按钮或规格。每次工具返回后先阅读最新 observation 中的“可点击的按钮”，每个 assistant 回合只调用一个工具。\n2. 页面状态与参数。Description、Features、Reviews、Attributes 都是信息子页：一旦进入这类子页，必须先调用当前页面可见的 `prev_page` 或 `back_to_search` 返回；不得直接切换到另一个信息子页、选择规格、购买或搜索。无参数工具（查看、翻页、返回、购买）必须传严格的 `{}`；只有 `search_products` 使用 `query`、`open_product` 使用 `asin`、`select_option` 使用 `value`。\n3. 搜索与候选探索。查询应简洁，优先使用品类和最有区分度的品牌、型号、核心功能或规格，不要机械复制整段需求。结果不理想时，缩短查询、更换真正不同的关键词或翻页；出现有希望的商品时应打开核验。不要重复相同查询，也不要只做同义改写却反复得到相同候选。\n4. 固定选择优先级。按“品类 > 预算 > 品牌 > 型号与核心功能 > 规格属性”比较候选。品类必须正确；选择具体规格后的实际价格不得超过用户明确预算。品类不符、价格未知或超预算时绝不能购买。在通过这两个门槛的候选中，依次优先满足品牌、型号与核心功能、规格属性；全部要求都满足的候选最好。\n5. 证据、规格与购买。品牌、型号、规格、功能和价格优先依据结构化字段、商品详情、Description、Features 和 Attributes；Reviews 只用于辅助判断使用体验，不能用于确认型号、官方功能、规格或价格。先完成必要的商品核验，再为最终候选补齐当前商品所有影响可购买 variant 的必要规格轴；不要为了临时浏览而随意选择规格。同一规格轴只选择一个当前页面可见的值，并以完整 variant 的实际价格判断预算。只有 `Buy Now` 当前可见，且商品通过品类和预算门槛，并在其余维度上是已核验候选中的最佳选择时，才调用 `buy_now`。\n6. 主动结束。经过多次有实质差异的搜索和多个候选核验，仍没有可接受商品，并且当前没有明显值得继续核验的候选时，调用 `finish_without_purchase`。不得过早结束，也不要为了增加搜索次数继续无效探索；是否达到结束资格由环境判断。\n7. 防止循环和非法动作。不要连续重复同一动作，也不要在相同结果、商品或子页之间无目的往返；后续操作应带来新候选、新商品信息、新规格选择或新的需求证据。不要调用 `think` 工具。若 tool 返回“本地动作守卫拒绝，未执行”，依据错误消息和最新 observation 改为一个合法动作，不要重复被拒绝的调用。不要在任务结束前输出最终答复或推荐总结；只有环境报告任务结束后才停止。\n",
+      "role": "system"
+    },
+    {
+      "content": "Instruction: 表妹想拥有剑桥少儿英语Guess What系列第一级的套装，要原版进口的主课本和练习册合订的，带英式发音的，特适合一年级孩子用的，价格在250左右。",
+      "role": "user"
+    },
+    {
+      "annotations": null,
+      "audio": null,
+      "content": null,
+      "function_call": null,
+      "reasoning": null,
+      "refusal": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "function": {
+            "arguments": "{\"query\": \"剑桥少儿英语 Guess What 第一级 套装\"}",
+            "name": "search_products"
+          },
+          "id": "chatcmpl-tool-bc6c9c3725453ff9",
+          "type": "function"
+        }
+      ]
+    },
+    {
+      "content": "[SHOPPING_OBSERVATION_V2]\npage_type: search_results\nquery: 剑桥少儿英语 guess what 第一级 套装\nnormalized_query: 剑桥少儿英语 guess what 第一级 套装\nPage 1 of 8 (Total results: 150; ranks 1-20)\n格式: rank|asin|price|brand|category|key_attributes|title\n1|610492565168|258.0 t…26.0|华仑书店|书籍/杂志/报…原版其它|剑桥少儿英语教…,英音版|原版进口剑桥大… 英音版\n2|613257600850|338.0 t…98.0|英沃图书专营店|书籍/杂志/报…原版其它|剑桥少儿英语,…考试教材|英音版supe…原版进口\n3|942954343596|54.0 to…47.0|天天特卖工厂|书籍/杂志/报…原版其它|剑桥,少儿英语,预备级|剑桥少儿英语教…考试原版\n4|653693603317|358.0 t…58.0|乔津图书专营店|书籍/杂志/报…原版其它|现货,进口,剑…材,英国|【现货速发】原…英文教材\n5|743260997368|100.0 t…20.0|趣象进口图书专营店|书籍/杂志/报…原版其它|少儿英语,新版,备考资料|原版新版剑桥y…专项训练\n6|921837809428|82.0 to…85.0|天天特卖工厂|书籍/杂志/报…原版其它|3-6岁幼儿,…,教师书|剑桥幼儿英语教…儿园教材\n7|724615771603|498.0 t…98.0|剑津图书专营店|书籍/杂志/报…原版其它|剑桥少儿英语,…刷分神器|BBC Do …级阅读书\n8|660736231876|318.0 t…08.0|斑达图书专营店|书籍/杂志/报…原版其它|剑桥英语教材,…T,原版|【斑达图书】原…考试教辅\n9|892611477838|88.0|天天特卖工厂|书籍/杂志/报…原版其它|big Eng…少儿英语|新版big E…外书原版\n10|730900358996|128.0 t…94.0|华学堂图书专营店|书籍/杂志/报…原版其它|进口,少儿英语演讲教材|进口原版少儿英…king\n11|704355091839|188.0|天猫国际自营全球超级店|书籍/杂志/报…原版其它|进口,少儿英语…寒暑假班|【自营】原版进…英文教材\n12|614315385615|38.0 to…64.0|华学堂图书专营店|书籍/杂志/报…原版其它|幼少儿,台湾新…发音教材|台湾新版Sup…nics\n13|925426925178|284.0 t…52.0|龙之彩图书专营店|书籍/杂志/报…原版其它|3-6岁幼儿,…版,剑桥|原版进口剑桥出…幼儿书籍\n14|930052908937|338.0 t…28.0|龙之彩图书专营店|书籍/杂志/报…原版其它|剑桥中学英语,…测试答案|原版进口新版原…英语教材\n15|657803250734|120.0 t…86.0|好奇豆图书专营店|书籍/杂志/报…原版其它|牛津,Oxfo…-12岁|进口原版牛津少…材教师书\n16|613863024037|428.0|英沃图书专营店|书籍/杂志/报…原版其它|原版,进口,剑…/PET|剑桥初高中英语…原版进口\n17|943721158758|58.0 to…75.0|盯洞图书专营店|书籍/杂志/报…原版其它|零基础发音,少儿|新版牛津自然拼…PW教材\n18|616327100012|135.0 t…50.0|华学堂图书专营店|书籍/杂志/报…原版其它|进口,剑桥雅思…核心词汇|进口原版 40…核心词汇\n19|520343824390|58.0 to…06.0|乐佳创投图书专营店|书籍/杂志/报…原版其它|正版,中英双语…,学英语|正版 英语老友…语笔记本\n20|798242431589|19.0 to…73.0|中华商务图书专营店|书籍/杂志/报…原版其它|剑桥考试局国际…6-7岁|剑桥考试局国际…6-7岁\n[TRUNCATED_BY_SHOPPING_PROJECTOR] product_fields_compacted=true\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"next >\", \"610492565168\", \"613257600850\", \"942954343596\", \"653693603317\", \"743260997368\", \"921837809428\", \"724615771603\", \"660736231876\", \"892611477838\", \"730900358996\", \"704355091839\", \"614315385615\", \"925426925178\", \"930052908937\", \"657803250734\", \"613863024037\", \"943721158758\", \"616327100012\", \"520343824390\", \"798242431589\"]",
+      "name": "search_products",
+      "role": "tool",
+      "tool_call_id": "chatcmpl-tool-bc6c9c3725453ff9"
+    },
+    {
+      "annotations": null,
+      "audio": null,
+      "content": null,
+      "function_call": null,
+      "reasoning": null,
+      "refusal": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "function": {
+            "arguments": "{\"asin\": \"610492565168\"}",
+            "name": "open_product"
+          },
+          "id": "chatcmpl-tool-88935f41ed8c4a34",
+          "type": "function"
+        }
+      ]
+    },
+    {
+      "content": "[SHOPPING_OBSERVATION_V2]\npage_type: product_detail\nasin: 610492565168\ntitle: 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版\nbrand: 华仑书店\ncategory: 书籍/杂志/报纸›进口原版书(含港台)›原版其它\nprice: 258.0 to 426.0\nkey_attributes: 剑桥少儿英语教材, 进口, 一年级, 英音版\nselected_options: {}\navailable_options: {\"分册名\": [\"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]}\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]",
+      "name": "open_product",
+      "role": "tool",
+      "tool_call_id": "chatcmpl-tool-88935f41ed8c4a34"
+    },
+    {
+      "annotations": null,
+      "audio": null,
+      "content": "这个商品非常匹配需求：Guess What 1 Pupil's Book Activity Book 套装，英音版，一级。我来选择\"guess what 1级别大卡\"规格确认价格。",
+      "function_call": null,
+      "reasoning": null,
+      "refusal": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "function": {
+            "arguments": "{\"value\": \"guess what 1级别大卡\"}",
+            "name": "select_option"
+          },
+          "id": "chatcmpl-tool-b47cc7e2f3e97e8c",
+          "type": "function"
+        }
+      ]
+    },
+    {
+      "content": "[SHOPPING_OBSERVATION_V2]\npage_type: product_detail\nasin: 610492565168\ntitle: 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版\nbrand: 华仑书店\ncategory: 书籍/杂志/报纸›进口原版书(含港台)›原版其它\nprice: 336.0\nkey_attributes: 剑桥少儿英语教材, 进口, 一年级, 英音版\nselected_options: {\"分册名\": \"guess what 1级别大卡\"}\navailable_options: {\"分册名\": [\"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]}\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]",
+      "name": "select_option",
+      "role": "tool",
+      "tool_call_id": "chatcmpl-tool-b47cc7e2f3e97e8c"
+    },
+    {
+      "annotations": null,
+      "audio": null,
+      "content": "选中\"guess what 1级别大卡\"后价格为336元，超出250元预算。我需要比较其他候选。先返回搜索页查看其他商品。",
+      "function_call": null,
+      "reasoning": null,
+      "refusal": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "function": {
+            "arguments": "{}",
+            "name": "back_to_search"
+          },
+          "id": "chatcmpl-tool-866252e499ec5031",
+          "type": "function"
+        }
+      ]
+    },
+    {
+      "content": "[SHOPPING_OBSERVATION_V2]\npage_type: search_home\n使用 search_products 提交简短、具有区分度的商品查询。\n\n搜索功能是否可用: True\n可点击的按钮: [\"search\"]",
+      "name": "back_to_search",
+      "role": "tool",
+      "tool_call_id": "chatcmpl-tool-866252e499ec5031"
+    },
+    {
+      "annotations": null,
+      "audio": null,
+      "content": null,
+      "function_call": null,
+      "reasoning": null,
+      "refusal": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "function": {
+            "arguments": "{\"query\": \"Guess What 1 Pupil's Book Activity Book 英音版\"}",
+            "name": "search_products"
+          },
+          "id": "chatcmpl-tool-b1d35cf25e042095",
+          "type": "function"
+        }
+      ]
+    },
+    {
+      "content": "[SHOPPING_OBSERVATION_V2]\npage_type: search_results\nquery: guess what 1 pupil's book activity book 英音版\nnormalized_query: guess what 1 pupil's book activity book 英音版\nPage 1 of 8 (Total results: 150; ranks 1-20)\n格式: rank|asin|price|brand|category|key_attributes|title\n1|610492565168|258.0 …26.0|华仑书店|书籍/杂志/…原版其它|剑桥少儿英语…,英音版|原版进口剑桥… 英音版\n2|613257600850|338.0 …98.0|英沃图书专营店|书籍/杂志/…原版其它|剑桥少儿英语…考试教材|英音版sup…原版进口\n3|921837809428|82.0 t…85.0|天天特卖工厂|书籍/杂志/…原版其它|3-6岁幼儿…,教师书|剑桥幼儿英语…儿园教材\n4|728007306236|16.0 t…21.0|申东图书专营店|书籍/杂志/…原版其它|平装,The…osch|The Na…on这本\n5|816064383307|60.0|GUESS CHINA|箱包皮具/热…包›胸包|欧美,时尚,…用,休闲|欧美时尚百搭…搭腋下包\n6|925426925178|284.0 …52.0|龙之彩图书专营店|书籍/杂志/…原版其它|3-6岁幼儿…版,剑桥|原版进口剑桥…幼儿书籍\n7|798242431589|19.0 t…73.0|中华商务图书专营店|书籍/杂志/…原版其它|剑桥考试局国…6-7岁|剑桥考试局国…6-7岁\n8|732551989085|248.0 …95.0|卡米图书专营店|书籍/杂志/…原版其它|新加坡,小学英语|新加坡小学英…书练习册\n9|899544334422|9800.0|KOAIKA旗舰店|大家电›商用电视|康佳,智能,…用,超清|&Kappa…5寸家用\n10|912098329576|9800.0|KOAIKA旗舰店|大家电›商用电视|康佳,超高清…用,智能|&Kappa…5寸家用\n11|908985130617|9800.0|KOAIKA坤单专卖店|大家电›商用电视|4K,高清|&Kappa…585寸\n12|901926967108|9800.0|Amoi夏新烽韫专卖店|大家电›商用电视|100寸,智能,平板|Amoi夏新…网络投屏\n13|902219646710|9800.0|Amoi夏新烽韫专卖店|大家电›商用电视|4K,高清,…屏,家用|AMOI/夏…0寸家用\n14|569681995126|145.0 …50.0|工控电气自动化之家1|五金/工具›…稳压电源|S-500-…开关电源|S-500-…/60V\n15|764780869610|498.0 …58.0|唯达信官方工厂店|办公设备/耗…管理系统|电话销售适用…拨号功能|电话销售系统…音营销机\n16|42467861662|9.0 to 30.0|東科維創散热风扇总店|电脑硬件/显…器/风扇|全新,静音,…,路由器|全新1202…散热风扇\n17|672816977604|46.0|泡菜娃娃美妆店|彩妆/香水/…泥/唇霜|菲丽菲拉,冰…镜面效果|韩国peri…纯欲唇彩\n18|776504162422|113.0 …60.0|阿囧的咖啡馆|咖啡/麦片/…›咖啡液|黑巧克力风味…条,美式|【正品】Pe…盒12条\n19|928941759900|100.0 …50.0|苏老伯旗舰店|床上用品›床…定制定做|S型,家用,折叠,护脊|苏老伯黄麻床…折叠床垫\n20|705386515415|39.0 t…60.0|盛邦智能|办公设备/耗…管理系统|电话录音盒,…示,拨号|电话录音盒7…权限管理\n[TRUNCATED_BY_SHOPPING_PROJECTOR] product_fields_compacted=true\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"next >\", \"610492565168\", \"613257600850\", \"921837809428\", \"728007306236\", \"816064383307\", \"925426925178\", \"798242431589\", \"732551989085\", \"899544334422\", \"912098329576\", \"908985130617\", \"901926967108\", \"902219646710\", \"569681995126\", \"764780869610\", \"42467861662\", \"672816977604\", \"776504162422\", \"928941759900\", \"705386515415\"]",
+      "name": "search_products",
+      "role": "tool",
+      "tool_call_id": "chatcmpl-tool-b1d35cf25e042095"
+    },
+    {
+      "annotations": null,
+      "audio": null,
+      "content": "搜索结果显示同一个 Guess What 1 Pupil's Book 套装（华仑书店，258-426元）。让我核验一下这个商品的 Features 确认其规格与内容。",
+      "function_call": null,
+      "reasoning": null,
+      "refusal": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "function": {
+            "arguments": "{\"asin\": \"610492565168\"}",
+            "name": "open_product"
+          },
+          "id": "chatcmpl-tool-99fa42d56d293881",
+          "type": "function"
+        }
+      ]
+    },
+    {
+      "content": "[SHOPPING_OBSERVATION_V2]\npage_type: product_detail\nasin: 610492565168\ntitle: 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版\nbrand: 华仑书店\ncategory: 书籍/杂志/报纸›进口原版书(含港台)›原版其它\nprice: 258.0 to 426.0\nkey_attributes: 剑桥少儿英语教材, 进口, 一年级, 英音版\nselected_options: {}\navailable_options: {\"分册名\": [\"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]}\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]",
+      "name": "open_product",
+      "role": "tool",
+      "tool_call_id": "chatcmpl-tool-99fa42d56d293881"
+    },
+    {
+      "annotations": null,
+      "audio": null,
+      "content": null,
+      "function_call": null,
+      "reasoning": null,
+      "refusal": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "function": {
+            "arguments": "{}",
+            "name": "view_features"
+          },
+          "id": "chatcmpl-tool-b2902b68305805f2",
+          "type": "function"
+        }
+      ]
+    },
+    {
+      "content": "[SHOPPING_OBSERVATION_V2]\npage_type: information_subpage\nasin: 610492565168\ntitle: 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版\nbrand: 华仑书店\ncategory: 书籍/杂志/报纸›进口原版书(含港台)›原版其它\nprice: 258.0 to 426.0\nkey_attributes: 剑桥少儿英语教材, 进口, 一年级, 英音版\nselected_options: {}\navailable_options: {\"分册名\": [\"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]}\nsubpage: Features\ncontent: ['']\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\"]",
+      "name": "view_features",
+      "role": "tool",
+      "tool_call_id": "chatcmpl-tool-b2902b68305805f2"
+    },
+    {
+      "annotations": null,
+      "audio": null,
+      "content": "Features 子页内容为空。返回商品详情页，查看 Description 以核验套装内容。",
+      "function_call": null,
+      "reasoning": null,
+      "refusal": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "function": {
+            "arguments": "{}",
+            "name": "prev_page"
+          },
+          "id": "chatcmpl-tool-aa3b81ba8341def6",
+          "type": "function"
+        }
+      ]
+    },
+    {
+      "content": "[SHOPPING_OBSERVATION_V2]\npage_type: product_detail\nasin: 610492565168\ntitle: 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版\nbrand: 华仑书店\ncategory: 书籍/杂志/报纸›进口原版书(含港台)›原版其它\nprice: 258.0 to 426.0\nkey_attributes: 剑桥少儿英语教材, 进口, 一年级, 英音版\nselected_options: {}\navailable_options: {\"分册名\": [\"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]}\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]",
+      "name": "prev_page",
+      "role": "tool",
+      "tool_call_id": "chatcmpl-tool-aa3b81ba8341def6"
+    },
+    {
+      "annotations": null,
+      "audio": null,
+      "content": null,
+      "function_call": null,
+      "reasoning": null,
+      "refusal": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "function": {
+            "arguments": "{}",
+            "name": "view_description"
+          },
+          "id": "chatcmpl-tool-a6691a1c91c46765",
+          "type": "function"
+        }
+      ]
+    },
+    {
+      "content": "[SHOPPING_OBSERVATION_V2]\npage_type: information_subpage\nasin: 610492565168\ntitle: 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版\nbrand: 华仑书店\ncategory: 书籍/杂志/报纸›进口原版书(含港台)›原版其它\nprice: 258.0 to 426.0\nkey_attributes: 剑桥少儿英语教材, 进口, 一年级, 英音版\nselected_options: {}\navailable_options: {\"分册名\": [\"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]}\nsubpage: Description\ncontent: 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\"]",
+      "name": "view_description",
+      "role": "tool",
+      "tool_call_id": "chatcmpl-tool-a6691a1c91c46765"
+    },
+    {
+      "annotations": null,
+      "audio": null,
+      "content": "Description 确认这是 Guess What 1 Pupil's Book Activity Book 套装，含主课本+练习册，英音版，适合一年级。返回商品页选择\"1级别大卡\"规格，确认实际价格。",
+      "function_call": null,
+      "reasoning": null,
+      "refusal": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "function": {
+            "arguments": "{}",
+            "name": "prev_page"
+          },
+          "id": "chatcmpl-tool-b9a0da84977657ed",
+          "type": "function"
+        }
+      ]
+    },
+    {
+      "content": "[SHOPPING_OBSERVATION_V2]\npage_type: product_detail\nasin: 610492565168\ntitle: 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版\nbrand: 华仑书店\ncategory: 书籍/杂志/报纸›进口原版书(含港台)›原版其它\nprice: 258.0 to 426.0\nkey_attributes: 剑桥少儿英语教材, 进口, 一年级, 英音版\nselected_options: {}\navailable_options: {\"分册名\": [\"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]}\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]",
+      "name": "prev_page",
+      "role": "tool",
+      "tool_call_id": "chatcmpl-tool-b9a0da84977657ed"
+    },
+    {
+      "annotations": null,
+      "audio": null,
+      "content": null,
+      "function_call": null,
+      "reasoning": null,
+      "refusal": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "function": {
+            "arguments": "{\"value\": \"guess what 1级别大卡\"}",
+            "name": "select_option"
+          },
+          "id": "chatcmpl-tool-b5f5e078e9e9de50",
+          "type": "function"
+        }
+      ]
+    },
+    {
+      "content": "[SHOPPING_OBSERVATION_V2]\npage_type: product_detail\nasin: 610492565168\ntitle: 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版\nbrand: 华仑书店\ncategory: 书籍/杂志/报纸›进口原版书(含港台)›原版其它\nprice: 336.0\nkey_attributes: 剑桥少儿英语教材, 进口, 一年级, 英音版\nselected_options: {\"分册名\": \"guess what 1级别大卡\"}\navailable_options: {\"分册名\": [\"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]}\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]",
+      "name": "select_option",
+      "role": "tool",
+      "tool_call_id": "chatcmpl-tool-b5f5e078e9e9de50"
+    },
+    {
+      "annotations": null,
+      "audio": null,
+      "content": "该 Guess What 1 级别套装价格为336元，超出250元预算。用户要求250左右的价格，我需要重新搜索其他候选。让我查看龙之彩的剑桥幼儿书籍（284元起，接近预算）。",
+      "function_call": null,
+      "reasoning": null,
+      "refusal": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "function": {
+            "arguments": "{}",
+            "name": "back_to_search"
+          },
+          "id": "chatcmpl-tool-85c80dbb5477b2b1",
+          "type": "function"
+        }
+      ]
+    },
+    {
+      "content": "[SHOPPING_OBSERVATION_V2]\npage_type: search_home\n使用 search_products 提交简短、具有区分度的商品查询。\n\n搜索功能是否可用: True\n可点击的按钮: [\"search\"]",
+      "name": "back_to_search",
+      "role": "tool",
+      "tool_call_id": "chatcmpl-tool-85c80dbb5477b2b1"
+    },
+    {
+      "annotations": null,
+      "audio": null,
+      "content": null,
+      "function_call": null,
+      "reasoning": null,
+      "refusal": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "function": {
+            "arguments": "{\"query\": \"剑桥少儿英语 Guess What 1 学生套装 英音\"}",
+            "name": "search_products"
+          },
+          "id": "chatcmpl-tool-84e19c46701f3a42",
+          "type": "function"
+        }
+      ]
+    },
+    {
+      "content": "[SHOPPING_OBSERVATION_V2]\npage_type: search_results\nquery: 剑桥少儿英语 guess what 1 学生套装 英音\nnormalized_query: 剑桥少儿英语 guess what 1 学生套装 英音\nPage 1 of 8 (Total results: 150; ranks 1-20)\n格式: rank|asin|price|brand|category|key_attributes|title\n1|610492565168|258.0 t…26.0|华仑书店|书籍/杂志/报…原版其它|剑桥少儿英语教…,英音版|原版进口剑桥大… 英音版\n2|613257600850|338.0 t…98.0|英沃图书专营店|书籍/杂志/报…原版其它|剑桥少儿英语,…考试教材|英音版supe…原版进口\n3|942954343596|54.0 to…47.0|天天特卖工厂|书籍/杂志/报…原版其它|剑桥,少儿英语,预备级|剑桥少儿英语教…考试原版\n4|653693603317|358.0 t…58.0|乔津图书专营店|书籍/杂志/报…原版其它|现货,进口,剑…材,英国|【现货速发】原…英文教材\n5|921837809428|82.0 to…85.0|天天特卖工厂|书籍/杂志/报…原版其它|3-6岁幼儿,…,教师书|剑桥幼儿英语教…儿园教材\n6|892611477838|88.0|天天特卖工厂|书籍/杂志/报…原版其它|big Eng…少儿英语|新版big E…外书原版\n7|724615771603|498.0 t…98.0|剑津图书专营店|书籍/杂志/报…原版其它|剑桥少儿英语,…刷分神器|BBC Do …级阅读书\n8|743260997368|100.0 t…20.0|趣象进口图书专营店|书籍/杂志/报…原版其它|少儿英语,新版,备考资料|原版新版剑桥y…专项训练\n9|660736231876|318.0 t…08.0|斑达图书专营店|书籍/杂志/报…原版其它|剑桥英语教材,…T,原版|【斑达图书】原…考试教辅\n10|925426925178|284.0 t…52.0|龙之彩图书专营店|书籍/杂志/报…原版其它|3-6岁幼儿,…版,剑桥|原版进口剑桥出…幼儿书籍\n11|730900358996|128.0 t…94.0|华学堂图书专营店|书籍/杂志/报…原版其它|进口,少儿英语演讲教材|进口原版少儿英…king\n12|704355091839|188.0|天猫国际自营全球超级店|书籍/杂志/报…原版其它|进口,少儿英语…寒暑假班|【自营】原版进…英文教材\n13|614315385615|38.0 to…64.0|华学堂图书专营店|书籍/杂志/报…原版其它|幼少儿,台湾新…发音教材|台湾新版Sup…nics\n14|613863024037|428.0|英沃图书专营店|书籍/杂志/报…原版其它|原版,进口,剑…/PET|剑桥初高中英语…原版进口\n15|657803250734|120.0 t…86.0|好奇豆图书专营店|书籍/杂志/报…原版其它|牛津,Oxfo…-12岁|进口原版牛津少…材教师书\n16|943721158758|58.0 to…75.0|盯洞图书专营店|书籍/杂志/报…原版其它|零基础发音,少儿|新版牛津自然拼…PW教材\n17|930052908937|338.0 t…28.0|龙之彩图书专营店|书籍/杂志/报…原版其它|剑桥中学英语,…测试答案|原版进口新版原…英语教材\n18|616327100012|135.0 t…50.0|华学堂图书专营店|书籍/杂志/报…原版其它|进口,剑桥雅思…核心词汇|进口原版 40…核心词汇\n19|753434522195|40.0 to…50.0|怡宸图书音像专营店|书籍/杂志/报…原版其它|幼儿启蒙,牛津…津点读笔|oxford牛…拼读教材\n20|831848413401|155.0 t…33.0|英斐创原版图书|书籍/杂志/报…原版其它|剑桥Alevel,现货|现货剑桥Ale…tice\n[TRUNCATED_BY_SHOPPING_PROJECTOR] product_fields_compacted=true\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"next >\", \"610492565168\", \"613257600850\", \"942954343596\", \"653693603317\", \"921837809428\", \"892611477838\", \"724615771603\", \"743260997368\", \"660736231876\", \"925426925178\", \"730900358996\", \"704355091839\", \"614315385615\", \"613863024037\", \"657803250734\", \"943721158758\", \"930052908937\", \"616327100012\", \"753434522195\", \"831848413401\"]",
+      "name": "search_products",
+      "role": "tool",
+      "tool_call_id": "chatcmpl-tool-84e19c46701f3a42"
+    }
+  ],
+  "release_error": null,
+  "status": "done",
+  "steps": [
+    {
+      "done": false,
+      "env_action": "search[剑桥少儿英语 Guess What 第一级 套装]",
+      "observation": "[SHOPPING_OBSERVATION_V2]\npage_type: search_results\nquery: 剑桥少儿英语 guess what 第一级 套装\nnormalized_query: 剑桥少儿英语 guess what 第一级 套装\nPage 1 of 8 (Total results: 150; ranks 1-20)\n格式: rank|asin|price|brand|category|key_attributes|title\n1|610492565168|258.0 t…26.0|华仑书店|书籍/杂志/报…原版其它|剑桥少儿英语教…,英音版|原版进口剑桥大… 英音版\n2|613257600850|338.0 t…98.0|英沃图书专营店|书籍/杂志/报…原版其它|剑桥少儿英语,…考试教材|英音版supe…原版进口\n3|942954343596|54.0 to…47.0|天天特卖工厂|书籍/杂志/报…原版其它|剑桥,少儿英语,预备级|剑桥少儿英语教…考试原版\n4|653693603317|358.0 t…58.0|乔津图书专营店|书籍/杂志/报…原版其它|现货,进口,剑…材,英国|【现货速发】原…英文教材\n5|743260997368|100.0 t…20.0|趣象进口图书专营店|书籍/杂志/报…原版其它|少儿英语,新版,备考资料|原版新版剑桥y…专项训练\n6|921837809428|82.0 to…85.0|天天特卖工厂|书籍/杂志/报…原版其它|3-6岁幼儿,…,教师书|剑桥幼儿英语教…儿园教材\n7|724615771603|498.0 t…98.0|剑津图书专营店|书籍/杂志/报…原版其它|剑桥少儿英语,…刷分神器|BBC Do …级阅读书\n8|660736231876|318.0 t…08.0|斑达图书专营店|书籍/杂志/报…原版其它|剑桥英语教材,…T,原版|【斑达图书】原…考试教辅\n9|892611477838|88.0|天天特卖工厂|书籍/杂志/报…原版其它|big Eng…少儿英语|新版big E…外书原版\n10|730900358996|128.0 t…94.0|华学堂图书专营店|书籍/杂志/报…原版其它|进口,少儿英语演讲教材|进口原版少儿英…king\n11|704355091839|188.0|天猫国际自营全球超级店|书籍/杂志/报…原版其它|进口,少儿英语…寒暑假班|【自营】原版进…英文教材\n12|614315385615|38.0 to…64.0|华学堂图书专营店|书籍/杂志/报…原版其它|幼少儿,台湾新…发音教材|台湾新版Sup…nics\n13|925426925178|284.0 t…52.0|龙之彩图书专营店|书籍/杂志/报…原版其它|3-6岁幼儿,…版,剑桥|原版进口剑桥出…幼儿书籍\n14|930052908937|338.0 t…28.0|龙之彩图书专营店|书籍/杂志/报…原版其它|剑桥中学英语,…测试答案|原版进口新版原…英语教材\n15|657803250734|120.0 t…86.0|好奇豆图书专营店|书籍/杂志/报…原版其它|牛津,Oxfo…-12岁|进口原版牛津少…材教师书\n16|613863024037|428.0|英沃图书专营店|书籍/杂志/报…原版其它|原版,进口,剑…/PET|剑桥初高中英语…原版进口\n17|943721158758|58.0 to…75.0|盯洞图书专营店|书籍/杂志/报…原版其它|零基础发音,少儿|新版牛津自然拼…PW教材\n18|616327100012|135.0 t…50.0|华学堂图书专营店|书籍/杂志/报…原版其它|进口,剑桥雅思…核心词汇|进口原版 40…核心词汇\n19|520343824390|58.0 to…06.0|乐佳创投图书专营店|书籍/杂志/报…原版其它|正版,中英双语…,学英语|正版 英语老友…语笔记本\n20|798242431589|19.0 to…73.0|中华商务图书专营店|书籍/杂志/报…原版其它|剑桥考试局国际…6-7岁|剑桥考试局国际…6-7岁\n[TRUNCATED_BY_SHOPPING_PROJECTOR] product_fields_compacted=true\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"next >\", \"610492565168\", \"613257600850\", \"942954343596\", \"653693603317\", \"743260997368\", \"921837809428\", \"724615771603\", \"660736231876\", \"892611477838\", \"730900358996\", \"704355091839\", \"614315385615\", \"925426925178\", \"930052908937\", \"657803250734\", \"613863024037\", \"943721158758\", \"616327100012\", \"520343824390\", \"798242431589\"]",
+      "parameters": {
+        "query": "剑桥少儿英语 Guess What 第一级 套装"
+      },
+      "projection": {
+        "critical_footer_preserved": true,
+        "page_type": "search_results",
+        "raw_asin_count": 20,
+        "raw_button_count": 22,
+        "raw_tokens": 2295,
+        "token_budget": 1536,
+        "tool_name": "search_products",
+        "truncated": true,
+        "truncation_ratio": 0.6610021786492375,
+        "visible_asin_count": 20,
+        "visible_button_count": 22,
+        "visible_tokens": 1517
+      },
+      "raw_observation": "[SHOPPING_OBSERVATION_V2]\npage_type: search_results\nquery: 剑桥少儿英语 guess what 第一级 套装\nnormalized_query: 剑桥少儿英语 guess what 第一级 套装\nPage 1 of 8 (Total results: 150; ranks 1-20)\n格式: rank|asin|price|brand|category|key_attributes|title\n1|610492565168|258.0 to 426.0|华仑书店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|剑桥少儿英语教材,进口,一年级,英音版|原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版\n2|613257600850|338.0 to 398.0|英沃图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|剑桥少儿英语,YLE考试教材|英音版superminds剑桥少儿英语教材super minds S/1/2/3/4/5/6级 学生书+练习册 YLE考试教材 原版进口\n3|942954343596|54.0 to 447.0|天天特卖工厂|书籍/杂志/报纸›进口原版书(含港台)›原版其它|剑桥,少儿英语,预备级|剑桥少儿英语教材powerup预备级PowerUp0123456级学生套装考试原版\n4|653693603317|358.0 to 2158.0|乔津图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|现货,进口,剑桥国际少儿英语教材,英国|【现货速发】原版进口Power Up预备123456级剑桥国际少儿英语教材powerup教材英国小学YLE剑桥少儿考试英文教程青少版英文教材\n5|743260997368|100.0 to 520.0|趣象进口图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|少儿英语,新版,备考资料|原版新版剑桥yle真题集考试剑桥少儿英语考试全真试题一二三级教材 Starters movers flyers 1 2 3全真备考资料剑桥考级专项训练\n6|921837809428|82.0 to 285.0|天天特卖工厂|书籍/杂志/报纸›进口原版书(含港台)›原版其它|3-6岁幼儿,英语启蒙,教师书|剑桥幼儿英语教材Super Safari 1 2 3级英式发音幼儿英语启蒙教材3-6岁剑桥少儿英语supersafari教师书幼儿园教材\n7|724615771603|498.0 to 2998.0|剑津图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|剑桥少儿英语,KET,刷分神器|BBC Do You Know科普分级阅读绘本 科普百科分级阅读1 2 3 4级英文原版剑桥少儿英语KET刷分神器自然科普百科英语分级阅读书\n8|660736231876|318.0 to 408.0|斑达图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|剑桥英语教材,think,适用中小学生,适用KET/PET,原版|【斑达图书】原版剑桥think第二版think教材剑桥少儿中小学英语cambridge think starter 12345KET/PET考试教辅\n9|892611477838|88.0|天天特卖工厂|书籍/杂志/报纸›进口原版书(含港台)›原版其它|big English,新版,正版,少儿英语|新版big English 1 2 3 4 5 6 学生套装含课本+活动手册+朗文小英+学生书 少儿bigenglish教材培生朗文少儿英语书籍正版课外书原版\n10|730900358996|128.0 to 394.0|华学堂图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|进口,少儿英语演讲教材|进口原版少儿英语演讲教材Easy Speaking for speeches 1 2 3级 中小学英语演讲口语训练书籍talking\n11|704355091839|188.0|天猫国际自营全球超级店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|进口,少儿英语语法书,6-8岁,寒暑假班|【自营】原版进口Grammar Space 1 2 3级 少儿英语语法书 初阶短期寒暑假班专项grammar教材6-8岁英文教材\n12|614315385615|38.0 to 364.0|华学堂图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|幼少儿,台湾新版,拼读,点读发音教材|台湾新版Super phonics 1 2 3级 幼少儿英语自然拼读phonics+26个字母点读发音教材 i can spell phonics\n13|925426925178|284.0 to 852.0|龙之彩图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|3-6岁幼儿,启蒙英语教材,美音版,剑桥|原版进口剑桥出版社Super Safari一二三级别美音版学生套装3-6岁入门级英文早教书幼儿园启蒙英语教材小班幼儿书籍\n14|930052908937|338.0 to 2028.0|龙之彩图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|剑桥中学英语,在线账号,音频视频,测试答案|原版进口新版原版第二版剑桥中学英语Think Starter 12345级课本+练习册+在线账号 送音频视频测试答案 正版现货 12-18岁英语教材\n15|657803250734|120.0 to 486.0|好奇豆图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|牛津,Oxford Discover,英语,7-12岁|进口原版牛津少儿英语原版Oxford Discover教材1 2 3 4 5 6级牛津探索与发现 牛津小学英语教材7-12岁牛津教材牛津英语教材教师书\n16|613863024037|428.0|英沃图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|原版,进口,剑桥英语教材,适用KET/PET|剑桥初高中英语教材Think二版 Starter12345级学生书练习册 Cambridge think教材 外语KET/PET考试 青少年英语教材原版进口\n17|943721158758|58.0 to 975.0|盯洞图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|零基础发音,少儿|新版牛津自然拼读教材 Oxford Phonics World 1 2 3 4 5 级别 牛津拼读世界全套零基础发音幼少儿英语自然拼读phonics教材OPW教材\n18|616327100012|135.0 to 850.0|华学堂图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|进口,剑桥雅思托福四六级英语考试核心词汇|进口原版 4000 Essential English Words 1/2/3/4/5/6级 新版4000词 常见词英文单词词典书 剑桥雅思托福四六级英语考试核心词汇\n19|520343824390|58.0 to 406.0|乐佳创投图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|正版,中英双语,视频全注解,学英语|正版 英语老友记笔记书第一二三四季全剧本五六七八九十季合订版全套7本赠送双语中英文台词视频全注解跟着美剧老友记学英语笔记本\n20|798242431589|19.0 to 273.0|中华商务图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|剑桥考试局国际小学教材,6-7岁|剑桥考试局国际小学教材丛书Grade 1 English/Maths/Science 英式主流学科组合 6-7岁\nproducts_shown: 20\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"next >\", \"610492565168\", \"613257600850\", \"942954343596\", \"653693603317\", \"743260997368\", \"921837809428\", \"724615771603\", \"660736231876\", \"892611477838\", \"730900358996\", \"704355091839\", \"614315385615\", \"925426925178\", \"930052908937\", \"657803250734\", \"613863024037\", \"943721158758\", \"616327100012\", \"520343824390\", \"798242431589\"]",
+      "result": {
+        "done": false,
+        "env_idx": 4,
+        "goal": {},
+        "idx": "slot-4-21936",
+        "instruction": "Instruction: [SEP] 表妹想拥有剑桥少儿英语Guess What系列第一级的套装，要原版进口的主课本和练习册合订的，带英式发音的，特适合一年级孩子用的，价格在250左右。 [SEP] Back to Search [SEP] Page 1 of 8 (Total results: 150) [SEP] Query: 剑桥少儿英语 guess what 第一级 套装 | Normalized query: 剑桥少儿英语 guess what 第一级 套装 [SEP] Next > [SEP] 610492565168 [SEP] 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版 [SEP] 258.0 to 426.0 [SEP] 613257600850 [SEP] 英音版superminds剑桥少儿英语教材super minds  S/1/2/3/4/5/6级 学生书+练习册 YLE考试教材 原版进口 [SEP] 338.0 to 398.0 [SEP] 942954343596 [SEP] 剑桥少儿英语教材powerup预备级PowerUp0123456级学生套装考试原版 [SEP] 54.0 to 447.0 [SEP] 653693603317 [SEP] 【现货速发】原版进口Power Up预备123456级剑桥国际少儿英语教材powerup教材英国小学YLE剑桥少儿考试英文教程青少版英文教材 [SEP] 358.0 to 2158.0 [SEP] 743260997368 [SEP] 原版新版剑桥yle真题集考试剑桥少儿英语考试全真试题一二三级教材 Starters movers flyers 1 2 3全真备考资料剑桥考级专项训练 [SEP] 100.0 to 520.0 [SEP] 921837809428 [SEP] 剑桥幼儿英语教材Super Safari 1 2 3级英式发音幼儿英语启蒙教材3-6岁剑桥少儿英语supersafari教师书幼儿园教材 [SEP] 82.0 to 285.0 [SEP] 724615771603 [SEP] BBC Do You Know科普分级阅读绘本 科普百科分级阅读1 2 3 4级英文原版剑桥少儿英语KET刷分神器自然科普百科英语分级阅读书 [SEP] 498.0 to 2998.0 [SEP] 660736231876 [SEP] 【斑达图书】原版剑桥think第二版think教材剑桥少儿中小学英语cambridge think starter 12345KET/PET考试教辅 [SEP] 318.0 to 408.0 [SEP] 892611477838 [SEP] 新版big English 1 2 3 4 5 6 学生套装含课本+活动手册+朗文小英+学生书 少儿bigenglish教材培生朗文少儿英语书籍正版课外书原版 [SEP] 88.0 [SEP] 730900358996 [SEP] 进口原版少儿英语演讲教材Easy Speaking for speeches 1 2 3级 中小学英语演讲口语训练书籍talking [SEP] 128.0 to 394.0 [SEP] 704355091839 [SEP] 【自营】原版进口Grammar Space 1 2 3级 少儿英语语法书 初阶短期寒暑假班专项grammar教材6-8岁英文教材 [SEP] 188.0 [SEP] 614315385615 [SEP] 台湾新版Super phonics 1 2 3级 幼少儿英语自然拼读phonics+26个字母点读发音教材 i can spell phonics [SEP] 38.0 to 364.0 [SEP] 925426925178 [SEP] 原版进口剑桥出版社Super Safari一二三级别美音版学生套装3-6岁入门级英文早教书幼儿园启蒙英语教材小班幼儿书籍 [SEP] 284.0 to 852.0 [SEP] 930052908937 [SEP] 原版进口新版原版第二版剑桥中学英语Think Starter 12345级课本+练习册+在线账号 送音频视频测试答案 正版现货 12-18岁英语教材 [SEP] 338.0 to 2028.0 [SEP] 657803250734 [SEP] 进口原版牛津少儿英语原版Oxford Discover教材1 2 3 4 5 6级牛津探索与发现 牛津小学英语教材7-12岁牛津教材牛津英语教材教师书 [SEP] 120.0 to 486.0 [SEP] 613863024037 [SEP] 剑桥初高中英语教材Think二版 Starter12345级学生书练习册 Cambridge think教材 外语KET/PET考试 青少年英语教材原版进口 [SEP] 428.0 [SEP] 943721158758 [SEP] 新版牛津自然拼读教材 Oxford Phonics World 1 2 3 4 5 级别 牛津拼读世界全套零基础发音幼少儿英语自然拼读phonics教材OPW教材 [SEP] 58.0 to 975.0 [SEP] 616327100012 [SEP] 进口原版 4000 Essential English Words 1/2/3/4/5/6级 新版4000词 常见词英文单词词典书 剑桥雅思托福四六级英语考试核心词汇 [SEP] 135.0 to 850.0 [SEP] 520343824390 [SEP] 正版 英语老友记笔记书第一二三四季全剧本五六七八九十季合订版全套7本赠送双语中英文台词视频全注解跟着美剧老友记学英语笔记本 [SEP] 58.0 to 406.0 [SEP] 798242431589 [SEP] 剑桥考试局国际小学教材丛书Grade 1  English/Maths/Science 英式主流学科组合  6-7岁 [SEP] 19.0 to 273.0\n\n搜索功能是否可用: False\n\n可点击的按钮: [\"back to search\", \"next >\", \"610492565168\", \"613257600850\", \"942954343596\", \"653693603317\", \"743260997368\", \"921837809428\", \"724615771603\", \"660736231876\", \"892611477838\", \"730900358996\", \"704355091839\", \"614315385615\", \"925426925178\", \"930052908937\", \"657803250734\", \"613863024037\", \"943721158758\", \"616327100012\", \"520343824390\", \"798242431589\"]",
+        "message": "Continue interaction",
+        "observation_state": {
+          "actions": [
+            "back to search",
+            "next >",
+            "610492565168",
+            "613257600850",
+            "942954343596",
+            "653693603317",
+            "743260997368",
+            "921837809428",
+            "724615771603",
+            "660736231876",
+            "892611477838",
+            "730900358996",
+            "704355091839",
+            "614315385615",
+            "925426925178",
+            "930052908937",
+            "657803250734",
+            "613863024037",
+            "943721158758",
+            "616327100012",
+            "520343824390",
+            "798242431589"
+          ],
+          "normalized_query": "剑桥少儿英语 guess what 第一级 套装",
+          "observation_version": "shopping-observation-v2",
+          "page": 1,
+          "page_type": "search_results",
+          "products": [
+            {
+              "asin": "610492565168",
+              "brand": "华仑书店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "剑桥少儿英语教材",
+                "进口",
+                "一年级",
+                "英音版"
+              ],
+              "price": "258.0 to 426.0",
+              "rank": 1,
+              "title": "原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版"
+            },
+            {
+              "asin": "613257600850",
+              "brand": "英沃图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "剑桥少儿英语",
+                "YLE考试教材"
+              ],
+              "price": "338.0 to 398.0",
+              "rank": 2,
+              "title": "英音版superminds剑桥少儿英语教材super minds  S/1/2/3/4/5/6级 学生书+练习册 YLE考试教材 原版进口"
+            },
+            {
+              "asin": "942954343596",
+              "brand": "天天特卖工厂",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "剑桥",
+                "少儿英语",
+                "预备级"
+              ],
+              "price": "54.0 to 447.0",
+              "rank": 3,
+              "title": "剑桥少儿英语教材powerup预备级PowerUp0123456级学生套装考试原版"
+            },
+            {
+              "asin": "653693603317",
+              "brand": "乔津图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "现货",
+                "进口",
+                "剑桥国际少儿英语教材",
+                "英国"
+              ],
+              "price": "358.0 to 2158.0",
+              "rank": 4,
+              "title": "【现货速发】原版进口Power Up预备123456级剑桥国际少儿英语教材powerup教材英国小学YLE剑桥少儿考试英文教程青少版英文教材"
+            },
+            {
+              "asin": "743260997368",
+              "brand": "趣象进口图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "少儿英语",
+                "新版",
+                "备考资料"
+              ],
+              "price": "100.0 to 520.0",
+              "rank": 5,
+              "title": "原版新版剑桥yle真题集考试剑桥少儿英语考试全真试题一二三级教材 Starters movers flyers 1 2 3全真备考资料剑桥考级专项训练"
+            },
+            {
+              "asin": "921837809428",
+              "brand": "天天特卖工厂",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "3-6岁幼儿",
+                "英语启蒙",
+                "教师书"
+              ],
+              "price": "82.0 to 285.0",
+              "rank": 6,
+              "title": "剑桥幼儿英语教材Super Safari 1 2 3级英式发音幼儿英语启蒙教材3-6岁剑桥少儿英语supersafari教师书幼儿园教材"
+            },
+            {
+              "asin": "724615771603",
+              "brand": "剑津图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "剑桥少儿英语",
+                "KET",
+                "刷分神器"
+              ],
+              "price": "498.0 to 2998.0",
+              "rank": 7,
+              "title": "BBC Do You Know科普分级阅读绘本 科普百科分级阅读1 2 3 4级英文原版剑桥少儿英语KET刷分神器自然科普百科英语分级阅读书"
+            },
+            {
+              "asin": "660736231876",
+              "brand": "斑达图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "剑桥英语教材",
+                "think",
+                "适用中小学生",
+                "适用KET/PET",
+                "原版"
+              ],
+              "price": "318.0 to 408.0",
+              "rank": 8,
+              "title": "【斑达图书】原版剑桥think第二版think教材剑桥少儿中小学英语cambridge think starter 12345KET/PET考试教辅"
+            },
+            {
+              "asin": "892611477838",
+              "brand": "天天特卖工厂",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "big English",
+                "新版",
+                "正版",
+                "少儿英语"
+              ],
+              "price": "88.0",
+              "rank": 9,
+              "title": "新版big English 1 2 3 4 5 6 学生套装含课本+活动手册+朗文小英+学生书 少儿bigenglish教材培生朗文少儿英语书籍正版课外书原版"
+            },
+            {
+              "asin": "730900358996",
+              "brand": "华学堂图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "进口",
+                "少儿英语演讲教材"
+              ],
+              "price": "128.0 to 394.0",
+              "rank": 10,
+              "title": "进口原版少儿英语演讲教材Easy Speaking for speeches 1 2 3级 中小学英语演讲口语训练书籍talking"
+            },
+            {
+              "asin": "704355091839",
+              "brand": "天猫国际自营全球超级店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "进口",
+                "少儿英语语法书",
+                "6-8岁",
+                "寒暑假班"
+              ],
+              "price": "188.0",
+              "rank": 11,
+              "title": "【自营】原版进口Grammar Space 1 2 3级 少儿英语语法书 初阶短期寒暑假班专项grammar教材6-8岁英文教材"
+            },
+            {
+              "asin": "614315385615",
+              "brand": "华学堂图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "幼少儿",
+                "台湾新版",
+                "拼读",
+                "点读发音教材"
+              ],
+              "price": "38.0 to 364.0",
+              "rank": 12,
+              "title": "台湾新版Super phonics 1 2 3级 幼少儿英语自然拼读phonics+26个字母点读发音教材 i can spell phonics"
+            },
+            {
+              "asin": "925426925178",
+              "brand": "龙之彩图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "3-6岁幼儿",
+                "启蒙英语教材",
+                "美音版",
+                "剑桥"
+              ],
+              "price": "284.0 to 852.0",
+              "rank": 13,
+              "title": "原版进口剑桥出版社Super Safari一二三级别美音版学生套装3-6岁入门级英文早教书幼儿园启蒙英语教材小班幼儿书籍"
+            },
+            {
+              "asin": "930052908937",
+              "brand": "龙之彩图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "剑桥中学英语",
+                "在线账号",
+                "音频视频",
+                "测试答案"
+              ],
+              "price": "338.0 to 2028.0",
+              "rank": 14,
+              "title": "原版进口新版原版第二版剑桥中学英语Think Starter 12345级课本+练习册+在线账号 送音频视频测试答案 正版现货 12-18岁英语教材"
+            },
+            {
+              "asin": "657803250734",
+              "brand": "好奇豆图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "牛津",
+                "Oxford Discover",
+                "英语",
+                "7-12岁"
+              ],
+              "price": "120.0 to 486.0",
+              "rank": 15,
+              "title": "进口原版牛津少儿英语原版Oxford Discover教材1 2 3 4 5 6级牛津探索与发现 牛津小学英语教材7-12岁牛津教材牛津英语教材教师书"
+            },
+            {
+              "asin": "613863024037",
+              "brand": "英沃图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "原版",
+                "进口",
+                "剑桥英语教材",
+                "适用KET/PET"
+              ],
+              "price": "428.0",
+              "rank": 16,
+              "title": "剑桥初高中英语教材Think二版 Starter12345级学生书练习册 Cambridge think教材 外语KET/PET考试 青少年英语教材原版进口"
+            },
+            {
+              "asin": "943721158758",
+              "brand": "盯洞图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "零基础发音",
+                "少儿"
+              ],
+              "price": "58.0 to 975.0",
+              "rank": 17,
+              "title": "新版牛津自然拼读教材 Oxford Phonics World 1 2 3 4 5 级别 牛津拼读世界全套零基础发音幼少儿英语自然拼读phonics教材OPW教材"
+            },
+            {
+              "asin": "616327100012",
+              "brand": "华学堂图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "进口",
+                "剑桥雅思托福四六级英语考试核心词汇"
+              ],
+              "price": "135.0 to 850.0",
+              "rank": 18,
+              "title": "进口原版 4000 Essential English Words 1/2/3/4/5/6级 新版4000词 常见词英文单词词典书 剑桥雅思托福四六级英语考试核心词汇"
+            },
+            {
+              "asin": "520343824390",
+              "brand": "乐佳创投图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "正版",
+                "中英双语",
+                "视频全注解",
+                "学英语"
+              ],
+              "price": "58.0 to 406.0",
+              "rank": 19,
+              "title": "正版 英语老友记笔记书第一二三四季全剧本五六七八九十季合订版全套7本赠送双语中英文台词视频全注解跟着美剧老友记学英语笔记本"
+            },
+            {
+              "asin": "798242431589",
+              "brand": "中华商务图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "剑桥考试局国际小学教材",
+                "6-7岁"
+              ],
+              "price": "19.0 to 273.0",
+              "rank": 20,
+              "title": "剑桥考试局国际小学教材丛书Grade 1  English/Maths/Science 英式主流学科组合  6-7岁"
+            }
+          ],
+          "query": "剑桥少儿英语 guess what 第一级 套装",
+          "rank_end": 20,
+          "rank_start": 1,
+          "search_available": false,
+          "total_pages": 8,
+          "total_results": 150
+        },
+        "over": false,
+        "progress": {
+          "action_signature": "{\"action\":\"search\",\"argument\":\"剑桥少儿英语 guess what 第一级 套装\"}",
+          "consecutive_repeats": 0,
+          "credited_evidence_added": [
+            "result_set:4f6d00a5b2e3301695b4aefaacfcc1e6df9a88b8c7c810171ee918be27ddc8b1"
+          ],
+          "effective_result_sets": 1,
+          "evidence_added": [
+            "result_set:4f6d00a5b2e3301695b4aefaacfcc1e6df9a88b8c7c810171ee918be27ddc8b1"
+          ],
+          "evidence_counts": {
+            "constraint": 0,
+            "option": 0,
+            "product": 0,
+            "result_set": 1,
+            "subpage": 0
+          },
+          "new_asin_count": 20,
+          "no_progress_steps": 0,
+          "opened_candidate_count": 0,
+          "runtime_evidence_counts": {
+            "constraint": 0,
+            "option": 0,
+            "product": 0,
+            "result_set": 1,
+            "subpage": 0
+          },
+          "runtime_progress_added": [
+            "result_set:4f6d00a5b2e3301695b4aefaacfcc1e6df9a88b8c7c810171ee918be27ddc8b1"
+          ],
+          "seen_asin_count": 20,
+          "step_count": 1,
+          "termination_reason": null,
+          "termination_version": "shopping-termination-v3"
+        },
+        "purchase": {},
+        "reward": 0.0,
+        "reward_detail": {}
+      },
+      "reward": 0.0,
+      "step_index": 0,
+      "tool_call": {
+        "function": {
+          "arguments": "{\"query\": \"剑桥少儿英语 Guess What 第一级 套装\"}",
+          "name": "search_products"
+        },
+        "id": "chatcmpl-tool-bc6c9c3725453ff9",
+        "type": "function"
+      },
+      "tool_name": "search_products"
+    },
+    {
+      "done": false,
+      "env_action": "click[610492565168]",
+      "observation": "[SHOPPING_OBSERVATION_V2]\npage_type: product_detail\nasin: 610492565168\ntitle: 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版\nbrand: 华仑书店\ncategory: 书籍/杂志/报纸›进口原版书(含港台)›原版其它\nprice: 258.0 to 426.0\nkey_attributes: 剑桥少儿英语教材, 进口, 一年级, 英音版\nselected_options: {}\navailable_options: {\"分册名\": [\"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]}\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]",
+      "parameters": {
+        "asin": "610492565168"
+      },
+      "projection": {
+        "critical_footer_preserved": true,
+        "page_type": "product_detail",
+        "raw_asin_count": 0,
+        "raw_button_count": 19,
+        "raw_tokens": 364,
+        "token_budget": 4096,
+        "tool_name": "open_product",
+        "truncated": false,
+        "truncation_ratio": 1.0,
+        "visible_asin_count": 0,
+        "visible_button_count": 19,
+        "visible_tokens": 364
+      },
+      "raw_observation": "[SHOPPING_OBSERVATION_V2]\npage_type: product_detail\nasin: 610492565168\ntitle: 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版\nbrand: 华仑书店\ncategory: 书籍/杂志/报纸›进口原版书(含港台)›原版其它\nprice: 258.0 to 426.0\nkey_attributes: 剑桥少儿英语教材, 进口, 一年级, 英音版\nselected_options: {}\navailable_options: {\"分册名\": [\"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]}\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]",
+      "result": {
+        "done": false,
+        "env_idx": 4,
+        "goal": {},
+        "idx": "slot-4-21936",
+        "instruction": "Instruction: [SEP] 表妹想拥有剑桥少儿英语Guess What系列第一级的套装，要原版进口的主课本和练习册合订的，带英式发音的，特适合一年级孩子用的，价格在250左右。 [SEP] Back to Search [SEP] < Prev [SEP] 分册名 [SEP] guess what 4级别大卡 [SEP] guess what六级别 [SEP] guess what五级别 [SEP] guess what 1级别教案 [SEP] guess what 2级别教案 [SEP] guess what四级别 [SEP] guess what三级别 [SEP] guess what 6级别教案 [SEP] guess what二级别 [SEP] guess what一级别 [SEP] guess what 1级别大卡 [SEP] guess what 5级别教案 [SEP] guess what 2级别大卡 [SEP] 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版 [SEP] 价格: 258.0 to 426.0 [SEP] 店铺: 华仑书店 [SEP] Description [SEP] Features [SEP] Reviews [SEP] Buy Now\n\n搜索功能是否可用: False\n\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]",
+        "message": "Continue interaction",
+        "observation_state": {
+          "actions": [
+            "back to search",
+            "< prev",
+            "description",
+            "features",
+            "reviews",
+            "buy now",
+            "guess what 4级别大卡",
+            "guess what六级别",
+            "guess what五级别",
+            "guess what 1级别教案",
+            "guess what 2级别教案",
+            "guess what四级别",
+            "guess what三级别",
+            "guess what 6级别教案",
+            "guess what二级别",
+            "guess what一级别",
+            "guess what 1级别大卡",
+            "guess what 5级别教案",
+            "guess what 2级别大卡"
+          ],
+          "available_options": {
+            "分册名": [
+              "guess what 4级别大卡",
+              "guess what六级别",
+              "guess what五级别",
+              "guess what 1级别教案",
+              "guess what 2级别教案",
+              "guess what四级别",
+              "guess what三级别",
+              "guess what 6级别教案",
+              "guess what二级别",
+              "guess what一级别",
+              "guess what 1级别大卡",
+              "guess what 5级别教案",
+              "guess what 2级别大卡"
+            ]
+          },
+          "observation_version": "shopping-observation-v2",
+          "page_type": "product_detail",
+          "product": {
+            "asin": "610492565168",
+            "brand": "华仑书店",
+            "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+            "key_attributes": [
+              "剑桥少儿英语教材",
+              "进口",
+              "一年级",
+              "英音版"
+            ],
+            "price": "258.0 to 426.0",
+            "title": "原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版"
+          },
+          "search_available": false,
+          "selected_options": {}
+        },
+        "over": false,
+        "progress": {
+          "action_signature": "{\"action\":\"click\",\"argument\":\"610492565168\"}",
+          "consecutive_repeats": 0,
+          "credited_evidence_added": [
+            "product:610492565168",
+            "constraint:610492565168:category:pass",
+            "constraint:610492565168:budget:pass"
+          ],
+          "effective_result_sets": 1,
+          "evidence_added": [
+            "product:610492565168",
+            "constraint:610492565168:category:pass",
+            "constraint:610492565168:budget:pass"
+          ],
+          "evidence_counts": {
+            "constraint": 2,
+            "option": 0,
+            "product": 1,
+            "result_set": 1,
+            "subpage": 0
+          },
+          "new_asin_count": 0,
+          "no_progress_steps": 0,
+          "opened_candidate_count": 1,
+          "runtime_evidence_counts": {
+            "constraint": 2,
+            "option": 0,
+            "product": 1,
+            "result_set": 1,
+            "subpage": 0
+          },
+          "runtime_progress_added": [
+            "product:610492565168",
+            "constraint:610492565168:category:pass",
+            "constraint:610492565168:budget:pass"
+          ],
+          "seen_asin_count": 20,
+          "step_count": 2,
+          "termination_reason": null,
+          "termination_version": "shopping-termination-v3"
+        },
+        "purchase": {},
+        "reward": 0.0,
+        "reward_detail": {}
+      },
+      "reward": 0.0,
+      "step_index": 1,
+      "tool_call": {
+        "function": {
+          "arguments": "{\"asin\": \"610492565168\"}",
+          "name": "open_product"
+        },
+        "id": "chatcmpl-tool-88935f41ed8c4a34",
+        "type": "function"
+      },
+      "tool_name": "open_product"
+    },
+    {
+      "done": false,
+      "env_action": "click[guess what 1级别大卡]",
+      "observation": "[SHOPPING_OBSERVATION_V2]\npage_type: product_detail\nasin: 610492565168\ntitle: 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版\nbrand: 华仑书店\ncategory: 书籍/杂志/报纸›进口原版书(含港台)›原版其它\nprice: 336.0\nkey_attributes: 剑桥少儿英语教材, 进口, 一年级, 英音版\nselected_options: {\"分册名\": \"guess what 1级别大卡\"}\navailable_options: {\"分册名\": [\"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]}\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]",
+      "parameters": {
+        "value": "guess what 1级别大卡"
+      },
+      "projection": {
+        "critical_footer_preserved": true,
+        "page_type": "product_detail",
+        "raw_asin_count": 0,
+        "raw_button_count": 19,
+        "raw_tokens": 370,
+        "token_budget": 4096,
+        "tool_name": "select_option",
+        "truncated": false,
+        "truncation_ratio": 1.0,
+        "visible_asin_count": 0,
+        "visible_button_count": 19,
+        "visible_tokens": 370
+      },
+      "raw_observation": "[SHOPPING_OBSERVATION_V2]\npage_type: product_detail\nasin: 610492565168\ntitle: 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版\nbrand: 华仑书店\ncategory: 书籍/杂志/报纸›进口原版书(含港台)›原版其它\nprice: 336.0\nkey_attributes: 剑桥少儿英语教材, 进口, 一年级, 英音版\nselected_options: {\"分册名\": \"guess what 1级别大卡\"}\navailable_options: {\"分册名\": [\"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]}\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]",
+      "result": {
+        "done": false,
+        "env_idx": 4,
+        "goal": {},
+        "idx": "slot-4-21936",
+        "instruction": "Instruction: [SEP] 表妹想拥有剑桥少儿英语Guess What系列第一级的套装，要原版进口的主课本和练习册合订的，带英式发音的，特适合一年级孩子用的，价格在250左右。 [SEP] Back to Search [SEP] < Prev [SEP] 分册名 [SEP] guess what 4级别大卡 [SEP] guess what六级别 [SEP] guess what五级别 [SEP] guess what 1级别教案 [SEP] guess what 2级别教案 [SEP] guess what四级别 [SEP] guess what三级别 [SEP] guess what 6级别教案 [SEP] guess what二级别 [SEP] guess what一级别 [SEP] guess what 1级别大卡 [SEP] guess what 5级别教案 [SEP] guess what 2级别大卡 [SEP] 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版 [SEP] 价格: 336.0 [SEP] 店铺: 华仑书店 [SEP] Description [SEP] Features [SEP] Reviews [SEP] Buy Now\n\n搜索功能是否可用: False\n\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]",
+        "message": "Continue interaction",
+        "observation_state": {
+          "actions": [
+            "back to search",
+            "< prev",
+            "description",
+            "features",
+            "reviews",
+            "buy now",
+            "guess what 4级别大卡",
+            "guess what六级别",
+            "guess what五级别",
+            "guess what 1级别教案",
+            "guess what 2级别教案",
+            "guess what四级别",
+            "guess what三级别",
+            "guess what 6级别教案",
+            "guess what二级别",
+            "guess what一级别",
+            "guess what 1级别大卡",
+            "guess what 5级别教案",
+            "guess what 2级别大卡"
+          ],
+          "available_options": {
+            "分册名": [
+              "guess what 4级别大卡",
+              "guess what六级别",
+              "guess what五级别",
+              "guess what 1级别教案",
+              "guess what 2级别教案",
+              "guess what四级别",
+              "guess what三级别",
+              "guess what 6级别教案",
+              "guess what二级别",
+              "guess what一级别",
+              "guess what 1级别大卡",
+              "guess what 5级别教案",
+              "guess what 2级别大卡"
+            ]
+          },
+          "observation_version": "shopping-observation-v2",
+          "page_type": "product_detail",
+          "product": {
+            "asin": "610492565168",
+            "brand": "华仑书店",
+            "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+            "key_attributes": [
+              "剑桥少儿英语教材",
+              "进口",
+              "一年级",
+              "英音版"
+            ],
+            "price": "258.0 to 426.0",
+            "title": "原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版"
+          },
+          "search_available": false,
+          "selected_options": {
+            "分册名": "guess what 1级别大卡"
+          },
+          "selected_price": 336.0
+        },
+        "over": false,
+        "progress": {
+          "action_signature": "{\"action\":\"click\",\"argument\":\"guess what 1级别大卡\"}",
+          "consecutive_repeats": 0,
+          "credited_evidence_added": [
+            "option:610492565168:分册名:guesswhat1级别大卡"
+          ],
+          "effective_result_sets": 1,
+          "evidence_added": [
+            "option:610492565168:分册名:guesswhat1级别大卡"
+          ],
+          "evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 1,
+            "subpage": 0
+          },
+          "new_asin_count": 0,
+          "no_progress_steps": 0,
+          "opened_candidate_count": 1,
+          "runtime_evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 1,
+            "subpage": 0
+          },
+          "runtime_progress_added": [
+            "option:610492565168:分册名:guesswhat1级别大卡"
+          ],
+          "seen_asin_count": 20,
+          "step_count": 3,
+          "termination_reason": null,
+          "termination_version": "shopping-termination-v3"
+        },
+        "purchase": {},
+        "reward": 0.0,
+        "reward_detail": {}
+      },
+      "reward": 0.0,
+      "step_index": 2,
+      "tool_call": {
+        "function": {
+          "arguments": "{\"value\": \"guess what 1级别大卡\"}",
+          "name": "select_option"
+        },
+        "id": "chatcmpl-tool-b47cc7e2f3e97e8c",
+        "type": "function"
+      },
+      "tool_name": "select_option"
+    },
+    {
+      "done": false,
+      "env_action": "click[Back to Search]",
+      "observation": "[SHOPPING_OBSERVATION_V2]\npage_type: search_home\n使用 search_products 提交简短、具有区分度的商品查询。\n\n搜索功能是否可用: True\n可点击的按钮: [\"search\"]",
+      "parameters": {},
+      "projection": {
+        "critical_footer_preserved": true,
+        "page_type": "search_home",
+        "raw_asin_count": 0,
+        "raw_button_count": 1,
+        "raw_tokens": 45,
+        "token_budget": 768,
+        "tool_name": "back_to_search",
+        "truncated": false,
+        "truncation_ratio": 1.0,
+        "visible_asin_count": 0,
+        "visible_button_count": 1,
+        "visible_tokens": 45
+      },
+      "raw_observation": "[SHOPPING_OBSERVATION_V2]\npage_type: search_home\n使用 search_products 提交简短、具有区分度的商品查询。\n\n搜索功能是否可用: True\n可点击的按钮: [\"search\"]",
+      "result": {
+        "done": false,
+        "env_idx": 4,
+        "goal": {},
+        "idx": "slot-4-21936",
+        "instruction": "WebShop [SEP] Instruction: [SEP] 表妹想拥有剑桥少儿英语Guess What系列第一级的套装，要原版进口的主课本和练习册合订的，带英式发音的，特适合一年级孩子用的，价格在250左右。 [SEP] Search\n\n搜索功能是否可用: True\n\n可点击的按钮: []",
+        "message": "Continue interaction",
+        "observation_state": {
+          "actions": [
+            "search"
+          ],
+          "observation_version": "shopping-observation-v2",
+          "page_type": "search_home",
+          "search_available": true
+        },
+        "over": false,
+        "progress": {
+          "action_signature": "{\"action\":\"click\",\"argument\":\"back to search\"}",
+          "consecutive_repeats": 0,
+          "credited_evidence_added": [],
+          "effective_result_sets": 1,
+          "evidence_added": [],
+          "evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 1,
+            "subpage": 0
+          },
+          "new_asin_count": 0,
+          "no_progress_steps": 1,
+          "opened_candidate_count": 1,
+          "runtime_evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 1,
+            "subpage": 0
+          },
+          "runtime_progress_added": [],
+          "seen_asin_count": 20,
+          "step_count": 4,
+          "termination_reason": null,
+          "termination_version": "shopping-termination-v3"
+        },
+        "purchase": {},
+        "reward": 0.0,
+        "reward_detail": {}
+      },
+      "reward": 0.0,
+      "step_index": 3,
+      "tool_call": {
+        "function": {
+          "arguments": "{}",
+          "name": "back_to_search"
+        },
+        "id": "chatcmpl-tool-866252e499ec5031",
+        "type": "function"
+      },
+      "tool_name": "back_to_search"
+    },
+    {
+      "done": false,
+      "env_action": "search[Guess What 1 Pupil's Book Activity Book 英音版]",
+      "observation": "[SHOPPING_OBSERVATION_V2]\npage_type: search_results\nquery: guess what 1 pupil's book activity book 英音版\nnormalized_query: guess what 1 pupil's book activity book 英音版\nPage 1 of 8 (Total results: 150; ranks 1-20)\n格式: rank|asin|price|brand|category|key_attributes|title\n1|610492565168|258.0 …26.0|华仑书店|书籍/杂志/…原版其它|剑桥少儿英语…,英音版|原版进口剑桥… 英音版\n2|613257600850|338.0 …98.0|英沃图书专营店|书籍/杂志/…原版其它|剑桥少儿英语…考试教材|英音版sup…原版进口\n3|921837809428|82.0 t…85.0|天天特卖工厂|书籍/杂志/…原版其它|3-6岁幼儿…,教师书|剑桥幼儿英语…儿园教材\n4|728007306236|16.0 t…21.0|申东图书专营店|书籍/杂志/…原版其它|平装,The…osch|The Na…on这本\n5|816064383307|60.0|GUESS CHINA|箱包皮具/热…包›胸包|欧美,时尚,…用,休闲|欧美时尚百搭…搭腋下包\n6|925426925178|284.0 …52.0|龙之彩图书专营店|书籍/杂志/…原版其它|3-6岁幼儿…版,剑桥|原版进口剑桥…幼儿书籍\n7|798242431589|19.0 t…73.0|中华商务图书专营店|书籍/杂志/…原版其它|剑桥考试局国…6-7岁|剑桥考试局国…6-7岁\n8|732551989085|248.0 …95.0|卡米图书专营店|书籍/杂志/…原版其它|新加坡,小学英语|新加坡小学英…书练习册\n9|899544334422|9800.0|KOAIKA旗舰店|大家电›商用电视|康佳,智能,…用,超清|&Kappa…5寸家用\n10|912098329576|9800.0|KOAIKA旗舰店|大家电›商用电视|康佳,超高清…用,智能|&Kappa…5寸家用\n11|908985130617|9800.0|KOAIKA坤单专卖店|大家电›商用电视|4K,高清|&Kappa…585寸\n12|901926967108|9800.0|Amoi夏新烽韫专卖店|大家电›商用电视|100寸,智能,平板|Amoi夏新…网络投屏\n13|902219646710|9800.0|Amoi夏新烽韫专卖店|大家电›商用电视|4K,高清,…屏,家用|AMOI/夏…0寸家用\n14|569681995126|145.0 …50.0|工控电气自动化之家1|五金/工具›…稳压电源|S-500-…开关电源|S-500-…/60V\n15|764780869610|498.0 …58.0|唯达信官方工厂店|办公设备/耗…管理系统|电话销售适用…拨号功能|电话销售系统…音营销机\n16|42467861662|9.0 to 30.0|東科維創散热风扇总店|电脑硬件/显…器/风扇|全新,静音,…,路由器|全新1202…散热风扇\n17|672816977604|46.0|泡菜娃娃美妆店|彩妆/香水/…泥/唇霜|菲丽菲拉,冰…镜面效果|韩国peri…纯欲唇彩\n18|776504162422|113.0 …60.0|阿囧的咖啡馆|咖啡/麦片/…›咖啡液|黑巧克力风味…条,美式|【正品】Pe…盒12条\n19|928941759900|100.0 …50.0|苏老伯旗舰店|床上用品›床…定制定做|S型,家用,折叠,护脊|苏老伯黄麻床…折叠床垫\n20|705386515415|39.0 t…60.0|盛邦智能|办公设备/耗…管理系统|电话录音盒,…示,拨号|电话录音盒7…权限管理\n[TRUNCATED_BY_SHOPPING_PROJECTOR] product_fields_compacted=true\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"next >\", \"610492565168\", \"613257600850\", \"921837809428\", \"728007306236\", \"816064383307\", \"925426925178\", \"798242431589\", \"732551989085\", \"899544334422\", \"912098329576\", \"908985130617\", \"901926967108\", \"902219646710\", \"569681995126\", \"764780869610\", \"42467861662\", \"672816977604\", \"776504162422\", \"928941759900\", \"705386515415\"]",
+      "parameters": {
+        "query": "Guess What 1 Pupil's Book Activity Book 英音版"
+      },
+      "projection": {
+        "critical_footer_preserved": true,
+        "page_type": "search_results",
+        "raw_asin_count": 20,
+        "raw_button_count": 22,
+        "raw_tokens": 2178,
+        "token_budget": 1536,
+        "tool_name": "search_products",
+        "truncated": true,
+        "truncation_ratio": 0.6928374655647382,
+        "visible_asin_count": 20,
+        "visible_button_count": 22,
+        "visible_tokens": 1509
+      },
+      "raw_observation": "[SHOPPING_OBSERVATION_V2]\npage_type: search_results\nquery: guess what 1 pupil's book activity book 英音版\nnormalized_query: guess what 1 pupil's book activity book 英音版\nPage 1 of 8 (Total results: 150; ranks 1-20)\n格式: rank|asin|price|brand|category|key_attributes|title\n1|610492565168|258.0 to 426.0|华仑书店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|剑桥少儿英语教材,进口,一年级,英音版|原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版\n2|613257600850|338.0 to 398.0|英沃图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|剑桥少儿英语,YLE考试教材|英音版superminds剑桥少儿英语教材super minds S/1/2/3/4/5/6级 学生书+练习册 YLE考试教材 原版进口\n3|921837809428|82.0 to 285.0|天天特卖工厂|书籍/杂志/报纸›进口原版书(含港台)›原版其它|3-6岁幼儿,英语启蒙,教师书|剑桥幼儿英语教材Super Safari 1 2 3级英式发音幼儿英语启蒙教材3-6岁剑桥少儿英语supersafari教师书幼儿园教材\n4|728007306236|16.0 to 21.0|申东图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|平装,The Name of this Book Is Secret,Pseudonymous Bosch|The Name of this Book Is Secret by Pseudonymous Bosch平装Little Brown Books for Young Readers; Illustrated edition这本\n5|816064383307|60.0|GUESS CHINA|箱包皮具/热销女包/男包›胸包|欧美,时尚,百搭,实用,休闲|欧美时尚百搭腰包实用胸包休闲斜挎包印花字母百搭腋下包\n6|925426925178|284.0 to 852.0|龙之彩图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|3-6岁幼儿,启蒙英语教材,美音版,剑桥|原版进口剑桥出版社Super Safari一二三级别美音版学生套装3-6岁入门级英文早教书幼儿园启蒙英语教材小班幼儿书籍\n7|798242431589|19.0 to 273.0|中华商务图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|剑桥考试局国际小学教材,6-7岁|剑桥考试局国际小学教材丛书Grade 1 English/Maths/Science 英式主流学科组合 6-7岁\n8|732551989085|248.0 to 495.0|卡米图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|新加坡,小学英语|新加坡小学英语 MPH MY PALS ARE HERE English 1A-1B-2A-2B-3A-3B-4A-4B-5A-5B-6A-6B 一二三四五六年级上下册学生用书练习册\n9|899544334422|9800.0|KOAIKA旗舰店|大家电›商用电视|康佳,智能,网络,家用,超清|&Kappa;&Omicron;&Lambda;&Iota;&Kappa;&Alpha;康佳4K超清55寸智能平板电视网络电视机85寸家用\n10|912098329576|9800.0|KOAIKA旗舰店|大家电›商用电视|康佳,超高清,家用,智能|&Kappa;&Omicron;&Lambda;&Iota;&Kappa;&Alpha;康佳4K100寸超高清电视机家用智能网络65/75寸家用\n11|908985130617|9800.0|KOAIKA坤单专卖店|大家电›商用电视|4K,高清|&Kappa;&Omicron;&Lambda;&Iota;&Kappa;&Alpha;康佳4K电视100寸智能液晶网络电视机高清55/6585寸\n12|901926967108|9800.0|Amoi夏新烽韫专卖店|大家电›商用电视|100寸,智能,平板|Amoi夏新智能平板100寸超高清液晶电视55/65/75/85寸智能网络投屏\n13|902219646710|9800.0|Amoi夏新烽韫专卖店|大家电›商用电视|4K,高清,智能,全面屏,家用|AMOI/夏新55英寸全面屏4K高清液晶电视机智能网络75/85/100寸家用\n14|569681995126|145.0 to 1750.0|工控电气自动化之家1|五金/工具›电气控制›电源/不间断电源/应急电源›直流稳压电源|S-500-24开关电源|S-500-24开关电源600/800/1000/1200/2000/3000W-12V/36V/48V/60V\n15|764780869610|498.0 to 658.0|唯达信官方工厂店|办公设备/耗材/相关服务›传真/通信设备›电话管理系统|电话销售适用,客服适用,自动拨号功能|电话销售系统自动拨号电话机外呼营销呼叫中心客服拨号语音营销机\n16|42467861662|9.0 to 30.0|東科維創散热风扇总店|电脑硬件/显示器/电脑周边›散热器/风扇|全新,静音,12V,电脑机箱,服务器,路由器|全新12025静音5V12V24V12CM厘米USB电脑机箱服务器路由器散热风扇\n17|672816977604|46.0|泡菜娃娃美妆店|彩妆/香水/美妆工具›唇部彩妆›唇彩/唇蜜/唇釉/唇泥/唇霜|菲丽菲拉,冰糖感,镜面效果|韩国peripera/菲丽菲拉冰糖唇釉04/09/10/11镜面水光透亮纯欲唇彩\n18|776504162422|113.0 to 360.0|阿囧的咖啡馆|咖啡/麦片/冲饮›速溶咖啡/咖啡豆/粉›咖啡液|黑巧克力风味,醇厚,1盒12条,美式|【正品】Peet's皮爷迪克森美式咖啡液黑巧克力风味醇厚1盒12条\n19|928941759900|100.0 to 150.0|苏老伯旗舰店|床上用品›床品定制/定做(新)›床垫定制定做|S型,家用,折叠,护脊|苏老伯黄麻床垫硬垫S型白麻乳胶护脊定制家用榻榻米软垫折叠床垫\n20|705386515415|39.0 to 360.0|盛邦智能|办公设备/耗材/相关服务›传真/通信设备›电话管理系统|电话录音盒,USB连接,电脑可用,弹屏提示,拨号|电话录音盒701固话座机USB录音设备电脑弹屏拨号系统员工权限管理\nproducts_shown: 20\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"next >\", \"610492565168\", \"613257600850\", \"921837809428\", \"728007306236\", \"816064383307\", \"925426925178\", \"798242431589\", \"732551989085\", \"899544334422\", \"912098329576\", \"908985130617\", \"901926967108\", \"902219646710\", \"569681995126\", \"764780869610\", \"42467861662\", \"672816977604\", \"776504162422\", \"928941759900\", \"705386515415\"]",
+      "result": {
+        "done": false,
+        "env_idx": 4,
+        "goal": {},
+        "idx": "slot-4-21936",
+        "instruction": "Instruction: [SEP] 表妹想拥有剑桥少儿英语Guess What系列第一级的套装，要原版进口的主课本和练习册合订的，带英式发音的，特适合一年级孩子用的，价格在250左右。 [SEP] Back to Search [SEP] Page 1 of 8 (Total results: 150) [SEP] Query: guess what 1 pupil's book activity book 英音版 | Normalized query: guess what 1 pupil's book activity book 英音版 [SEP] Next > [SEP] 610492565168 [SEP] 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版 [SEP] 258.0 to 426.0 [SEP] 613257600850 [SEP] 英音版superminds剑桥少儿英语教材super minds  S/1/2/3/4/5/6级 学生书+练习册 YLE考试教材 原版进口 [SEP] 338.0 to 398.0 [SEP] 921837809428 [SEP] 剑桥幼儿英语教材Super Safari 1 2 3级英式发音幼儿英语启蒙教材3-6岁剑桥少儿英语supersafari教师书幼儿园教材 [SEP] 82.0 to 285.0 [SEP] 728007306236 [SEP] The Name of this Book Is Secret  by Pseudonymous Bosch平装Little  Brown Books for Young Readers; Illustrated edition这本 [SEP] 16.0 to 21.0 [SEP] 816064383307 [SEP] 欧美时尚百搭腰包实用胸包休闲斜挎包印花字母百搭腋下包 [SEP] 60.0 [SEP] 925426925178 [SEP] 原版进口剑桥出版社Super Safari一二三级别美音版学生套装3-6岁入门级英文早教书幼儿园启蒙英语教材小班幼儿书籍 [SEP] 284.0 to 852.0 [SEP] 798242431589 [SEP] 剑桥考试局国际小学教材丛书Grade 1  English/Maths/Science 英式主流学科组合  6-7岁 [SEP] 19.0 to 273.0 [SEP] 732551989085 [SEP] 新加坡小学英语 MPH MY PALS ARE HERE English 1A-1B-2A-2B-3A-3B-4A-4B-5A-5B-6A-6B 一二三四五六年级上下册学生用书练习册 [SEP] 248.0 to 495.0 [SEP] 899544334422 [SEP] &Kappa;&Omicron;&Lambda;&Iota;&Kappa;&Alpha;康佳4K超清55寸智能平板电视网络电视机85寸家用 [SEP] 9800.0 [SEP] 912098329576 [SEP] &Kappa;&Omicron;&Lambda;&Iota;&Kappa;&Alpha;康佳4K100寸超高清电视机家用智能网络65/75寸家用 [SEP] 9800.0 [SEP] 908985130617 [SEP] &Kappa;&Omicron;&Lambda;&Iota;&Kappa;&Alpha;康佳4K电视100寸智能液晶网络电视机高清55/6585寸 [SEP] 9800.0 [SEP] 901926967108 [SEP] Amoi夏新智能平板100寸超高清液晶电视55/65/75/85寸智能网络投屏 [SEP] 9800.0 [SEP] 902219646710 [SEP] AMOI/夏新55英寸全面屏4K高清液晶电视机智能网络75/85/100寸家用 [SEP] 9800.0 [SEP] 569681995126 [SEP] S-500-24开关电源600/800/1000/1200/2000/3000W-12V/36V/48V/60V [SEP] 145.0 to 1750.0 [SEP] 764780869610 [SEP] 电话销售系统自动拨号电话机外呼营销呼叫中心客服拨号语音营销机 [SEP] 498.0 to 658.0 [SEP] 42467861662 [SEP] 全新12025静音5V12V24V12CM厘米USB电脑机箱服务器路由器散热风扇 [SEP] 9.0 to 30.0 [SEP] 672816977604 [SEP] 韩国peripera/菲丽菲拉冰糖唇釉04/09/10/11镜面水光透亮纯欲唇彩 [SEP] 46.0 [SEP] 776504162422 [SEP] 【正品】Peet's皮爷迪克森美式咖啡液黑巧克力风味醇厚1盒12条 [SEP] 113.0 to 360.0 [SEP] 928941759900 [SEP] 苏老伯黄麻床垫硬垫S型白麻乳胶护脊定制家用榻榻米软垫折叠床垫 [SEP] 100.0 to 150.0 [SEP] 705386515415 [SEP] 电话录音盒701固话座机USB录音设备电脑弹屏拨号系统员工权限管理 [SEP] 39.0 to 360.0\n\n搜索功能是否可用: False\n\n可点击的按钮: [\"back to search\", \"next >\", \"610492565168\", \"613257600850\", \"921837809428\", \"728007306236\", \"816064383307\", \"925426925178\", \"798242431589\", \"732551989085\", \"899544334422\", \"912098329576\", \"908985130617\", \"901926967108\", \"902219646710\", \"569681995126\", \"764780869610\", \"42467861662\", \"672816977604\", \"776504162422\", \"928941759900\", \"705386515415\"]",
+        "message": "Continue interaction",
+        "observation_state": {
+          "actions": [
+            "back to search",
+            "next >",
+            "610492565168",
+            "613257600850",
+            "921837809428",
+            "728007306236",
+            "816064383307",
+            "925426925178",
+            "798242431589",
+            "732551989085",
+            "899544334422",
+            "912098329576",
+            "908985130617",
+            "901926967108",
+            "902219646710",
+            "569681995126",
+            "764780869610",
+            "42467861662",
+            "672816977604",
+            "776504162422",
+            "928941759900",
+            "705386515415"
+          ],
+          "normalized_query": "guess what 1 pupil's book activity book 英音版",
+          "observation_version": "shopping-observation-v2",
+          "page": 1,
+          "page_type": "search_results",
+          "products": [
+            {
+              "asin": "610492565168",
+              "brand": "华仑书店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "剑桥少儿英语教材",
+                "进口",
+                "一年级",
+                "英音版"
+              ],
+              "price": "258.0 to 426.0",
+              "rank": 1,
+              "title": "原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版"
+            },
+            {
+              "asin": "613257600850",
+              "brand": "英沃图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "剑桥少儿英语",
+                "YLE考试教材"
+              ],
+              "price": "338.0 to 398.0",
+              "rank": 2,
+              "title": "英音版superminds剑桥少儿英语教材super minds  S/1/2/3/4/5/6级 学生书+练习册 YLE考试教材 原版进口"
+            },
+            {
+              "asin": "921837809428",
+              "brand": "天天特卖工厂",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "3-6岁幼儿",
+                "英语启蒙",
+                "教师书"
+              ],
+              "price": "82.0 to 285.0",
+              "rank": 3,
+              "title": "剑桥幼儿英语教材Super Safari 1 2 3级英式发音幼儿英语启蒙教材3-6岁剑桥少儿英语supersafari教师书幼儿园教材"
+            },
+            {
+              "asin": "728007306236",
+              "brand": "申东图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "平装",
+                "The Name of this Book Is Secret",
+                "Pseudonymous Bosch"
+              ],
+              "price": "16.0 to 21.0",
+              "rank": 4,
+              "title": "The Name of this Book Is Secret  by Pseudonymous Bosch平装Little  Brown Books for Young Readers; Illustrated edition这本"
+            },
+            {
+              "asin": "816064383307",
+              "brand": "GUESS CHINA",
+              "category": "箱包皮具/热销女包/男包›胸包",
+              "key_attributes": [
+                "欧美",
+                "时尚",
+                "百搭",
+                "实用",
+                "休闲"
+              ],
+              "price": "60.0",
+              "rank": 5,
+              "title": "欧美时尚百搭腰包实用胸包休闲斜挎包印花字母百搭腋下包"
+            },
+            {
+              "asin": "925426925178",
+              "brand": "龙之彩图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "3-6岁幼儿",
+                "启蒙英语教材",
+                "美音版",
+                "剑桥"
+              ],
+              "price": "284.0 to 852.0",
+              "rank": 6,
+              "title": "原版进口剑桥出版社Super Safari一二三级别美音版学生套装3-6岁入门级英文早教书幼儿园启蒙英语教材小班幼儿书籍"
+            },
+            {
+              "asin": "798242431589",
+              "brand": "中华商务图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "剑桥考试局国际小学教材",
+                "6-7岁"
+              ],
+              "price": "19.0 to 273.0",
+              "rank": 7,
+              "title": "剑桥考试局国际小学教材丛书Grade 1  English/Maths/Science 英式主流学科组合  6-7岁"
+            },
+            {
+              "asin": "732551989085",
+              "brand": "卡米图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "新加坡",
+                "小学英语"
+              ],
+              "price": "248.0 to 495.0",
+              "rank": 8,
+              "title": "新加坡小学英语 MPH MY PALS ARE HERE English 1A-1B-2A-2B-3A-3B-4A-4B-5A-5B-6A-6B 一二三四五六年级上下册学生用书练习册"
+            },
+            {
+              "asin": "899544334422",
+              "brand": "KOAIKA旗舰店",
+              "category": "大家电›商用电视",
+              "key_attributes": [
+                "康佳",
+                "智能",
+                "网络",
+                "家用",
+                "超清"
+              ],
+              "price": "9800.0",
+              "rank": 9,
+              "title": "&Kappa;&Omicron;&Lambda;&Iota;&Kappa;&Alpha;康佳4K超清55寸智能平板电视网络电视机85寸家用"
+            },
+            {
+              "asin": "912098329576",
+              "brand": "KOAIKA旗舰店",
+              "category": "大家电›商用电视",
+              "key_attributes": [
+                "康佳",
+                "超高清",
+                "家用",
+                "智能"
+              ],
+              "price": "9800.0",
+              "rank": 10,
+              "title": "&Kappa;&Omicron;&Lambda;&Iota;&Kappa;&Alpha;康佳4K100寸超高清电视机家用智能网络65/75寸家用"
+            },
+            {
+              "asin": "908985130617",
+              "brand": "KOAIKA坤单专卖店",
+              "category": "大家电›商用电视",
+              "key_attributes": [
+                "4K",
+                "高清"
+              ],
+              "price": "9800.0",
+              "rank": 11,
+              "title": "&Kappa;&Omicron;&Lambda;&Iota;&Kappa;&Alpha;康佳4K电视100寸智能液晶网络电视机高清55/6585寸"
+            },
+            {
+              "asin": "901926967108",
+              "brand": "Amoi夏新烽韫专卖店",
+              "category": "大家电›商用电视",
+              "key_attributes": [
+                "100寸",
+                "智能",
+                "平板"
+              ],
+              "price": "9800.0",
+              "rank": 12,
+              "title": "Amoi夏新智能平板100寸超高清液晶电视55/65/75/85寸智能网络投屏"
+            },
+            {
+              "asin": "902219646710",
+              "brand": "Amoi夏新烽韫专卖店",
+              "category": "大家电›商用电视",
+              "key_attributes": [
+                "4K",
+                "高清",
+                "智能",
+                "全面屏",
+                "家用"
+              ],
+              "price": "9800.0",
+              "rank": 13,
+              "title": "AMOI/夏新55英寸全面屏4K高清液晶电视机智能网络75/85/100寸家用"
+            },
+            {
+              "asin": "569681995126",
+              "brand": "工控电气自动化之家1",
+              "category": "五金/工具›电气控制›电源/不间断电源/应急电源›直流稳压电源",
+              "key_attributes": [
+                "S-500-24开关电源"
+              ],
+              "price": "145.0 to 1750.0",
+              "rank": 14,
+              "title": "S-500-24开关电源600/800/1000/1200/2000/3000W-12V/36V/48V/60V"
+            },
+            {
+              "asin": "764780869610",
+              "brand": "唯达信官方工厂店",
+              "category": "办公设备/耗材/相关服务›传真/通信设备›电话管理系统",
+              "key_attributes": [
+                "电话销售适用",
+                "客服适用",
+                "自动拨号功能"
+              ],
+              "price": "498.0 to 658.0",
+              "rank": 15,
+              "title": "电话销售系统自动拨号电话机外呼营销呼叫中心客服拨号语音营销机"
+            },
+            {
+              "asin": "42467861662",
+              "brand": "東科維創散热风扇总店",
+              "category": "电脑硬件/显示器/电脑周边›散热器/风扇",
+              "key_attributes": [
+                "全新",
+                "静音",
+                "12V",
+                "电脑机箱",
+                "服务器",
+                "路由器"
+              ],
+              "price": "9.0 to 30.0",
+              "rank": 16,
+              "title": "全新12025静音5V12V24V12CM厘米USB电脑机箱服务器路由器散热风扇"
+            },
+            {
+              "asin": "672816977604",
+              "brand": "泡菜娃娃美妆店",
+              "category": "彩妆/香水/美妆工具›唇部彩妆›唇彩/唇蜜/唇釉/唇泥/唇霜",
+              "key_attributes": [
+                "菲丽菲拉",
+                "冰糖感",
+                "镜面效果"
+              ],
+              "price": "46.0",
+              "rank": 17,
+              "title": "韩国peripera/菲丽菲拉冰糖唇釉04/09/10/11镜面水光透亮纯欲唇彩"
+            },
+            {
+              "asin": "776504162422",
+              "brand": "阿囧的咖啡馆",
+              "category": "咖啡/麦片/冲饮›速溶咖啡/咖啡豆/粉›咖啡液",
+              "key_attributes": [
+                "黑巧克力风味",
+                "醇厚",
+                "1盒12条",
+                "美式"
+              ],
+              "price": "113.0 to 360.0",
+              "rank": 18,
+              "title": "【正品】Peet's皮爷迪克森美式咖啡液黑巧克力风味醇厚1盒12条"
+            },
+            {
+              "asin": "928941759900",
+              "brand": "苏老伯旗舰店",
+              "category": "床上用品›床品定制/定做(新)›床垫定制定做",
+              "key_attributes": [
+                "S型",
+                "家用",
+                "折叠",
+                "护脊"
+              ],
+              "price": "100.0 to 150.0",
+              "rank": 19,
+              "title": "苏老伯黄麻床垫硬垫S型白麻乳胶护脊定制家用榻榻米软垫折叠床垫"
+            },
+            {
+              "asin": "705386515415",
+              "brand": "盛邦智能",
+              "category": "办公设备/耗材/相关服务›传真/通信设备›电话管理系统",
+              "key_attributes": [
+                "电话录音盒",
+                "USB连接",
+                "电脑可用",
+                "弹屏提示",
+                "拨号"
+              ],
+              "price": "39.0 to 360.0",
+              "rank": 20,
+              "title": "电话录音盒701固话座机USB录音设备电脑弹屏拨号系统员工权限管理"
+            }
+          ],
+          "query": "guess what 1 pupil's book activity book 英音版",
+          "rank_end": 20,
+          "rank_start": 1,
+          "search_available": false,
+          "total_pages": 8,
+          "total_results": 150
+        },
+        "over": false,
+        "progress": {
+          "action_signature": "{\"action\":\"search\",\"argument\":\"guess what 1 pupil's book activity book 英音版\"}",
+          "consecutive_repeats": 0,
+          "credited_evidence_added": [
+            "result_set:ba764c88d764772f82f58e2d022321f739ebbf79892a661273ae6cb7aae50af8"
+          ],
+          "effective_result_sets": 2,
+          "evidence_added": [
+            "result_set:ba764c88d764772f82f58e2d022321f739ebbf79892a661273ae6cb7aae50af8"
+          ],
+          "evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 2,
+            "subpage": 0
+          },
+          "new_asin_count": 15,
+          "no_progress_steps": 0,
+          "opened_candidate_count": 1,
+          "runtime_evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 2,
+            "subpage": 0
+          },
+          "runtime_progress_added": [
+            "result_set:ba764c88d764772f82f58e2d022321f739ebbf79892a661273ae6cb7aae50af8"
+          ],
+          "seen_asin_count": 35,
+          "step_count": 5,
+          "termination_reason": null,
+          "termination_version": "shopping-termination-v3"
+        },
+        "purchase": {},
+        "reward": 0.0,
+        "reward_detail": {}
+      },
+      "reward": 0.0,
+      "step_index": 4,
+      "tool_call": {
+        "function": {
+          "arguments": "{\"query\": \"Guess What 1 Pupil's Book Activity Book 英音版\"}",
+          "name": "search_products"
+        },
+        "id": "chatcmpl-tool-b1d35cf25e042095",
+        "type": "function"
+      },
+      "tool_name": "search_products"
+    },
+    {
+      "done": false,
+      "env_action": "click[610492565168]",
+      "observation": "[SHOPPING_OBSERVATION_V2]\npage_type: product_detail\nasin: 610492565168\ntitle: 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版\nbrand: 华仑书店\ncategory: 书籍/杂志/报纸›进口原版书(含港台)›原版其它\nprice: 258.0 to 426.0\nkey_attributes: 剑桥少儿英语教材, 进口, 一年级, 英音版\nselected_options: {}\navailable_options: {\"分册名\": [\"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]}\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]",
+      "parameters": {
+        "asin": "610492565168"
+      },
+      "projection": {
+        "critical_footer_preserved": true,
+        "page_type": "product_detail",
+        "raw_asin_count": 0,
+        "raw_button_count": 19,
+        "raw_tokens": 364,
+        "token_budget": 4096,
+        "tool_name": "open_product",
+        "truncated": false,
+        "truncation_ratio": 1.0,
+        "visible_asin_count": 0,
+        "visible_button_count": 19,
+        "visible_tokens": 364
+      },
+      "raw_observation": "[SHOPPING_OBSERVATION_V2]\npage_type: product_detail\nasin: 610492565168\ntitle: 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版\nbrand: 华仑书店\ncategory: 书籍/杂志/报纸›进口原版书(含港台)›原版其它\nprice: 258.0 to 426.0\nkey_attributes: 剑桥少儿英语教材, 进口, 一年级, 英音版\nselected_options: {}\navailable_options: {\"分册名\": [\"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]}\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]",
+      "result": {
+        "done": false,
+        "env_idx": 4,
+        "goal": {},
+        "idx": "slot-4-21936",
+        "instruction": "Instruction: [SEP] 表妹想拥有剑桥少儿英语Guess What系列第一级的套装，要原版进口的主课本和练习册合订的，带英式发音的，特适合一年级孩子用的，价格在250左右。 [SEP] Back to Search [SEP] < Prev [SEP] 分册名 [SEP] guess what 4级别大卡 [SEP] guess what六级别 [SEP] guess what五级别 [SEP] guess what 1级别教案 [SEP] guess what 2级别教案 [SEP] guess what四级别 [SEP] guess what三级别 [SEP] guess what 6级别教案 [SEP] guess what二级别 [SEP] guess what一级别 [SEP] guess what 1级别大卡 [SEP] guess what 5级别教案 [SEP] guess what 2级别大卡 [SEP] 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版 [SEP] 价格: 258.0 to 426.0 [SEP] 店铺: 华仑书店 [SEP] Description [SEP] Features [SEP] Reviews [SEP] Buy Now\n\n搜索功能是否可用: False\n\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]",
+        "message": "Continue interaction",
+        "observation_state": {
+          "actions": [
+            "back to search",
+            "< prev",
+            "description",
+            "features",
+            "reviews",
+            "buy now",
+            "guess what 4级别大卡",
+            "guess what六级别",
+            "guess what五级别",
+            "guess what 1级别教案",
+            "guess what 2级别教案",
+            "guess what四级别",
+            "guess what三级别",
+            "guess what 6级别教案",
+            "guess what二级别",
+            "guess what一级别",
+            "guess what 1级别大卡",
+            "guess what 5级别教案",
+            "guess what 2级别大卡"
+          ],
+          "available_options": {
+            "分册名": [
+              "guess what 4级别大卡",
+              "guess what六级别",
+              "guess what五级别",
+              "guess what 1级别教案",
+              "guess what 2级别教案",
+              "guess what四级别",
+              "guess what三级别",
+              "guess what 6级别教案",
+              "guess what二级别",
+              "guess what一级别",
+              "guess what 1级别大卡",
+              "guess what 5级别教案",
+              "guess what 2级别大卡"
+            ]
+          },
+          "observation_version": "shopping-observation-v2",
+          "page_type": "product_detail",
+          "product": {
+            "asin": "610492565168",
+            "brand": "华仑书店",
+            "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+            "key_attributes": [
+              "剑桥少儿英语教材",
+              "进口",
+              "一年级",
+              "英音版"
+            ],
+            "price": "258.0 to 426.0",
+            "title": "原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版"
+          },
+          "search_available": false,
+          "selected_options": {}
+        },
+        "over": false,
+        "progress": {
+          "action_signature": "{\"action\":\"click\",\"argument\":\"610492565168\"}",
+          "consecutive_repeats": 0,
+          "credited_evidence_added": [],
+          "effective_result_sets": 2,
+          "evidence_added": [],
+          "evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 2,
+            "subpage": 0
+          },
+          "new_asin_count": 0,
+          "no_progress_steps": 1,
+          "opened_candidate_count": 1,
+          "runtime_evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 2,
+            "subpage": 0
+          },
+          "runtime_progress_added": [],
+          "seen_asin_count": 35,
+          "step_count": 6,
+          "termination_reason": null,
+          "termination_version": "shopping-termination-v3"
+        },
+        "purchase": {},
+        "reward": 0.0,
+        "reward_detail": {}
+      },
+      "reward": 0.0,
+      "step_index": 5,
+      "tool_call": {
+        "function": {
+          "arguments": "{\"asin\": \"610492565168\"}",
+          "name": "open_product"
+        },
+        "id": "chatcmpl-tool-99fa42d56d293881",
+        "type": "function"
+      },
+      "tool_name": "open_product"
+    },
+    {
+      "done": false,
+      "env_action": "click[Features]",
+      "observation": "[SHOPPING_OBSERVATION_V2]\npage_type: information_subpage\nasin: 610492565168\ntitle: 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版\nbrand: 华仑书店\ncategory: 书籍/杂志/报纸›进口原版书(含港台)›原版其它\nprice: 258.0 to 426.0\nkey_attributes: 剑桥少儿英语教材, 进口, 一年级, 英音版\nselected_options: {}\navailable_options: {\"分册名\": [\"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]}\nsubpage: Features\ncontent: ['']\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\"]",
+      "parameters": {},
+      "projection": {
+        "critical_footer_preserved": true,
+        "page_type": "information_subpage",
+        "raw_asin_count": 0,
+        "raw_button_count": 2,
+        "raw_tokens": 267,
+        "token_budget": 768,
+        "tool_name": "view_features",
+        "truncated": false,
+        "truncation_ratio": 1.0,
+        "visible_asin_count": 0,
+        "visible_button_count": 2,
+        "visible_tokens": 267
+      },
+      "raw_observation": "[SHOPPING_OBSERVATION_V2]\npage_type: information_subpage\nasin: 610492565168\ntitle: 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版\nbrand: 华仑书店\ncategory: 书籍/杂志/报纸›进口原版书(含港台)›原版其它\nprice: 258.0 to 426.0\nkey_attributes: 剑桥少儿英语教材, 进口, 一年级, 英音版\nselected_options: {}\navailable_options: {\"分册名\": [\"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]}\nsubpage: Features\ncontent: ['']\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\"]",
+      "result": {
+        "done": false,
+        "env_idx": 4,
+        "goal": {},
+        "idx": "slot-4-21936",
+        "instruction": "Instruction: [SEP] 表妹想拥有剑桥少儿英语Guess What系列第一级的套装，要原版进口的主课本和练习册合订的，带英式发音的，特适合一年级孩子用的，价格在250左右。 [SEP] Back to Search [SEP] < Prev [SEP] \n\n搜索功能是否可用: False\n\n可点击的按钮: [\"back to search\", \"< prev\"]",
+        "message": "Continue interaction",
+        "observation_state": {
+          "actions": [
+            "back to search",
+            "< prev"
+          ],
+          "available_options": {
+            "分册名": [
+              "guess what 4级别大卡",
+              "guess what六级别",
+              "guess what五级别",
+              "guess what 1级别教案",
+              "guess what 2级别教案",
+              "guess what四级别",
+              "guess what三级别",
+              "guess what 6级别教案",
+              "guess what二级别",
+              "guess what一级别",
+              "guess what 1级别大卡",
+              "guess what 5级别教案",
+              "guess what 2级别大卡"
+            ]
+          },
+          "content": [
+            ""
+          ],
+          "observation_version": "shopping-observation-v2",
+          "page_type": "information_subpage",
+          "product": {
+            "asin": "610492565168",
+            "brand": "华仑书店",
+            "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+            "key_attributes": [
+              "剑桥少儿英语教材",
+              "进口",
+              "一年级",
+              "英音版"
+            ],
+            "price": "258.0 to 426.0",
+            "title": "原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版"
+          },
+          "search_available": false,
+          "selected_options": {},
+          "subpage": "Features"
+        },
+        "over": false,
+        "progress": {
+          "action_signature": "{\"action\":\"click\",\"argument\":\"features\"}",
+          "consecutive_repeats": 0,
+          "credited_evidence_added": [
+            "subpage:610492565168:features"
+          ],
+          "effective_result_sets": 2,
+          "evidence_added": [
+            "subpage:610492565168:features"
+          ],
+          "evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 2,
+            "subpage": 1
+          },
+          "new_asin_count": 0,
+          "no_progress_steps": 0,
+          "opened_candidate_count": 1,
+          "runtime_evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 2,
+            "subpage": 1
+          },
+          "runtime_progress_added": [
+            "subpage:610492565168:features"
+          ],
+          "seen_asin_count": 35,
+          "step_count": 7,
+          "termination_reason": null,
+          "termination_version": "shopping-termination-v3"
+        },
+        "purchase": {},
+        "reward": 0.0,
+        "reward_detail": {}
+      },
+      "reward": 0.0,
+      "step_index": 6,
+      "tool_call": {
+        "function": {
+          "arguments": "{}",
+          "name": "view_features"
+        },
+        "id": "chatcmpl-tool-b2902b68305805f2",
+        "type": "function"
+      },
+      "tool_name": "view_features"
+    },
+    {
+      "done": false,
+      "env_action": "click[< Prev]",
+      "observation": "[SHOPPING_OBSERVATION_V2]\npage_type: product_detail\nasin: 610492565168\ntitle: 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版\nbrand: 华仑书店\ncategory: 书籍/杂志/报纸›进口原版书(含港台)›原版其它\nprice: 258.0 to 426.0\nkey_attributes: 剑桥少儿英语教材, 进口, 一年级, 英音版\nselected_options: {}\navailable_options: {\"分册名\": [\"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]}\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]",
+      "parameters": {},
+      "projection": {
+        "critical_footer_preserved": true,
+        "page_type": "product_detail",
+        "raw_asin_count": 0,
+        "raw_button_count": 19,
+        "raw_tokens": 364,
+        "token_budget": 4096,
+        "tool_name": "prev_page",
+        "truncated": false,
+        "truncation_ratio": 1.0,
+        "visible_asin_count": 0,
+        "visible_button_count": 19,
+        "visible_tokens": 364
+      },
+      "raw_observation": "[SHOPPING_OBSERVATION_V2]\npage_type: product_detail\nasin: 610492565168\ntitle: 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版\nbrand: 华仑书店\ncategory: 书籍/杂志/报纸›进口原版书(含港台)›原版其它\nprice: 258.0 to 426.0\nkey_attributes: 剑桥少儿英语教材, 进口, 一年级, 英音版\nselected_options: {}\navailable_options: {\"分册名\": [\"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]}\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]",
+      "result": {
+        "done": false,
+        "env_idx": 4,
+        "goal": {},
+        "idx": "slot-4-21936",
+        "instruction": "Instruction: [SEP] 表妹想拥有剑桥少儿英语Guess What系列第一级的套装，要原版进口的主课本和练习册合订的，带英式发音的，特适合一年级孩子用的，价格在250左右。 [SEP] Back to Search [SEP] < Prev [SEP] 分册名 [SEP] guess what 4级别大卡 [SEP] guess what六级别 [SEP] guess what五级别 [SEP] guess what 1级别教案 [SEP] guess what 2级别教案 [SEP] guess what四级别 [SEP] guess what三级别 [SEP] guess what 6级别教案 [SEP] guess what二级别 [SEP] guess what一级别 [SEP] guess what 1级别大卡 [SEP] guess what 5级别教案 [SEP] guess what 2级别大卡 [SEP] 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版 [SEP] 价格: 258.0 to 426.0 [SEP] 店铺: 华仑书店 [SEP] Description [SEP] Features [SEP] Reviews [SEP] Buy Now\n\n搜索功能是否可用: False\n\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]",
+        "message": "Continue interaction",
+        "observation_state": {
+          "actions": [
+            "back to search",
+            "< prev",
+            "description",
+            "features",
+            "reviews",
+            "buy now",
+            "guess what 4级别大卡",
+            "guess what六级别",
+            "guess what五级别",
+            "guess what 1级别教案",
+            "guess what 2级别教案",
+            "guess what四级别",
+            "guess what三级别",
+            "guess what 6级别教案",
+            "guess what二级别",
+            "guess what一级别",
+            "guess what 1级别大卡",
+            "guess what 5级别教案",
+            "guess what 2级别大卡"
+          ],
+          "available_options": {
+            "分册名": [
+              "guess what 4级别大卡",
+              "guess what六级别",
+              "guess what五级别",
+              "guess what 1级别教案",
+              "guess what 2级别教案",
+              "guess what四级别",
+              "guess what三级别",
+              "guess what 6级别教案",
+              "guess what二级别",
+              "guess what一级别",
+              "guess what 1级别大卡",
+              "guess what 5级别教案",
+              "guess what 2级别大卡"
+            ]
+          },
+          "observation_version": "shopping-observation-v2",
+          "page_type": "product_detail",
+          "product": {
+            "asin": "610492565168",
+            "brand": "华仑书店",
+            "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+            "key_attributes": [
+              "剑桥少儿英语教材",
+              "进口",
+              "一年级",
+              "英音版"
+            ],
+            "price": "258.0 to 426.0",
+            "title": "原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版"
+          },
+          "search_available": false,
+          "selected_options": {}
+        },
+        "over": false,
+        "progress": {
+          "action_signature": "{\"action\":\"click\",\"argument\":\"< prev\"}",
+          "consecutive_repeats": 0,
+          "credited_evidence_added": [],
+          "effective_result_sets": 2,
+          "evidence_added": [],
+          "evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 2,
+            "subpage": 1
+          },
+          "new_asin_count": 0,
+          "no_progress_steps": 1,
+          "opened_candidate_count": 1,
+          "runtime_evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 3,
+            "subpage": 1
+          },
+          "runtime_progress_added": [],
+          "seen_asin_count": 35,
+          "step_count": 8,
+          "termination_reason": null,
+          "termination_version": "shopping-termination-v3"
+        },
+        "purchase": {},
+        "reward": 0.0,
+        "reward_detail": {}
+      },
+      "reward": 0.0,
+      "step_index": 7,
+      "tool_call": {
+        "function": {
+          "arguments": "{}",
+          "name": "prev_page"
+        },
+        "id": "chatcmpl-tool-aa3b81ba8341def6",
+        "type": "function"
+      },
+      "tool_name": "prev_page"
+    },
+    {
+      "done": false,
+      "env_action": "click[Description]",
+      "observation": "[SHOPPING_OBSERVATION_V2]\npage_type: information_subpage\nasin: 610492565168\ntitle: 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版\nbrand: 华仑书店\ncategory: 书籍/杂志/报纸›进口原版书(含港台)›原版其它\nprice: 258.0 to 426.0\nkey_attributes: 剑桥少儿英语教材, 进口, 一年级, 英音版\nselected_options: {}\navailable_options: {\"分册名\": [\"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]}\nsubpage: Description\ncontent: 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\"]",
+      "parameters": {},
+      "projection": {
+        "critical_footer_preserved": true,
+        "page_type": "information_subpage",
+        "raw_asin_count": 0,
+        "raw_button_count": 2,
+        "raw_tokens": 295,
+        "token_budget": 768,
+        "tool_name": "view_description",
+        "truncated": false,
+        "truncation_ratio": 1.0,
+        "visible_asin_count": 0,
+        "visible_button_count": 2,
+        "visible_tokens": 295
+      },
+      "raw_observation": "[SHOPPING_OBSERVATION_V2]\npage_type: information_subpage\nasin: 610492565168\ntitle: 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版\nbrand: 华仑书店\ncategory: 书籍/杂志/报纸›进口原版书(含港台)›原版其它\nprice: 258.0 to 426.0\nkey_attributes: 剑桥少儿英语教材, 进口, 一年级, 英音版\nselected_options: {}\navailable_options: {\"分册名\": [\"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]}\nsubpage: Description\ncontent: 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\"]",
+      "result": {
+        "done": false,
+        "env_idx": 4,
+        "goal": {},
+        "idx": "slot-4-21936",
+        "instruction": "Instruction: [SEP] 表妹想拥有剑桥少儿英语Guess What系列第一级的套装，要原版进口的主课本和练习册合订的，带英式发音的，特适合一年级孩子用的，价格在250左右。 [SEP] Back to Search [SEP] < Prev [SEP] 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版\n\n搜索功能是否可用: False\n\n可点击的按钮: [\"back to search\", \"< prev\"]",
+        "message": "Continue interaction",
+        "observation_state": {
+          "actions": [
+            "back to search",
+            "< prev"
+          ],
+          "available_options": {
+            "分册名": [
+              "guess what 4级别大卡",
+              "guess what六级别",
+              "guess what五级别",
+              "guess what 1级别教案",
+              "guess what 2级别教案",
+              "guess what四级别",
+              "guess what三级别",
+              "guess what 6级别教案",
+              "guess what二级别",
+              "guess what一级别",
+              "guess what 1级别大卡",
+              "guess what 5级别教案",
+              "guess what 2级别大卡"
+            ]
+          },
+          "content": "原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版",
+          "observation_version": "shopping-observation-v2",
+          "page_type": "information_subpage",
+          "product": {
+            "asin": "610492565168",
+            "brand": "华仑书店",
+            "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+            "key_attributes": [
+              "剑桥少儿英语教材",
+              "进口",
+              "一年级",
+              "英音版"
+            ],
+            "price": "258.0 to 426.0",
+            "title": "原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版"
+          },
+          "search_available": false,
+          "selected_options": {},
+          "subpage": "Description"
+        },
+        "over": false,
+        "progress": {
+          "action_signature": "{\"action\":\"click\",\"argument\":\"description\"}",
+          "consecutive_repeats": 0,
+          "credited_evidence_added": [
+            "subpage:610492565168:description"
+          ],
+          "effective_result_sets": 2,
+          "evidence_added": [
+            "subpage:610492565168:description"
+          ],
+          "evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 2,
+            "subpage": 2
+          },
+          "new_asin_count": 0,
+          "no_progress_steps": 0,
+          "opened_candidate_count": 1,
+          "runtime_evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 3,
+            "subpage": 2
+          },
+          "runtime_progress_added": [
+            "subpage:610492565168:description"
+          ],
+          "seen_asin_count": 35,
+          "step_count": 9,
+          "termination_reason": null,
+          "termination_version": "shopping-termination-v3"
+        },
+        "purchase": {},
+        "reward": 0.0,
+        "reward_detail": {}
+      },
+      "reward": 0.0,
+      "step_index": 8,
+      "tool_call": {
+        "function": {
+          "arguments": "{}",
+          "name": "view_description"
+        },
+        "id": "chatcmpl-tool-a6691a1c91c46765",
+        "type": "function"
+      },
+      "tool_name": "view_description"
+    },
+    {
+      "done": false,
+      "env_action": "click[< Prev]",
+      "observation": "[SHOPPING_OBSERVATION_V2]\npage_type: product_detail\nasin: 610492565168\ntitle: 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版\nbrand: 华仑书店\ncategory: 书籍/杂志/报纸›进口原版书(含港台)›原版其它\nprice: 258.0 to 426.0\nkey_attributes: 剑桥少儿英语教材, 进口, 一年级, 英音版\nselected_options: {}\navailable_options: {\"分册名\": [\"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]}\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]",
+      "parameters": {},
+      "projection": {
+        "critical_footer_preserved": true,
+        "page_type": "product_detail",
+        "raw_asin_count": 0,
+        "raw_button_count": 19,
+        "raw_tokens": 364,
+        "token_budget": 4096,
+        "tool_name": "prev_page",
+        "truncated": false,
+        "truncation_ratio": 1.0,
+        "visible_asin_count": 0,
+        "visible_button_count": 19,
+        "visible_tokens": 364
+      },
+      "raw_observation": "[SHOPPING_OBSERVATION_V2]\npage_type: product_detail\nasin: 610492565168\ntitle: 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版\nbrand: 华仑书店\ncategory: 书籍/杂志/报纸›进口原版书(含港台)›原版其它\nprice: 258.0 to 426.0\nkey_attributes: 剑桥少儿英语教材, 进口, 一年级, 英音版\nselected_options: {}\navailable_options: {\"分册名\": [\"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]}\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]",
+      "result": {
+        "done": false,
+        "env_idx": 4,
+        "goal": {},
+        "idx": "slot-4-21936",
+        "instruction": "Instruction: [SEP] 表妹想拥有剑桥少儿英语Guess What系列第一级的套装，要原版进口的主课本和练习册合订的，带英式发音的，特适合一年级孩子用的，价格在250左右。 [SEP] Back to Search [SEP] < Prev [SEP] 分册名 [SEP] guess what 4级别大卡 [SEP] guess what六级别 [SEP] guess what五级别 [SEP] guess what 1级别教案 [SEP] guess what 2级别教案 [SEP] guess what四级别 [SEP] guess what三级别 [SEP] guess what 6级别教案 [SEP] guess what二级别 [SEP] guess what一级别 [SEP] guess what 1级别大卡 [SEP] guess what 5级别教案 [SEP] guess what 2级别大卡 [SEP] 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版 [SEP] 价格: 258.0 to 426.0 [SEP] 店铺: 华仑书店 [SEP] Description [SEP] Features [SEP] Reviews [SEP] Buy Now\n\n搜索功能是否可用: False\n\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]",
+        "message": "Continue interaction",
+        "observation_state": {
+          "actions": [
+            "back to search",
+            "< prev",
+            "description",
+            "features",
+            "reviews",
+            "buy now",
+            "guess what 4级别大卡",
+            "guess what六级别",
+            "guess what五级别",
+            "guess what 1级别教案",
+            "guess what 2级别教案",
+            "guess what四级别",
+            "guess what三级别",
+            "guess what 6级别教案",
+            "guess what二级别",
+            "guess what一级别",
+            "guess what 1级别大卡",
+            "guess what 5级别教案",
+            "guess what 2级别大卡"
+          ],
+          "available_options": {
+            "分册名": [
+              "guess what 4级别大卡",
+              "guess what六级别",
+              "guess what五级别",
+              "guess what 1级别教案",
+              "guess what 2级别教案",
+              "guess what四级别",
+              "guess what三级别",
+              "guess what 6级别教案",
+              "guess what二级别",
+              "guess what一级别",
+              "guess what 1级别大卡",
+              "guess what 5级别教案",
+              "guess what 2级别大卡"
+            ]
+          },
+          "observation_version": "shopping-observation-v2",
+          "page_type": "product_detail",
+          "product": {
+            "asin": "610492565168",
+            "brand": "华仑书店",
+            "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+            "key_attributes": [
+              "剑桥少儿英语教材",
+              "进口",
+              "一年级",
+              "英音版"
+            ],
+            "price": "258.0 to 426.0",
+            "title": "原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版"
+          },
+          "search_available": false,
+          "selected_options": {}
+        },
+        "over": false,
+        "progress": {
+          "action_signature": "{\"action\":\"click\",\"argument\":\"< prev\"}",
+          "consecutive_repeats": 0,
+          "credited_evidence_added": [],
+          "effective_result_sets": 2,
+          "evidence_added": [],
+          "evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 2,
+            "subpage": 2
+          },
+          "new_asin_count": 0,
+          "no_progress_steps": 1,
+          "opened_candidate_count": 1,
+          "runtime_evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 3,
+            "subpage": 2
+          },
+          "runtime_progress_added": [],
+          "seen_asin_count": 35,
+          "step_count": 10,
+          "termination_reason": null,
+          "termination_version": "shopping-termination-v3"
+        },
+        "purchase": {},
+        "reward": 0.0,
+        "reward_detail": {}
+      },
+      "reward": 0.0,
+      "step_index": 9,
+      "tool_call": {
+        "function": {
+          "arguments": "{}",
+          "name": "prev_page"
+        },
+        "id": "chatcmpl-tool-b9a0da84977657ed",
+        "type": "function"
+      },
+      "tool_name": "prev_page"
+    },
+    {
+      "done": false,
+      "env_action": "click[guess what 1级别大卡]",
+      "observation": "[SHOPPING_OBSERVATION_V2]\npage_type: product_detail\nasin: 610492565168\ntitle: 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版\nbrand: 华仑书店\ncategory: 书籍/杂志/报纸›进口原版书(含港台)›原版其它\nprice: 336.0\nkey_attributes: 剑桥少儿英语教材, 进口, 一年级, 英音版\nselected_options: {\"分册名\": \"guess what 1级别大卡\"}\navailable_options: {\"分册名\": [\"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]}\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]",
+      "parameters": {
+        "value": "guess what 1级别大卡"
+      },
+      "projection": {
+        "critical_footer_preserved": true,
+        "page_type": "product_detail",
+        "raw_asin_count": 0,
+        "raw_button_count": 19,
+        "raw_tokens": 370,
+        "token_budget": 4096,
+        "tool_name": "select_option",
+        "truncated": false,
+        "truncation_ratio": 1.0,
+        "visible_asin_count": 0,
+        "visible_button_count": 19,
+        "visible_tokens": 370
+      },
+      "raw_observation": "[SHOPPING_OBSERVATION_V2]\npage_type: product_detail\nasin: 610492565168\ntitle: 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版\nbrand: 华仑书店\ncategory: 书籍/杂志/报纸›进口原版书(含港台)›原版其它\nprice: 336.0\nkey_attributes: 剑桥少儿英语教材, 进口, 一年级, 英音版\nselected_options: {\"分册名\": \"guess what 1级别大卡\"}\navailable_options: {\"分册名\": [\"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]}\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]",
+      "result": {
+        "done": false,
+        "env_idx": 4,
+        "goal": {},
+        "idx": "slot-4-21936",
+        "instruction": "Instruction: [SEP] 表妹想拥有剑桥少儿英语Guess What系列第一级的套装，要原版进口的主课本和练习册合订的，带英式发音的，特适合一年级孩子用的，价格在250左右。 [SEP] Back to Search [SEP] < Prev [SEP] 分册名 [SEP] guess what 4级别大卡 [SEP] guess what六级别 [SEP] guess what五级别 [SEP] guess what 1级别教案 [SEP] guess what 2级别教案 [SEP] guess what四级别 [SEP] guess what三级别 [SEP] guess what 6级别教案 [SEP] guess what二级别 [SEP] guess what一级别 [SEP] guess what 1级别大卡 [SEP] guess what 5级别教案 [SEP] guess what 2级别大卡 [SEP] 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版 [SEP] 价格: 336.0 [SEP] 店铺: 华仑书店 [SEP] Description [SEP] Features [SEP] Reviews [SEP] Buy Now\n\n搜索功能是否可用: False\n\n可点击的按钮: [\"back to search\", \"< prev\", \"description\", \"features\", \"reviews\", \"buy now\", \"guess what 4级别大卡\", \"guess what六级别\", \"guess what五级别\", \"guess what 1级别教案\", \"guess what 2级别教案\", \"guess what四级别\", \"guess what三级别\", \"guess what 6级别教案\", \"guess what二级别\", \"guess what一级别\", \"guess what 1级别大卡\", \"guess what 5级别教案\", \"guess what 2级别大卡\"]",
+        "message": "Continue interaction",
+        "observation_state": {
+          "actions": [
+            "back to search",
+            "< prev",
+            "description",
+            "features",
+            "reviews",
+            "buy now",
+            "guess what 4级别大卡",
+            "guess what六级别",
+            "guess what五级别",
+            "guess what 1级别教案",
+            "guess what 2级别教案",
+            "guess what四级别",
+            "guess what三级别",
+            "guess what 6级别教案",
+            "guess what二级别",
+            "guess what一级别",
+            "guess what 1级别大卡",
+            "guess what 5级别教案",
+            "guess what 2级别大卡"
+          ],
+          "available_options": {
+            "分册名": [
+              "guess what 4级别大卡",
+              "guess what六级别",
+              "guess what五级别",
+              "guess what 1级别教案",
+              "guess what 2级别教案",
+              "guess what四级别",
+              "guess what三级别",
+              "guess what 6级别教案",
+              "guess what二级别",
+              "guess what一级别",
+              "guess what 1级别大卡",
+              "guess what 5级别教案",
+              "guess what 2级别大卡"
+            ]
+          },
+          "observation_version": "shopping-observation-v2",
+          "page_type": "product_detail",
+          "product": {
+            "asin": "610492565168",
+            "brand": "华仑书店",
+            "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+            "key_attributes": [
+              "剑桥少儿英语教材",
+              "进口",
+              "一年级",
+              "英音版"
+            ],
+            "price": "258.0 to 426.0",
+            "title": "原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版"
+          },
+          "search_available": false,
+          "selected_options": {
+            "分册名": "guess what 1级别大卡"
+          },
+          "selected_price": 336.0
+        },
+        "over": false,
+        "progress": {
+          "action_signature": "{\"action\":\"click\",\"argument\":\"guess what 1级别大卡\"}",
+          "consecutive_repeats": 0,
+          "credited_evidence_added": [],
+          "effective_result_sets": 2,
+          "evidence_added": [],
+          "evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 2,
+            "subpage": 2
+          },
+          "new_asin_count": 0,
+          "no_progress_steps": 2,
+          "opened_candidate_count": 1,
+          "runtime_evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 3,
+            "subpage": 2
+          },
+          "runtime_progress_added": [],
+          "seen_asin_count": 35,
+          "step_count": 11,
+          "termination_reason": null,
+          "termination_version": "shopping-termination-v3"
+        },
+        "purchase": {},
+        "reward": 0.0,
+        "reward_detail": {}
+      },
+      "reward": 0.0,
+      "step_index": 10,
+      "tool_call": {
+        "function": {
+          "arguments": "{\"value\": \"guess what 1级别大卡\"}",
+          "name": "select_option"
+        },
+        "id": "chatcmpl-tool-b5f5e078e9e9de50",
+        "type": "function"
+      },
+      "tool_name": "select_option"
+    },
+    {
+      "done": false,
+      "env_action": "click[Back to Search]",
+      "observation": "[SHOPPING_OBSERVATION_V2]\npage_type: search_home\n使用 search_products 提交简短、具有区分度的商品查询。\n\n搜索功能是否可用: True\n可点击的按钮: [\"search\"]",
+      "parameters": {},
+      "projection": {
+        "critical_footer_preserved": true,
+        "page_type": "search_home",
+        "raw_asin_count": 0,
+        "raw_button_count": 1,
+        "raw_tokens": 45,
+        "token_budget": 768,
+        "tool_name": "back_to_search",
+        "truncated": false,
+        "truncation_ratio": 1.0,
+        "visible_asin_count": 0,
+        "visible_button_count": 1,
+        "visible_tokens": 45
+      },
+      "raw_observation": "[SHOPPING_OBSERVATION_V2]\npage_type: search_home\n使用 search_products 提交简短、具有区分度的商品查询。\n\n搜索功能是否可用: True\n可点击的按钮: [\"search\"]",
+      "result": {
+        "done": false,
+        "env_idx": 4,
+        "goal": {},
+        "idx": "slot-4-21936",
+        "instruction": "WebShop [SEP] Instruction: [SEP] 表妹想拥有剑桥少儿英语Guess What系列第一级的套装，要原版进口的主课本和练习册合订的，带英式发音的，特适合一年级孩子用的，价格在250左右。 [SEP] Search\n\n搜索功能是否可用: True\n\n可点击的按钮: []",
+        "message": "Continue interaction",
+        "observation_state": {
+          "actions": [
+            "search"
+          ],
+          "observation_version": "shopping-observation-v2",
+          "page_type": "search_home",
+          "search_available": true
+        },
+        "over": false,
+        "progress": {
+          "action_signature": "{\"action\":\"click\",\"argument\":\"back to search\"}",
+          "consecutive_repeats": 0,
+          "credited_evidence_added": [],
+          "effective_result_sets": 2,
+          "evidence_added": [],
+          "evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 2,
+            "subpage": 2
+          },
+          "new_asin_count": 0,
+          "no_progress_steps": 3,
+          "opened_candidate_count": 1,
+          "runtime_evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 3,
+            "subpage": 2
+          },
+          "runtime_progress_added": [],
+          "seen_asin_count": 35,
+          "step_count": 12,
+          "termination_reason": null,
+          "termination_version": "shopping-termination-v3"
+        },
+        "purchase": {},
+        "reward": 0.0,
+        "reward_detail": {}
+      },
+      "reward": 0.0,
+      "step_index": 11,
+      "tool_call": {
+        "function": {
+          "arguments": "{}",
+          "name": "back_to_search"
+        },
+        "id": "chatcmpl-tool-85c80dbb5477b2b1",
+        "type": "function"
+      },
+      "tool_name": "back_to_search"
+    },
+    {
+      "done": true,
+      "env_action": "search[剑桥少儿英语 Guess What 1 学生套装 英音]",
+      "observation": "[SHOPPING_OBSERVATION_V2]\npage_type: search_results\nquery: 剑桥少儿英语 guess what 1 学生套装 英音\nnormalized_query: 剑桥少儿英语 guess what 1 学生套装 英音\nPage 1 of 8 (Total results: 150; ranks 1-20)\n格式: rank|asin|price|brand|category|key_attributes|title\n1|610492565168|258.0 t…26.0|华仑书店|书籍/杂志/报…原版其它|剑桥少儿英语教…,英音版|原版进口剑桥大… 英音版\n2|613257600850|338.0 t…98.0|英沃图书专营店|书籍/杂志/报…原版其它|剑桥少儿英语,…考试教材|英音版supe…原版进口\n3|942954343596|54.0 to…47.0|天天特卖工厂|书籍/杂志/报…原版其它|剑桥,少儿英语,预备级|剑桥少儿英语教…考试原版\n4|653693603317|358.0 t…58.0|乔津图书专营店|书籍/杂志/报…原版其它|现货,进口,剑…材,英国|【现货速发】原…英文教材\n5|921837809428|82.0 to…85.0|天天特卖工厂|书籍/杂志/报…原版其它|3-6岁幼儿,…,教师书|剑桥幼儿英语教…儿园教材\n6|892611477838|88.0|天天特卖工厂|书籍/杂志/报…原版其它|big Eng…少儿英语|新版big E…外书原版\n7|724615771603|498.0 t…98.0|剑津图书专营店|书籍/杂志/报…原版其它|剑桥少儿英语,…刷分神器|BBC Do …级阅读书\n8|743260997368|100.0 t…20.0|趣象进口图书专营店|书籍/杂志/报…原版其它|少儿英语,新版,备考资料|原版新版剑桥y…专项训练\n9|660736231876|318.0 t…08.0|斑达图书专营店|书籍/杂志/报…原版其它|剑桥英语教材,…T,原版|【斑达图书】原…考试教辅\n10|925426925178|284.0 t…52.0|龙之彩图书专营店|书籍/杂志/报…原版其它|3-6岁幼儿,…版,剑桥|原版进口剑桥出…幼儿书籍\n11|730900358996|128.0 t…94.0|华学堂图书专营店|书籍/杂志/报…原版其它|进口,少儿英语演讲教材|进口原版少儿英…king\n12|704355091839|188.0|天猫国际自营全球超级店|书籍/杂志/报…原版其它|进口,少儿英语…寒暑假班|【自营】原版进…英文教材\n13|614315385615|38.0 to…64.0|华学堂图书专营店|书籍/杂志/报…原版其它|幼少儿,台湾新…发音教材|台湾新版Sup…nics\n14|613863024037|428.0|英沃图书专营店|书籍/杂志/报…原版其它|原版,进口,剑…/PET|剑桥初高中英语…原版进口\n15|657803250734|120.0 t…86.0|好奇豆图书专营店|书籍/杂志/报…原版其它|牛津,Oxfo…-12岁|进口原版牛津少…材教师书\n16|943721158758|58.0 to…75.0|盯洞图书专营店|书籍/杂志/报…原版其它|零基础发音,少儿|新版牛津自然拼…PW教材\n17|930052908937|338.0 t…28.0|龙之彩图书专营店|书籍/杂志/报…原版其它|剑桥中学英语,…测试答案|原版进口新版原…英语教材\n18|616327100012|135.0 t…50.0|华学堂图书专营店|书籍/杂志/报…原版其它|进口,剑桥雅思…核心词汇|进口原版 40…核心词汇\n19|753434522195|40.0 to…50.0|怡宸图书音像专营店|书籍/杂志/报…原版其它|幼儿启蒙,牛津…津点读笔|oxford牛…拼读教材\n20|831848413401|155.0 t…33.0|英斐创原版图书|书籍/杂志/报…原版其它|剑桥Alevel,现货|现货剑桥Ale…tice\n[TRUNCATED_BY_SHOPPING_PROJECTOR] product_fields_compacted=true\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"next >\", \"610492565168\", \"613257600850\", \"942954343596\", \"653693603317\", \"921837809428\", \"892611477838\", \"724615771603\", \"743260997368\", \"660736231876\", \"925426925178\", \"730900358996\", \"704355091839\", \"614315385615\", \"613863024037\", \"657803250734\", \"943721158758\", \"930052908937\", \"616327100012\", \"753434522195\", \"831848413401\"]",
+      "parameters": {
+        "query": "剑桥少儿英语 Guess What 1 学生套装 英音"
+      },
+      "projection": {
+        "critical_footer_preserved": true,
+        "page_type": "search_results",
+        "raw_asin_count": 20,
+        "raw_button_count": 22,
+        "raw_tokens": 2312,
+        "token_budget": 1536,
+        "tool_name": "search_products",
+        "truncated": true,
+        "truncation_ratio": 0.6587370242214533,
+        "visible_asin_count": 20,
+        "visible_button_count": 22,
+        "visible_tokens": 1523
+      },
+      "raw_observation": "[SHOPPING_OBSERVATION_V2]\npage_type: search_results\nquery: 剑桥少儿英语 guess what 1 学生套装 英音\nnormalized_query: 剑桥少儿英语 guess what 1 学生套装 英音\nPage 1 of 8 (Total results: 150; ranks 1-20)\n格式: rank|asin|price|brand|category|key_attributes|title\n1|610492565168|258.0 to 426.0|华仑书店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|剑桥少儿英语教材,进口,一年级,英音版|原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版\n2|613257600850|338.0 to 398.0|英沃图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|剑桥少儿英语,YLE考试教材|英音版superminds剑桥少儿英语教材super minds S/1/2/3/4/5/6级 学生书+练习册 YLE考试教材 原版进口\n3|942954343596|54.0 to 447.0|天天特卖工厂|书籍/杂志/报纸›进口原版书(含港台)›原版其它|剑桥,少儿英语,预备级|剑桥少儿英语教材powerup预备级PowerUp0123456级学生套装考试原版\n4|653693603317|358.0 to 2158.0|乔津图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|现货,进口,剑桥国际少儿英语教材,英国|【现货速发】原版进口Power Up预备123456级剑桥国际少儿英语教材powerup教材英国小学YLE剑桥少儿考试英文教程青少版英文教材\n5|921837809428|82.0 to 285.0|天天特卖工厂|书籍/杂志/报纸›进口原版书(含港台)›原版其它|3-6岁幼儿,英语启蒙,教师书|剑桥幼儿英语教材Super Safari 1 2 3级英式发音幼儿英语启蒙教材3-6岁剑桥少儿英语supersafari教师书幼儿园教材\n6|892611477838|88.0|天天特卖工厂|书籍/杂志/报纸›进口原版书(含港台)›原版其它|big English,新版,正版,少儿英语|新版big English 1 2 3 4 5 6 学生套装含课本+活动手册+朗文小英+学生书 少儿bigenglish教材培生朗文少儿英语书籍正版课外书原版\n7|724615771603|498.0 to 2998.0|剑津图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|剑桥少儿英语,KET,刷分神器|BBC Do You Know科普分级阅读绘本 科普百科分级阅读1 2 3 4级英文原版剑桥少儿英语KET刷分神器自然科普百科英语分级阅读书\n8|743260997368|100.0 to 520.0|趣象进口图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|少儿英语,新版,备考资料|原版新版剑桥yle真题集考试剑桥少儿英语考试全真试题一二三级教材 Starters movers flyers 1 2 3全真备考资料剑桥考级专项训练\n9|660736231876|318.0 to 408.0|斑达图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|剑桥英语教材,think,适用中小学生,适用KET/PET,原版|【斑达图书】原版剑桥think第二版think教材剑桥少儿中小学英语cambridge think starter 12345KET/PET考试教辅\n10|925426925178|284.0 to 852.0|龙之彩图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|3-6岁幼儿,启蒙英语教材,美音版,剑桥|原版进口剑桥出版社Super Safari一二三级别美音版学生套装3-6岁入门级英文早教书幼儿园启蒙英语教材小班幼儿书籍\n11|730900358996|128.0 to 394.0|华学堂图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|进口,少儿英语演讲教材|进口原版少儿英语演讲教材Easy Speaking for speeches 1 2 3级 中小学英语演讲口语训练书籍talking\n12|704355091839|188.0|天猫国际自营全球超级店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|进口,少儿英语语法书,6-8岁,寒暑假班|【自营】原版进口Grammar Space 1 2 3级 少儿英语语法书 初阶短期寒暑假班专项grammar教材6-8岁英文教材\n13|614315385615|38.0 to 364.0|华学堂图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|幼少儿,台湾新版,拼读,点读发音教材|台湾新版Super phonics 1 2 3级 幼少儿英语自然拼读phonics+26个字母点读发音教材 i can spell phonics\n14|613863024037|428.0|英沃图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|原版,进口,剑桥英语教材,适用KET/PET|剑桥初高中英语教材Think二版 Starter12345级学生书练习册 Cambridge think教材 外语KET/PET考试 青少年英语教材原版进口\n15|657803250734|120.0 to 486.0|好奇豆图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|牛津,Oxford Discover,英语,7-12岁|进口原版牛津少儿英语原版Oxford Discover教材1 2 3 4 5 6级牛津探索与发现 牛津小学英语教材7-12岁牛津教材牛津英语教材教师书\n16|943721158758|58.0 to 975.0|盯洞图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|零基础发音,少儿|新版牛津自然拼读教材 Oxford Phonics World 1 2 3 4 5 级别 牛津拼读世界全套零基础发音幼少儿英语自然拼读phonics教材OPW教材\n17|930052908937|338.0 to 2028.0|龙之彩图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|剑桥中学英语,在线账号,音频视频,测试答案|原版进口新版原版第二版剑桥中学英语Think Starter 12345级课本+练习册+在线账号 送音频视频测试答案 正版现货 12-18岁英语教材\n18|616327100012|135.0 to 850.0|华学堂图书专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|进口,剑桥雅思托福四六级英语考试核心词汇|进口原版 4000 Essential English Words 1/2/3/4/5/6级 新版4000词 常见词英文单词词典书 剑桥雅思托福四六级英语考试核心词汇\n19|753434522195|40.0 to 550.0|怡宸图书音像专营店|书籍/杂志/报纸›进口原版书(含港台)›原版其它|幼儿启蒙,牛津英语拼读教材,支持牛津点读笔|oxford牛津幼儿英语拼读教材get set go phonics 1 2 3 4 5 6学生书教师书支持牛津点读笔幼儿启蒙早教phonics自然拼读教材\n20|831848413401|155.0 to 433.0|英斐创原版图书|书籍/杂志/报纸›进口原版书(含港台)›原版其它|剑桥Alevel,现货|现货剑桥Alevel 纯数学1 学生书 Cambridge International AS &amp; A Level Mathematics Pure Mathematics1 Coursebook/Practice\nproducts_shown: 20\n\n搜索功能是否可用: False\n可点击的按钮: [\"back to search\", \"next >\", \"610492565168\", \"613257600850\", \"942954343596\", \"653693603317\", \"921837809428\", \"892611477838\", \"724615771603\", \"743260997368\", \"660736231876\", \"925426925178\", \"730900358996\", \"704355091839\", \"614315385615\", \"613863024037\", \"657803250734\", \"943721158758\", \"930052908937\", \"616327100012\", \"753434522195\", \"831848413401\"]",
+      "result": {
+        "done": true,
+        "env_idx": 4,
+        "goal": {},
+        "idx": "slot-4-21936",
+        "instruction": "Instruction: [SEP] 表妹想拥有剑桥少儿英语Guess What系列第一级的套装，要原版进口的主课本和练习册合订的，带英式发音的，特适合一年级孩子用的，价格在250左右。 [SEP] Back to Search [SEP] Page 1 of 8 (Total results: 150) [SEP] Query: 剑桥少儿英语 guess what 1 学生套装 英音 | Normalized query: 剑桥少儿英语 guess what 1 学生套装 英音 [SEP] Next > [SEP] 610492565168 [SEP] 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版 [SEP] 258.0 to 426.0 [SEP] 613257600850 [SEP] 英音版superminds剑桥少儿英语教材super minds  S/1/2/3/4/5/6级 学生书+练习册 YLE考试教材 原版进口 [SEP] 338.0 to 398.0 [SEP] 942954343596 [SEP] 剑桥少儿英语教材powerup预备级PowerUp0123456级学生套装考试原版 [SEP] 54.0 to 447.0 [SEP] 653693603317 [SEP] 【现货速发】原版进口Power Up预备123456级剑桥国际少儿英语教材powerup教材英国小学YLE剑桥少儿考试英文教程青少版英文教材 [SEP] 358.0 to 2158.0 [SEP] 921837809428 [SEP] 剑桥幼儿英语教材Super Safari 1 2 3级英式发音幼儿英语启蒙教材3-6岁剑桥少儿英语supersafari教师书幼儿园教材 [SEP] 82.0 to 285.0 [SEP] 892611477838 [SEP] 新版big English 1 2 3 4 5 6 学生套装含课本+活动手册+朗文小英+学生书 少儿bigenglish教材培生朗文少儿英语书籍正版课外书原版 [SEP] 88.0 [SEP] 724615771603 [SEP] BBC Do You Know科普分级阅读绘本 科普百科分级阅读1 2 3 4级英文原版剑桥少儿英语KET刷分神器自然科普百科英语分级阅读书 [SEP] 498.0 to 2998.0 [SEP] 743260997368 [SEP] 原版新版剑桥yle真题集考试剑桥少儿英语考试全真试题一二三级教材 Starters movers flyers 1 2 3全真备考资料剑桥考级专项训练 [SEP] 100.0 to 520.0 [SEP] 660736231876 [SEP] 【斑达图书】原版剑桥think第二版think教材剑桥少儿中小学英语cambridge think starter 12345KET/PET考试教辅 [SEP] 318.0 to 408.0 [SEP] 925426925178 [SEP] 原版进口剑桥出版社Super Safari一二三级别美音版学生套装3-6岁入门级英文早教书幼儿园启蒙英语教材小班幼儿书籍 [SEP] 284.0 to 852.0 [SEP] 730900358996 [SEP] 进口原版少儿英语演讲教材Easy Speaking for speeches 1 2 3级 中小学英语演讲口语训练书籍talking [SEP] 128.0 to 394.0 [SEP] 704355091839 [SEP] 【自营】原版进口Grammar Space 1 2 3级 少儿英语语法书 初阶短期寒暑假班专项grammar教材6-8岁英文教材 [SEP] 188.0 [SEP] 614315385615 [SEP] 台湾新版Super phonics 1 2 3级 幼少儿英语自然拼读phonics+26个字母点读发音教材 i can spell phonics [SEP] 38.0 to 364.0 [SEP] 613863024037 [SEP] 剑桥初高中英语教材Think二版 Starter12345级学生书练习册 Cambridge think教材 外语KET/PET考试 青少年英语教材原版进口 [SEP] 428.0 [SEP] 657803250734 [SEP] 进口原版牛津少儿英语原版Oxford Discover教材1 2 3 4 5 6级牛津探索与发现 牛津小学英语教材7-12岁牛津教材牛津英语教材教师书 [SEP] 120.0 to 486.0 [SEP] 943721158758 [SEP] 新版牛津自然拼读教材 Oxford Phonics World 1 2 3 4 5 级别 牛津拼读世界全套零基础发音幼少儿英语自然拼读phonics教材OPW教材 [SEP] 58.0 to 975.0 [SEP] 930052908937 [SEP] 原版进口新版原版第二版剑桥中学英语Think Starter 12345级课本+练习册+在线账号 送音频视频测试答案 正版现货 12-18岁英语教材 [SEP] 338.0 to 2028.0 [SEP] 616327100012 [SEP] 进口原版 4000 Essential English Words 1/2/3/4/5/6级 新版4000词 常见词英文单词词典书 剑桥雅思托福四六级英语考试核心词汇 [SEP] 135.0 to 850.0 [SEP] 753434522195 [SEP] oxford牛津幼儿英语拼读教材get set go phonics 1 2 3 4 5 6学生书教师书支持牛津点读笔幼儿启蒙早教phonics自然拼读教材 [SEP] 40.0 to 550.0 [SEP] 831848413401 [SEP] 现货剑桥Alevel 纯数学1 学生书 Cambridge International AS &amp; A Level Mathematics Pure Mathematics1 Coursebook/Practice [SEP] 155.0 to 433.0\n\n搜索功能是否可用: False\n\n可点击的按钮: [\"back to search\", \"next >\", \"610492565168\", \"613257600850\", \"942954343596\", \"653693603317\", \"921837809428\", \"892611477838\", \"724615771603\", \"743260997368\", \"660736231876\", \"925426925178\", \"730900358996\", \"704355091839\", \"614315385615\", \"613863024037\", \"657803250734\", \"943721158758\", \"930052908937\", \"616327100012\", \"753434522195\", \"831848413401\"]",
+        "message": "Continue interaction",
+        "observation_state": {
+          "actions": [
+            "back to search",
+            "next >",
+            "610492565168",
+            "613257600850",
+            "942954343596",
+            "653693603317",
+            "921837809428",
+            "892611477838",
+            "724615771603",
+            "743260997368",
+            "660736231876",
+            "925426925178",
+            "730900358996",
+            "704355091839",
+            "614315385615",
+            "613863024037",
+            "657803250734",
+            "943721158758",
+            "930052908937",
+            "616327100012",
+            "753434522195",
+            "831848413401"
+          ],
+          "normalized_query": "剑桥少儿英语 guess what 1 学生套装 英音",
+          "observation_version": "shopping-observation-v2",
+          "page": 1,
+          "page_type": "search_results",
+          "products": [
+            {
+              "asin": "610492565168",
+              "brand": "华仑书店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "剑桥少儿英语教材",
+                "进口",
+                "一年级",
+                "英音版"
+              ],
+              "price": "258.0 to 426.0",
+              "rank": 1,
+              "title": "原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版"
+            },
+            {
+              "asin": "613257600850",
+              "brand": "英沃图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "剑桥少儿英语",
+                "YLE考试教材"
+              ],
+              "price": "338.0 to 398.0",
+              "rank": 2,
+              "title": "英音版superminds剑桥少儿英语教材super minds  S/1/2/3/4/5/6级 学生书+练习册 YLE考试教材 原版进口"
+            },
+            {
+              "asin": "942954343596",
+              "brand": "天天特卖工厂",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "剑桥",
+                "少儿英语",
+                "预备级"
+              ],
+              "price": "54.0 to 447.0",
+              "rank": 3,
+              "title": "剑桥少儿英语教材powerup预备级PowerUp0123456级学生套装考试原版"
+            },
+            {
+              "asin": "653693603317",
+              "brand": "乔津图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "现货",
+                "进口",
+                "剑桥国际少儿英语教材",
+                "英国"
+              ],
+              "price": "358.0 to 2158.0",
+              "rank": 4,
+              "title": "【现货速发】原版进口Power Up预备123456级剑桥国际少儿英语教材powerup教材英国小学YLE剑桥少儿考试英文教程青少版英文教材"
+            },
+            {
+              "asin": "921837809428",
+              "brand": "天天特卖工厂",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "3-6岁幼儿",
+                "英语启蒙",
+                "教师书"
+              ],
+              "price": "82.0 to 285.0",
+              "rank": 5,
+              "title": "剑桥幼儿英语教材Super Safari 1 2 3级英式发音幼儿英语启蒙教材3-6岁剑桥少儿英语supersafari教师书幼儿园教材"
+            },
+            {
+              "asin": "892611477838",
+              "brand": "天天特卖工厂",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "big English",
+                "新版",
+                "正版",
+                "少儿英语"
+              ],
+              "price": "88.0",
+              "rank": 6,
+              "title": "新版big English 1 2 3 4 5 6 学生套装含课本+活动手册+朗文小英+学生书 少儿bigenglish教材培生朗文少儿英语书籍正版课外书原版"
+            },
+            {
+              "asin": "724615771603",
+              "brand": "剑津图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "剑桥少儿英语",
+                "KET",
+                "刷分神器"
+              ],
+              "price": "498.0 to 2998.0",
+              "rank": 7,
+              "title": "BBC Do You Know科普分级阅读绘本 科普百科分级阅读1 2 3 4级英文原版剑桥少儿英语KET刷分神器自然科普百科英语分级阅读书"
+            },
+            {
+              "asin": "743260997368",
+              "brand": "趣象进口图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "少儿英语",
+                "新版",
+                "备考资料"
+              ],
+              "price": "100.0 to 520.0",
+              "rank": 8,
+              "title": "原版新版剑桥yle真题集考试剑桥少儿英语考试全真试题一二三级教材 Starters movers flyers 1 2 3全真备考资料剑桥考级专项训练"
+            },
+            {
+              "asin": "660736231876",
+              "brand": "斑达图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "剑桥英语教材",
+                "think",
+                "适用中小学生",
+                "适用KET/PET",
+                "原版"
+              ],
+              "price": "318.0 to 408.0",
+              "rank": 9,
+              "title": "【斑达图书】原版剑桥think第二版think教材剑桥少儿中小学英语cambridge think starter 12345KET/PET考试教辅"
+            },
+            {
+              "asin": "925426925178",
+              "brand": "龙之彩图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "3-6岁幼儿",
+                "启蒙英语教材",
+                "美音版",
+                "剑桥"
+              ],
+              "price": "284.0 to 852.0",
+              "rank": 10,
+              "title": "原版进口剑桥出版社Super Safari一二三级别美音版学生套装3-6岁入门级英文早教书幼儿园启蒙英语教材小班幼儿书籍"
+            },
+            {
+              "asin": "730900358996",
+              "brand": "华学堂图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "进口",
+                "少儿英语演讲教材"
+              ],
+              "price": "128.0 to 394.0",
+              "rank": 11,
+              "title": "进口原版少儿英语演讲教材Easy Speaking for speeches 1 2 3级 中小学英语演讲口语训练书籍talking"
+            },
+            {
+              "asin": "704355091839",
+              "brand": "天猫国际自营全球超级店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "进口",
+                "少儿英语语法书",
+                "6-8岁",
+                "寒暑假班"
+              ],
+              "price": "188.0",
+              "rank": 12,
+              "title": "【自营】原版进口Grammar Space 1 2 3级 少儿英语语法书 初阶短期寒暑假班专项grammar教材6-8岁英文教材"
+            },
+            {
+              "asin": "614315385615",
+              "brand": "华学堂图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "幼少儿",
+                "台湾新版",
+                "拼读",
+                "点读发音教材"
+              ],
+              "price": "38.0 to 364.0",
+              "rank": 13,
+              "title": "台湾新版Super phonics 1 2 3级 幼少儿英语自然拼读phonics+26个字母点读发音教材 i can spell phonics"
+            },
+            {
+              "asin": "613863024037",
+              "brand": "英沃图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "原版",
+                "进口",
+                "剑桥英语教材",
+                "适用KET/PET"
+              ],
+              "price": "428.0",
+              "rank": 14,
+              "title": "剑桥初高中英语教材Think二版 Starter12345级学生书练习册 Cambridge think教材 外语KET/PET考试 青少年英语教材原版进口"
+            },
+            {
+              "asin": "657803250734",
+              "brand": "好奇豆图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "牛津",
+                "Oxford Discover",
+                "英语",
+                "7-12岁"
+              ],
+              "price": "120.0 to 486.0",
+              "rank": 15,
+              "title": "进口原版牛津少儿英语原版Oxford Discover教材1 2 3 4 5 6级牛津探索与发现 牛津小学英语教材7-12岁牛津教材牛津英语教材教师书"
+            },
+            {
+              "asin": "943721158758",
+              "brand": "盯洞图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "零基础发音",
+                "少儿"
+              ],
+              "price": "58.0 to 975.0",
+              "rank": 16,
+              "title": "新版牛津自然拼读教材 Oxford Phonics World 1 2 3 4 5 级别 牛津拼读世界全套零基础发音幼少儿英语自然拼读phonics教材OPW教材"
+            },
+            {
+              "asin": "930052908937",
+              "brand": "龙之彩图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "剑桥中学英语",
+                "在线账号",
+                "音频视频",
+                "测试答案"
+              ],
+              "price": "338.0 to 2028.0",
+              "rank": 17,
+              "title": "原版进口新版原版第二版剑桥中学英语Think Starter 12345级课本+练习册+在线账号 送音频视频测试答案 正版现货 12-18岁英语教材"
+            },
+            {
+              "asin": "616327100012",
+              "brand": "华学堂图书专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "进口",
+                "剑桥雅思托福四六级英语考试核心词汇"
+              ],
+              "price": "135.0 to 850.0",
+              "rank": 18,
+              "title": "进口原版 4000 Essential English Words 1/2/3/4/5/6级 新版4000词 常见词英文单词词典书 剑桥雅思托福四六级英语考试核心词汇"
+            },
+            {
+              "asin": "753434522195",
+              "brand": "怡宸图书音像专营店",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "幼儿启蒙",
+                "牛津英语拼读教材",
+                "支持牛津点读笔"
+              ],
+              "price": "40.0 to 550.0",
+              "rank": 19,
+              "title": "oxford牛津幼儿英语拼读教材get set go phonics 1 2 3 4 5 6学生书教师书支持牛津点读笔幼儿启蒙早教phonics自然拼读教材"
+            },
+            {
+              "asin": "831848413401",
+              "brand": "英斐创原版图书",
+              "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+              "key_attributes": [
+                "剑桥Alevel",
+                "现货"
+              ],
+              "price": "155.0 to 433.0",
+              "rank": 20,
+              "title": "现货剑桥Alevel 纯数学1 学生书 Cambridge International AS &amp; A Level Mathematics Pure Mathematics1 Coursebook/Practice"
+            }
+          ],
+          "query": "剑桥少儿英语 guess what 1 学生套装 英音",
+          "rank_end": 20,
+          "rank_start": 1,
+          "search_available": false,
+          "total_pages": 8,
+          "total_results": 150
+        },
+        "over": true,
+        "progress": {
+          "action_signature": "{\"action\":\"search\",\"argument\":\"剑桥少儿英语 guess what 1 学生套装 英音\"}",
+          "consecutive_repeats": 0,
+          "credited_evidence_added": [],
+          "effective_result_sets": 2,
+          "evidence_added": [],
+          "evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 2,
+            "subpage": 2
+          },
+          "new_asin_count": 2,
+          "no_progress_steps": 4,
+          "opened_candidate_count": 1,
+          "runtime_evidence_counts": {
+            "constraint": 2,
+            "option": 1,
+            "product": 1,
+            "result_set": 4,
+            "subpage": 2
+          },
+          "runtime_progress_added": [],
+          "seen_asin_count": 37,
+          "step_count": 13,
+          "termination_reason": "repeat_loop",
+          "termination_version": "shopping-termination-v3"
+        },
+        "purchase": {},
+        "reward": -0.65,
+        "reward_detail": {
+          "dimension_scores": {},
+          "evidence": {},
+          "evidence_coverage": 0.0,
+          "hard_gates": {},
+          "purchase_success": false,
+          "reward": -0.65,
+          "reward_type": "repeat_loop",
+          "reward_valid": true,
+          "reward_version": "shopsimulator-reward-v3",
+          "sampling_invalid": false,
+          "target_asin_match": false,
+          "terminal_utility": -0.65,
+          "termination_reason": "repeat_loop",
+          "weighted_score": 0.0
+        },
+        "reward_valid": true,
+        "termination_reason": "repeat_loop"
+      },
+      "reward": -0.65,
+      "step_index": 12,
+      "tool_call": {
+        "function": {
+          "arguments": "{\"query\": \"剑桥少儿英语 Guess What 1 学生套装 英音\"}",
+          "name": "search_products"
+        },
+        "id": "chatcmpl-tool-84e19c46701f3a42",
+        "type": "function"
+      },
+      "tool_name": "search_products"
+    }
+  ],
+  "task_id": 21936,
+  "terminal_result": {
+    "done": true,
+    "env_idx": 4,
+    "goal": {},
+    "idx": "slot-4-21936",
+    "instruction": "Instruction: [SEP] 表妹想拥有剑桥少儿英语Guess What系列第一级的套装，要原版进口的主课本和练习册合订的，带英式发音的，特适合一年级孩子用的，价格在250左右。 [SEP] Back to Search [SEP] Page 1 of 8 (Total results: 150) [SEP] Query: 剑桥少儿英语 guess what 1 学生套装 英音 | Normalized query: 剑桥少儿英语 guess what 1 学生套装 英音 [SEP] Next > [SEP] 610492565168 [SEP] 原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版 [SEP] 258.0 to 426.0 [SEP] 613257600850 [SEP] 英音版superminds剑桥少儿英语教材super minds  S/1/2/3/4/5/6级 学生书+练习册 YLE考试教材 原版进口 [SEP] 338.0 to 398.0 [SEP] 942954343596 [SEP] 剑桥少儿英语教材powerup预备级PowerUp0123456级学生套装考试原版 [SEP] 54.0 to 447.0 [SEP] 653693603317 [SEP] 【现货速发】原版进口Power Up预备123456级剑桥国际少儿英语教材powerup教材英国小学YLE剑桥少儿考试英文教程青少版英文教材 [SEP] 358.0 to 2158.0 [SEP] 921837809428 [SEP] 剑桥幼儿英语教材Super Safari 1 2 3级英式发音幼儿英语启蒙教材3-6岁剑桥少儿英语supersafari教师书幼儿园教材 [SEP] 82.0 to 285.0 [SEP] 892611477838 [SEP] 新版big English 1 2 3 4 5 6 学生套装含课本+活动手册+朗文小英+学生书 少儿bigenglish教材培生朗文少儿英语书籍正版课外书原版 [SEP] 88.0 [SEP] 724615771603 [SEP] BBC Do You Know科普分级阅读绘本 科普百科分级阅读1 2 3 4级英文原版剑桥少儿英语KET刷分神器自然科普百科英语分级阅读书 [SEP] 498.0 to 2998.0 [SEP] 743260997368 [SEP] 原版新版剑桥yle真题集考试剑桥少儿英语考试全真试题一二三级教材 Starters movers flyers 1 2 3全真备考资料剑桥考级专项训练 [SEP] 100.0 to 520.0 [SEP] 660736231876 [SEP] 【斑达图书】原版剑桥think第二版think教材剑桥少儿中小学英语cambridge think starter 12345KET/PET考试教辅 [SEP] 318.0 to 408.0 [SEP] 925426925178 [SEP] 原版进口剑桥出版社Super Safari一二三级别美音版学生套装3-6岁入门级英文早教书幼儿园启蒙英语教材小班幼儿书籍 [SEP] 284.0 to 852.0 [SEP] 730900358996 [SEP] 进口原版少儿英语演讲教材Easy Speaking for speeches 1 2 3级 中小学英语演讲口语训练书籍talking [SEP] 128.0 to 394.0 [SEP] 704355091839 [SEP] 【自营】原版进口Grammar Space 1 2 3级 少儿英语语法书 初阶短期寒暑假班专项grammar教材6-8岁英文教材 [SEP] 188.0 [SEP] 614315385615 [SEP] 台湾新版Super phonics 1 2 3级 幼少儿英语自然拼读phonics+26个字母点读发音教材 i can spell phonics [SEP] 38.0 to 364.0 [SEP] 613863024037 [SEP] 剑桥初高中英语教材Think二版 Starter12345级学生书练习册 Cambridge think教材 外语KET/PET考试 青少年英语教材原版进口 [SEP] 428.0 [SEP] 657803250734 [SEP] 进口原版牛津少儿英语原版Oxford Discover教材1 2 3 4 5 6级牛津探索与发现 牛津小学英语教材7-12岁牛津教材牛津英语教材教师书 [SEP] 120.0 to 486.0 [SEP] 943721158758 [SEP] 新版牛津自然拼读教材 Oxford Phonics World 1 2 3 4 5 级别 牛津拼读世界全套零基础发音幼少儿英语自然拼读phonics教材OPW教材 [SEP] 58.0 to 975.0 [SEP] 930052908937 [SEP] 原版进口新版原版第二版剑桥中学英语Think Starter 12345级课本+练习册+在线账号 送音频视频测试答案 正版现货 12-18岁英语教材 [SEP] 338.0 to 2028.0 [SEP] 616327100012 [SEP] 进口原版 4000 Essential English Words 1/2/3/4/5/6级 新版4000词 常见词英文单词词典书 剑桥雅思托福四六级英语考试核心词汇 [SEP] 135.0 to 850.0 [SEP] 753434522195 [SEP] oxford牛津幼儿英语拼读教材get set go phonics 1 2 3 4 5 6学生书教师书支持牛津点读笔幼儿启蒙早教phonics自然拼读教材 [SEP] 40.0 to 550.0 [SEP] 831848413401 [SEP] 现货剑桥Alevel 纯数学1 学生书 Cambridge International AS &amp; A Level Mathematics Pure Mathematics1 Coursebook/Practice [SEP] 155.0 to 433.0\n\n搜索功能是否可用: False\n\n可点击的按钮: [\"back to search\", \"next >\", \"610492565168\", \"613257600850\", \"942954343596\", \"653693603317\", \"921837809428\", \"892611477838\", \"724615771603\", \"743260997368\", \"660736231876\", \"925426925178\", \"730900358996\", \"704355091839\", \"614315385615\", \"613863024037\", \"657803250734\", \"943721158758\", \"930052908937\", \"616327100012\", \"753434522195\", \"831848413401\"]",
+    "message": "Continue interaction",
+    "observation_state": {
+      "actions": [
+        "back to search",
+        "next >",
+        "610492565168",
+        "613257600850",
+        "942954343596",
+        "653693603317",
+        "921837809428",
+        "892611477838",
+        "724615771603",
+        "743260997368",
+        "660736231876",
+        "925426925178",
+        "730900358996",
+        "704355091839",
+        "614315385615",
+        "613863024037",
+        "657803250734",
+        "943721158758",
+        "930052908937",
+        "616327100012",
+        "753434522195",
+        "831848413401"
+      ],
+      "normalized_query": "剑桥少儿英语 guess what 1 学生套装 英音",
+      "observation_version": "shopping-observation-v2",
+      "page": 1,
+      "page_type": "search_results",
+      "products": [
+        {
+          "asin": "610492565168",
+          "brand": "华仑书店",
+          "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+          "key_attributes": [
+            "剑桥少儿英语教材",
+            "进口",
+            "一年级",
+            "英音版"
+          ],
+          "price": "258.0 to 426.0",
+          "rank": 1,
+          "title": "原版进口剑桥大学出版小学少儿英语教材Guess What 1 Pupil's Book Activity Book学生套装一年级主课本练习册 英音版"
+        },
+        {
+          "asin": "613257600850",
+          "brand": "英沃图书专营店",
+          "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+          "key_attributes": [
+            "剑桥少儿英语",
+            "YLE考试教材"
+          ],
+          "price": "338.0 to 398.0",
+          "rank": 2,
+          "title": "英音版superminds剑桥少儿英语教材super minds  S/1/2/3/4/5/6级 学生书+练习册 YLE考试教材 原版进口"
+        },
+        {
+          "asin": "942954343596",
+          "brand": "天天特卖工厂",
+          "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+          "key_attributes": [
+            "剑桥",
+            "少儿英语",
+            "预备级"
+          ],
+          "price": "54.0 to 447.0",
+          "rank": 3,
+          "title": "剑桥少儿英语教材powerup预备级PowerUp0123456级学生套装考试原版"
+        },
+        {
+          "asin": "653693603317",
+          "brand": "乔津图书专营店",
+          "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+          "key_attributes": [
+            "现货",
+            "进口",
+            "剑桥国际少儿英语教材",
+            "英国"
+          ],
+          "price": "358.0 to 2158.0",
+          "rank": 4,
+          "title": "【现货速发】原版进口Power Up预备123456级剑桥国际少儿英语教材powerup教材英国小学YLE剑桥少儿考试英文教程青少版英文教材"
+        },
+        {
+          "asin": "921837809428",
+          "brand": "天天特卖工厂",
+          "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+          "key_attributes": [
+            "3-6岁幼儿",
+            "英语启蒙",
+            "教师书"
+          ],
+          "price": "82.0 to 285.0",
+          "rank": 5,
+          "title": "剑桥幼儿英语教材Super Safari 1 2 3级英式发音幼儿英语启蒙教材3-6岁剑桥少儿英语supersafari教师书幼儿园教材"
+        },
+        {
+          "asin": "892611477838",
+          "brand": "天天特卖工厂",
+          "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+          "key_attributes": [
+            "big English",
+            "新版",
+            "正版",
+            "少儿英语"
+          ],
+          "price": "88.0",
+          "rank": 6,
+          "title": "新版big English 1 2 3 4 5 6 学生套装含课本+活动手册+朗文小英+学生书 少儿bigenglish教材培生朗文少儿英语书籍正版课外书原版"
+        },
+        {
+          "asin": "724615771603",
+          "brand": "剑津图书专营店",
+          "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+          "key_attributes": [
+            "剑桥少儿英语",
+            "KET",
+            "刷分神器"
+          ],
+          "price": "498.0 to 2998.0",
+          "rank": 7,
+          "title": "BBC Do You Know科普分级阅读绘本 科普百科分级阅读1 2 3 4级英文原版剑桥少儿英语KET刷分神器自然科普百科英语分级阅读书"
+        },
+        {
+          "asin": "743260997368",
+          "brand": "趣象进口图书专营店",
+          "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+          "key_attributes": [
+            "少儿英语",
+            "新版",
+            "备考资料"
+          ],
+          "price": "100.0 to 520.0",
+          "rank": 8,
+          "title": "原版新版剑桥yle真题集考试剑桥少儿英语考试全真试题一二三级教材 Starters movers flyers 1 2 3全真备考资料剑桥考级专项训练"
+        },
+        {
+          "asin": "660736231876",
+          "brand": "斑达图书专营店",
+          "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+          "key_attributes": [
+            "剑桥英语教材",
+            "think",
+            "适用中小学生",
+            "适用KET/PET",
+            "原版"
+          ],
+          "price": "318.0 to 408.0",
+          "rank": 9,
+          "title": "【斑达图书】原版剑桥think第二版think教材剑桥少儿中小学英语cambridge think starter 12345KET/PET考试教辅"
+        },
+        {
+          "asin": "925426925178",
+          "brand": "龙之彩图书专营店",
+          "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+          "key_attributes": [
+            "3-6岁幼儿",
+            "启蒙英语教材",
+            "美音版",
+            "剑桥"
+          ],
+          "price": "284.0 to 852.0",
+          "rank": 10,
+          "title": "原版进口剑桥出版社Super Safari一二三级别美音版学生套装3-6岁入门级英文早教书幼儿园启蒙英语教材小班幼儿书籍"
+        },
+        {
+          "asin": "730900358996",
+          "brand": "华学堂图书专营店",
+          "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+          "key_attributes": [
+            "进口",
+            "少儿英语演讲教材"
+          ],
+          "price": "128.0 to 394.0",
+          "rank": 11,
+          "title": "进口原版少儿英语演讲教材Easy Speaking for speeches 1 2 3级 中小学英语演讲口语训练书籍talking"
+        },
+        {
+          "asin": "704355091839",
+          "brand": "天猫国际自营全球超级店",
+          "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+          "key_attributes": [
+            "进口",
+            "少儿英语语法书",
+            "6-8岁",
+            "寒暑假班"
+          ],
+          "price": "188.0",
+          "rank": 12,
+          "title": "【自营】原版进口Grammar Space 1 2 3级 少儿英语语法书 初阶短期寒暑假班专项grammar教材6-8岁英文教材"
+        },
+        {
+          "asin": "614315385615",
+          "brand": "华学堂图书专营店",
+          "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+          "key_attributes": [
+            "幼少儿",
+            "台湾新版",
+            "拼读",
+            "点读发音教材"
+          ],
+          "price": "38.0 to 364.0",
+          "rank": 13,
+          "title": "台湾新版Super phonics 1 2 3级 幼少儿英语自然拼读phonics+26个字母点读发音教材 i can spell phonics"
+        },
+        {
+          "asin": "613863024037",
+          "brand": "英沃图书专营店",
+          "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+          "key_attributes": [
+            "原版",
+            "进口",
+            "剑桥英语教材",
+            "适用KET/PET"
+          ],
+          "price": "428.0",
+          "rank": 14,
+          "title": "剑桥初高中英语教材Think二版 Starter12345级学生书练习册 Cambridge think教材 外语KET/PET考试 青少年英语教材原版进口"
+        },
+        {
+          "asin": "657803250734",
+          "brand": "好奇豆图书专营店",
+          "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+          "key_attributes": [
+            "牛津",
+            "Oxford Discover",
+            "英语",
+            "7-12岁"
+          ],
+          "price": "120.0 to 486.0",
+          "rank": 15,
+          "title": "进口原版牛津少儿英语原版Oxford Discover教材1 2 3 4 5 6级牛津探索与发现 牛津小学英语教材7-12岁牛津教材牛津英语教材教师书"
+        },
+        {
+          "asin": "943721158758",
+          "brand": "盯洞图书专营店",
+          "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+          "key_attributes": [
+            "零基础发音",
+            "少儿"
+          ],
+          "price": "58.0 to 975.0",
+          "rank": 16,
+          "title": "新版牛津自然拼读教材 Oxford Phonics World 1 2 3 4 5 级别 牛津拼读世界全套零基础发音幼少儿英语自然拼读phonics教材OPW教材"
+        },
+        {
+          "asin": "930052908937",
+          "brand": "龙之彩图书专营店",
+          "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+          "key_attributes": [
+            "剑桥中学英语",
+            "在线账号",
+            "音频视频",
+            "测试答案"
+          ],
+          "price": "338.0 to 2028.0",
+          "rank": 17,
+          "title": "原版进口新版原版第二版剑桥中学英语Think Starter 12345级课本+练习册+在线账号 送音频视频测试答案 正版现货 12-18岁英语教材"
+        },
+        {
+          "asin": "616327100012",
+          "brand": "华学堂图书专营店",
+          "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+          "key_attributes": [
+            "进口",
+            "剑桥雅思托福四六级英语考试核心词汇"
+          ],
+          "price": "135.0 to 850.0",
+          "rank": 18,
+          "title": "进口原版 4000 Essential English Words 1/2/3/4/5/6级 新版4000词 常见词英文单词词典书 剑桥雅思托福四六级英语考试核心词汇"
+        },
+        {
+          "asin": "753434522195",
+          "brand": "怡宸图书音像专营店",
+          "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+          "key_attributes": [
+            "幼儿启蒙",
+            "牛津英语拼读教材",
+            "支持牛津点读笔"
+          ],
+          "price": "40.0 to 550.0",
+          "rank": 19,
+          "title": "oxford牛津幼儿英语拼读教材get set go phonics 1 2 3 4 5 6学生书教师书支持牛津点读笔幼儿启蒙早教phonics自然拼读教材"
+        },
+        {
+          "asin": "831848413401",
+          "brand": "英斐创原版图书",
+          "category": "书籍/杂志/报纸›进口原版书(含港台)›原版其它",
+          "key_attributes": [
+            "剑桥Alevel",
+            "现货"
+          ],
+          "price": "155.0 to 433.0",
+          "rank": 20,
+          "title": "现货剑桥Alevel 纯数学1 学生书 Cambridge International AS &amp; A Level Mathematics Pure Mathematics1 Coursebook/Practice"
+        }
+      ],
+      "query": "剑桥少儿英语 guess what 1 学生套装 英音",
+      "rank_end": 20,
+      "rank_start": 1,
+      "search_available": false,
+      "total_pages": 8,
+      "total_results": 150
+    },
+    "over": true,
+    "progress": {
+      "action_signature": "{\"action\":\"search\",\"argument\":\"剑桥少儿英语 guess what 1 学生套装 英音\"}",
+      "consecutive_repeats": 0,
+      "credited_evidence_added": [],
+      "effective_result_sets": 2,
+      "evidence_added": [],
+      "evidence_counts": {
+        "constraint": 2,
+        "option": 1,
+        "product": 1,
+        "result_set": 2,
+        "subpage": 2
+      },
+      "new_asin_count": 2,
+      "no_progress_steps": 4,
+      "opened_candidate_count": 1,
+      "runtime_evidence_counts": {
+        "constraint": 2,
+        "option": 1,
+        "product": 1,
+        "result_set": 4,
+        "subpage": 2
+      },
+      "runtime_progress_added": [],
+      "seen_asin_count": 37,
+      "step_count": 13,
+      "termination_reason": "repeat_loop",
+      "termination_version": "shopping-termination-v3"
+    },
+    "purchase": {},
+    "reward": -0.65,
+    "reward_detail": {
+      "dimension_scores": {},
+      "evidence": {},
+      "evidence_coverage": 0.0,
+      "hard_gates": {},
+      "purchase_success": false,
+      "reward": -0.65,
+      "reward_type": "repeat_loop",
+      "reward_valid": true,
+      "reward_version": "shopsimulator-reward-v3",
+      "sampling_invalid": false,
+      "target_asin_match": false,
+      "terminal_utility": -0.65,
+      "termination_reason": "repeat_loop",
+      "weighted_score": 0.0
+    },
+    "reward_valid": true,
+    "termination_reason": "repeat_loop"
+  },
+  "tool_call_truncations": [],
+  "trajectory_id": "c0136993-9096-4a7b-9037-c45324242d8e"
+}
