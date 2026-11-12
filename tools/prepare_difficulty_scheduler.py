@@ -27,6 +27,9 @@ SETTINGS = {'budget': 4000, 'seed': 20261112, 'group_size': 4, 'tasks_per_batch'
             'arms': ['uniform', 'adaptive'], 'environment_port': 5723, 'model_port': 8023}
 OLD_ENV_FILE_HASH = '448f5ec31fe5a71d1e43376d42cd84787a0e48fe96a8032fc0383f65e5928ea2'
 PINNED_ENV_FILE_HASH = 'd6db15f282849847a364d8d36af0eed113c1c97184a1ded98eb1fd29dab577d1'
+# Original formal-run checkpoint-save repair, documented in the OOM recovery
+# runbook. The isolated trainer is still rebuilt from the pinned fixtures.
+DYNAMIC_EARLY_SAVE = 'dce8e3d431218888c9cf65ea8a031091699ac4bd573c7c0a50677a14e75cca59'
 
 
 def git_bytes(relative):
@@ -208,7 +211,7 @@ def overlay(bundle):
         raise ValueError('Requires verl==0.8.0')
     source = Path(importlib.util.find_spec('verl').origin).parent
     trainer = source / 'trainer/ppo/ray_trainer.py'
-    if text_hash(trainer) not in (ORIGINAL, DYNAMIC):
+    if text_hash(trainer) not in (ORIGINAL, DYNAMIC, DYNAMIC_EARLY_SAVE):
         raise ValueError('Installed veRL trainer is unknown; refusing to copy')
     destination = Path(bundle) / 'overlay'
     if destination.exists():

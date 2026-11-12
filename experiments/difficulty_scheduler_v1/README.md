@@ -11,6 +11,14 @@ must not refreeze or change these files. Runtime export reads the pinned Git
 object, not the dirty upstream worktree. veRL modifications affect only an
 isolated copied package under outputs.
 
+The overlay builder also recognizes the exact historical V3-plus-early-save
+trainer hash dce8e3d431218888c9cf65ea8a031091699ac4bd573c7c0a50677a14e75cca59,
+reconstructed from the documented OOM recovery checkpoint-save repair.
+Installed files remain untouched, and every accepted input still produces the
+same frozen scheduled trainer. Unknown edits remain rejected. The pre-training
+code manifest was refreshed for this compatibility fix; training settings and
+task inputs did not change.
+
 The pinned baseline's data/environment.json records one stale source hash.
 Export corrects only that metadata entry (448f... -> actual d6db...) and saves
 metadata_correction.json. Environment source and scoring are unchanged; both
