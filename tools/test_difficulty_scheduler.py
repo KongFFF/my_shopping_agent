@@ -314,6 +314,49 @@ class IntegrationTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             build_trainer(base + '\n# unknown edit', dynamic)
 
+    def test_overlay_accepts_documented_early_save_and_rejects_unknown_source(self):
+        import prepare_difficulty_scheduler as builder
+        base = (PACKAGE / 'ray_trainer_0_8_0.py').read_text(encoding='utf-8')
+        patch_text = (PACKAGE / 'baseline_dynamic.patch').read_text(encoding='utf-8')
+        dynamic = unified_patch(base, patch_text)
+        source_lines = dynamic.splitlines(keepends=True)
+        matches = [i for i, line in enumerate(source_lines)
+                   if line.strip() == 'or current_step % self.config.trainer.save_freq == 0']
+        self.assertEqual(len(matches), 1)
+        i = matches[0]
+        indent = source_lines[i][:len(source_lines[i]) - len(source_lines[i].lstrip())]
+        source_lines[i] += (indent + '# SHOPPING_GRPO_EARLY_SAVE_STEPS_V1\n'
+                           + indent + 'or current_step in self.config.trainer.get("early_save_steps", [])\n')
+        historical = ''.join(source_lines)
+        self.assertEqual(sha(historical), builder.DYNAMIC_EARLY_SAVE)
+        expected = build_trainer(base, patch_text)
+        for source in (base, dynamic, historical, historical + '\n# unknown edit\n'):
+            with self.subTest(source_hash=sha(source)), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                package = root / 'installed/verl'
+                trainer = package / 'trainer/ppo/ray_trainer.py'
+                trainer.parent.mkdir(parents=True)
+                trainer.write_text(source, encoding='utf-8', newline='\n')
+                (package / '__init__.py').write_text('', encoding='utf-8')
+                before = trainer.read_bytes()
+                bundle = root / 'runtime'
+                bundle.mkdir()
+                with patch.object(builder, 'check_runtime'), \
+                     patch.object(builder.importlib.metadata, 'version', return_value='0.8.0'), \
+                     patch.object(builder.importlib.util, 'find_spec', return_value=NS(origin=str(package / '__init__.py'))), \
+                     contextlib.redirect_stdout(io.StringIO()):
+                    if source.endswith('# unknown edit\n'):
+                        with self.assertRaisesRegex(ValueError, 'Installed veRL trainer is unknown'):
+                            builder.overlay(bundle)
+                        self.assertFalse((bundle / 'overlay').exists())
+                    else:
+                        builder.overlay(bundle)
+                        copied = bundle / 'overlay/verl/trainer/ppo/ray_trainer.py'
+                        self.assertEqual(copied.read_text(encoding='utf-8'), expected)
+                        self.assertEqual(read(bundle / 'overlay_receipt.json')['files'][
+                            'verl/trainer/ppo/ray_trainer.py'], builder.file_hash(copied))
+                self.assertEqual(trainer.read_bytes(), before)
+
     def test_actual_trainer_dynamic_block_budget_residual_and_group_identity(self):
         # Execute the real transformed AST block, with tensor/worker calls replaced
         # by CPU test doubles. Filtering, concat, ordering and stop code are real.
