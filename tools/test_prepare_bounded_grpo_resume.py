@@ -3,6 +3,7 @@ import copy
 import json
 from pathlib import Path
 import tempfile
+import subprocess
 import unittest
 from unittest.mock import patch
 import zipfile
@@ -124,6 +125,79 @@ class ResumeTests(unittest.TestCase):
             report = resume.audit(project)
             self.assertFalse(report["passed"])
             self.assertTrue(any(item["kind"] == "checkpoint" for item in report["issues"]))
+
+    def test_isolated_paths_preserve_training_and_asset_bindings(self):
+        report = dict(self.report, runtime_project="/isolated/runtime")
+        cfg, changed, env, allowed = resume.derive_config(self.before, report)
+        self.assertEqual(cfg.actor_rollout_ref.model.path, self.before["actor_rollout_ref"]["model"]["path"])
+        self.assertEqual(cfg.data.train_files, self.before["data"]["train_files"])
+        self.assertEqual(cfg.actor_rollout_ref.actor.optim.lr, 1e-6)
+        self.assertEqual(env["PYTHONPATH"], str(Path("/isolated/runtime/src")))
+        self.assertEqual(cfg.actor_rollout_ref.rollout.agent.agent_loop_config_path,
+                         str(Path("/isolated/runtime/configs/agent_loop.yaml")))
+        self.assertEqual(cfg.ray_kwargs.ray_init.runtime_env.env_vars.PYTHONPATH, env["PYTHONPATH"])
+        self.assertLessEqual(set(changed), set(allowed))
+
+    def test_isolation_cannot_waive_missing_optimizer_or_unknown_source(self):
+        for kind, name, detail in [
+            ("checkpoint", "actor/optim.pt", "missing"),
+            ("source", "src/unknown.py", {"expected": "bad", "actual": "changed"}),
+            ("source", "configs/grpo.yaml", "missing"),
+        ]:
+            report = dict(self.report, issues=[{"kind": kind,
+                          "path": str(Path(self.report["project"]) / name), "detail": detail}])
+            with self.assertRaisesRegex(ValueError, "cannot resolve"):
+                resume.isolate_runtime(report)
+
+    def test_real_git_rebuild_matches_all_five_cloud_expected_hashes(self):
+        with tempfile.TemporaryDirectory(dir=ROOT / "outputs") as td:
+            stage = Path(td) / "code"
+            stage.mkdir()
+            resume.export_pinned_code(ROOT / "upstream/shopping-grpo-longhorizon", stage, Path(td) / "code.tar")
+            self.assertEqual({n: resume.digest(stage / n) for n in resume.PINNED_REPAIRS}, resume.PINNED_REPAIRS)
+            self.assertFalse((stage / "data").exists())
+            self.assertFalse((stage / ".venv").exists())
+
+    def test_full_isolation_keeps_original_files_and_reuses_verified_copy(self):
+        with tempfile.TemporaryDirectory(dir=ROOT / "outputs") as td:
+            project = Path(td).resolve()
+            parent, _, _ = self.fixture(project)
+            for name in (".venv", "data", "environments"):
+                (project / name).mkdir()
+            # Confirm symlink support before doing the integration build.
+            probe = project / "link_probe"
+            try:
+                probe.symlink_to(project / "data", target_is_directory=True)
+            except OSError:
+                self.skipTest("This Windows account cannot create directory symlinks; run this case on Linux")
+            probe.unlink()
+            spec = resume.read(parent / "launch_spec.json")
+            for name, expected in resume.PINNED_REPAIRS.items():
+                path = project / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text("# later experiment\n", encoding="utf-8")
+                spec["source_sha256"][str(path)] = expected
+            resume.write(parent / "launch_spec.json", spec)
+            original_hashes = {name: resume.digest(project / name) for name in resume.PINNED_REPAIRS}
+            report = resume.audit(project)
+            self.assertEqual(len(report["issues"]), 5)
+            run = subprocess.run
+            def use_real_git(command, **kwargs):
+                if command[:2] == ["git", "-C"]:
+                    command = list(command)
+                    command[2] = str(ROOT / "upstream/shopping-grpo-longhorizon")
+                return run(command, **kwargs)
+            with patch.object(resume.subprocess, "run", side_effect=use_real_git):
+                effective = resume.isolate_runtime(report)
+            self.assertTrue(effective["passed"])
+            self.assertEqual(original_hashes, {name: resume.digest(project / name) for name in resume.PINNED_REPAIRS})
+            self.assertFalse((project / resume.RUN / "formal_resume500_to650_v1").exists())
+            reused = resume.isolate_runtime(report)
+            self.assertEqual(reused["runtime_project"], effective["runtime_project"])
+            isolated = Path(effective["runtime_project"])
+            (isolated / "configs/grpo.yaml").write_text("tampered\n", encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "file hashes differ"):
+                resume.isolate_runtime(report)
 
 
 if __name__ == "__main__":
