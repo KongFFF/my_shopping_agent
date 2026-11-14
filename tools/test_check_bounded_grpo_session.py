@@ -53,6 +53,22 @@ class PreflightGuards(unittest.TestCase):
             self.assertFalse((prep / "environment_preflight.json").exists())
             self.assertFalse((prep / "environment_process.json").exists())
 
+    def test_650_to800_routes_to_new_preparation_before_gpu(self):
+        with tempfile.TemporaryDirectory(dir=ROOT / "outputs") as td:
+            project = Path(td).resolve()
+            prep = project / RUN / "preparation/formal_resume650_to800_v1"
+            prep.mkdir(parents=True)
+            write(prep / "launch_spec.json", {"resume_step": 650, "total_updates": 800,
+                "project": str(project), "source_sha256": {}, "env": {}, "required_free_bytes": 10**30})
+            with patch.object(checker.subprocess, "run") as run:
+                with self.assertRaisesRegex(ValueError, "disk budget"):
+                    checker.check(project, 650, 800)
+                run.assert_not_called()
+
+    def test_unsupported_pair_rejected(self):
+        with self.assertRaisesRegex(ValueError, "Unsupported"):
+            checker.check(Path("/unused"), 650, 650)
+
 
 if __name__ == "__main__":
     unittest.main()

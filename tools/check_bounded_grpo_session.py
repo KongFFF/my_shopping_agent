@@ -22,12 +22,14 @@ def listening():
         return False
 
 
-def check(project, step):
+def check(project, step, target=650):
+    if (step, target) not in ((500, 650), (600, 650), (650, 800)):
+        raise ValueError("Unsupported continuation bounds")
     project = Path(project).resolve()
-    prep = project / RUN / f"preparation/formal_resume{step}_to650_v1"
+    prep = project / RUN / f"preparation/formal_resume{step}_to{target}_v1"
     spec = read(prep / "launch_spec.json")
     runtime = Path(spec["project"])
-    if spec["resume_step"] != step or spec["total_updates"] != 650:
+    if spec["resume_step"] != step or spec["total_updates"] != target:
         raise ValueError("Unexpected recovery bounds")
     for name in ("driver.log", "train.log", "train.pid", "exit_status.json"):
         if (prep / name).exists():
@@ -59,7 +61,7 @@ def check(project, step):
         "free,total=torch.cuda.mem_get_info(); "
         "print(f'GPU available/total: {free/2**30:.2f}/{total/2**30:.2f} GiB'); "
         "assert free>=90*2**30, 'GPU available memory below 90 GiB'"], check=True, env=env)
-    write(prep / "resource_check.json", {"passed": True, "resume_step": step})
+    write(prep / "resource_check.json", {"passed": True, "resume_step": step, "target_step": target})
     log_path = prep / f"runtime_preflight_{time.time_ns()}.log"
     with log_path.open("x") as log:
         result = subprocess.run(spec["preflight"], cwd=runtime, env=env,
@@ -67,7 +69,7 @@ def check(project, step):
     print(log_path.read_text(), flush=True)
     if result.returncode:
         raise ValueError(f"Runtime preflight failed: {result.returncode}; log={log_path}")
-    write(prep / "runtime_preflight.json", {"passed": True, "resume_step": step})
+    write(prep / "runtime_preflight.json", {"passed": True, "resume_step": step, "target_step": target})
     url = env["SHOPSIM_BASE_URL"]
     if url != "http://127.0.0.1:5700":
         raise ValueError(f"Unexpected environment URL: {url}")
@@ -129,14 +131,15 @@ def check(project, step):
         print(ray.get(probe.remote(task, str(runtime / "src")), timeout=120), flush=True)
     finally:
         ray.shutdown()
-    write(prep / "environment_preflight.json", {"passed": True, "resume_step": step,
+    write(prep / "environment_preflight.json", {"passed": True, "resume_step": step, "target_step": target,
           "runtime_project": str(runtime), "base_url": url, "checked_slots": 8})
-    print(f"PASS: step{step}->650 session preflight complete; environment retained; no training started")
+    print(f"PASS: step{step}->{target} session preflight complete; environment retained; no training started")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", type=Path, default=Path(DEFAULT_PROJECT))
-    parser.add_argument("--resume-step", type=int, choices=(500, 600), required=True)
+    parser.add_argument("--resume-step", type=int, choices=(500, 600, 650), required=True)
+    parser.add_argument("--target-step", type=int, choices=(650, 800), default=650)
     args = parser.parse_args()
-    check(args.project, args.resume_step)
+    check(args.project, args.resume_step, args.target_step)
