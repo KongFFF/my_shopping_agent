@@ -52,6 +52,22 @@ def write(path, value):
     Path(path).write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+def compatible_shutdown_monitor(source):
+    """Use a shell for AutoDL's command, which can be a no-shebang script.
+
+    This only transforms source; it never calls the shutdown command. Existing
+    monitor logs and historical files remain unchanged.
+    """
+    old = "subprocess.run([shutdown], check=True)"
+    new = 'subprocess.run(["/bin/bash", "-c", shutdown], check=True)'
+    if source.count(old) == 1 and new not in source:
+        source = source.replace(old, new)
+    elif old in source or source.count(new) != 1:
+        raise ValueError("Unknown shutdown monitor implementation; refusing a broad replacement")
+    ast.parse(source)
+    return source
+
+
 def audit(project, source_overrides=None):
     project = Path(project).resolve()
     run = project / RUN
@@ -398,7 +414,8 @@ def prepare(report):
             shutil.copy2(parent / name, stage / name)
         # Copying the monitor does not start it. It is supplied for later use.
         if (parent / "auto_shutdown.py").is_file():
-            shutil.copy2(parent / "auto_shutdown.py", stage / "auto_shutdown.py")
+            monitor = compatible_shutdown_monitor((parent / "auto_shutdown.py").read_text(encoding="utf-8-sig"))
+            (stage / "auto_shutdown.py").write_text(monitor, encoding="utf-8")
         for name in ("continuation.yaml", "composed_config.yaml"):
             (stage / name).write_text(OmegaConf.to_yaml(cfg, resolve=True), encoding="utf-8")
         write(stage / "resume_receipt.json", dict(report, config_differences=changed,

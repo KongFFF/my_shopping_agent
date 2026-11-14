@@ -18,7 +18,7 @@ import zipfile
 
 from prepare_bounded_grpo_resume import (
     DEFAULT_PROJECT, GIB, REQUIRED, RUN, differences, digest, read,
-    replace_overrides, write,
+    replace_overrides, write, compatible_shutdown_monitor,
 )
 
 
@@ -174,8 +174,10 @@ def prepare(project):
     with tempfile.TemporaryDirectory(prefix="recovery600_", dir=parent.parent) as td:
         stage = Path(td) / "prepared"
         stage.mkdir()
-        for name in ("launch_formal.py", "math_probe.json", "auto_shutdown.py"):
+        for name in ("launch_formal.py", "math_probe.json"):
             shutil.copy2(parent / name, stage / name)
+        monitor = compatible_shutdown_monitor((parent / "auto_shutdown.py").read_text(encoding="utf-8-sig"))
+        (stage / "auto_shutdown.py").write_text(monitor, encoding="utf-8")
         for name in ("composed_config.yaml", "continuation.yaml"):
             (stage / name).write_text(OmegaConf.to_yaml(cfg, resolve=True), encoding="utf-8")
         bindings = dict(env, PROJECT=old["project"], ASSET_PROJECT=str(project),

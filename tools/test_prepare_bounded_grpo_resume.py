@@ -50,6 +50,15 @@ class ResumeTests(unittest.TestCase):
             resume.replace_overrides(["trainer.total_training_steps=500", "++trainer.total_training_steps=500"],
                                      {"trainer.total_training_steps": 650})
 
+    def test_shutdown_monitor_fix_only_changes_invocation_and_is_idempotent(self):
+        source = 'import subprocess\nshutdown="/usr/bin/shutdown"\ncallback=lambda: subprocess.run([shutdown], check=True)\n'
+        fixed = resume.compatible_shutdown_monitor(source)
+        self.assertEqual(fixed, source.replace('subprocess.run([shutdown], check=True)',
+            'subprocess.run(["/bin/bash", "-c", shutdown], check=True)'))
+        self.assertEqual(resume.compatible_shutdown_monitor(fixed), fixed)
+        with self.assertRaisesRegex(ValueError, "Unknown shutdown"):
+            resume.compatible_shutdown_monitor("# unknown monitor\n")
+
     def fixture(self, project):
         parent = project / resume.RUN / "preparation/formal_resume350_v1"
         parent.mkdir(parents=True)

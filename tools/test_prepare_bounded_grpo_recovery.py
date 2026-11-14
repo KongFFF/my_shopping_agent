@@ -35,7 +35,9 @@ class RecoveryTests(unittest.TestCase):
         base.write(parent / "launch_spec.json", spec)
         for name in ("launch_formal.py", "math_probe.json"):
             shutil.copy2(old_parent / name, parent / name)
-        (parent / "auto_shutdown.py").write_text("# fixture monitor\n", encoding="utf-8")
+        (parent / "auto_shutdown.py").write_text(
+            'import subprocess\nshutdown="/usr/bin/shutdown"\n'
+            'callback=lambda: subprocess.run([shutdown], check=True)\n', encoding="utf-8")
         with (checkpoint.parent / "training_diagnostics.jsonl").open("w") as stream:
             import json
             for step in range(501, 624):
@@ -73,6 +75,8 @@ class RecoveryTests(unittest.TestCase):
             self.assertFalse(Path(record["output"]).exists())
             self.assertFalse((prep / "resource_check.json").exists())
             self.assertFalse((prep / "train.pid").exists())
+            self.assertIn('["/bin/bash", "-c", shutdown]', (prep / "auto_shutdown.py").read_text())
+            self.assertIn('subprocess.run([shutdown]', (parent / "auto_shutdown.py").read_text())
             with self.assertRaisesRegex(ValueError, "already exists"):
                 recovery.prepare(project)
 
