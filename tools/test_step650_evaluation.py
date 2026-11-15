@@ -134,6 +134,7 @@ class EvaluationTests(unittest.TestCase):
         write(parent / "exit_status.json", {"exit_code": 0})
         folder = run / "formal_resume650_to800_v1"
         shutil.copytree(run / "formal_resume600_to650_v1/global_step_650", folder / "global_step_750")
+        shutil.copytree(run / "formal_resume600_to650_v1/global_step_650", folder / "global_step_800")
         (folder / "validation").mkdir()
         import json
         for step, gold in ((700, 28), (750, 30), (800, 28)):
@@ -165,11 +166,35 @@ class EvaluationTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "did not select750"):
                 tool.prepare(project, 750)
 
-    def pipeline_fixture(self, project):
+    def test800_is_separate_endpoint_and_preserves750_outputs(self):
+        with tempfile.TemporaryDirectory(dir=ROOT / "outputs") as td:
+            project = Path(td).resolve()
+            reference, _, run = self.fixture750(project)
+            with patch.object(tool, "FINAL_HASH", reference["benchmarks"]["final200_clean"]["sha256"]):
+                tool.prepare(project, 750)
+                old_post = run / "preparation/posttrain_step750_v1"
+                write(old_post / "pipeline_result.json", {"final200_clean": {"strict_successes": 142}})
+                frozen = {p: digest(p) for p in old_post.iterdir() if p.is_file()}
+                tool.prepare(project, 800)
+            post = run / "preparation/posttrain_step800_v1"
+            spec = read(post / "evaluation_spec.json")
+            self.assertEqual(Path(spec["checkpoint"]), run / "formal_resume650_to800_v1/global_step_800")
+            self.assertEqual(spec["diagnostic_endpoint_step"], 800)
+            self.assertEqual(spec["dev_selected_step"], 750)
+            self.assertEqual(spec["model_tag"], "shopping-agent-grpo-step800")
+            self.assertEqual(spec["protocols"], reference["protocols"])
+            self.assertEqual(spec["benchmarks"], reference["benchmarks"])
+            self.assertIn("after observing step750 Final", spec["purpose"])
+            self.assertEqual(read(post / "preparation_receipt.json")["selection"]["selected_step"], 750)
+            self.assertEqual(frozen, {p: digest(p) for p in frozen})
+            with self.assertRaisesRegex(ValueError, "already exists"):
+                tool.prepare(project, 800)
+
+    def pipeline_fixture(self, project, step=750):
         reference, _, run = self.fixture750(project)
         with patch.object(tool, "FINAL_HASH", reference["benchmarks"]["final200_clean"]["sha256"]):
-            tool.prepare(project, 750)
-        post = run / "preparation/posttrain_step750_v1"
+            tool.prepare(project, step)
+        post = run / f"preparation/posttrain_step{step}_v1"
         return post, read(post / "evaluation_spec.json")
 
     def test_background750_pipeline_preserves_step_and_shutdown(self):
@@ -190,6 +215,22 @@ class EvaluationTests(unittest.TestCase):
                     runpy.run_path(tool.__file__, run_name="__main__")
                 self.assertEqual(popen.call_count, 1)
             self.assertEqual(read(post / "pipeline_launcher.json")["pid"], 12345)
+
+    def test_background800_pipeline_uses800_child_and_output(self):
+        with tempfile.TemporaryDirectory(dir=ROOT / "outputs") as td:
+            project = Path(td).resolve()
+            post, _ = self.pipeline_fixture(project, 800)
+            argv = [str(Path(tool.__file__)), "pipeline", "--step", "800", "--launch",
+                    "--shutdown-after-exit", "--project", str(project)]
+            with patch.object(sys, "argv", argv), patch("subprocess.Popen") as popen:
+                popen.return_value.pid = 12345
+                runpy.run_path(tool.__file__, run_name="__main__")
+                command = popen.call_args.args[0]
+                self.assertEqual(command[command.index("--step")+1], "800")
+                self.assertIn("--shutdown-after-exit", command)
+                self.assertNotIn("--launch", command)
+            self.assertEqual(read(post / "pipeline_launcher.json")["pid"], 12345)
+            self.assertTrue((post / "pipeline_driver.log").exists())
 
     def test_pipeline_stage_order_and_shell_shutdown(self):
         with tempfile.TemporaryDirectory(dir=ROOT / "outputs") as td:

@@ -1,4 +1,4 @@
-"""Evaluate step650 or Dev-selected step750 with frozen step500 protocols.
+"""Evaluate step650/800 endpoints or Dev-selected750 with frozen step500 protocols.
 
 prepare is CPU-light and starts no services. pipeline exports the model,
 starts verified services, then runs smoke3, dev50 and final200_clean.
@@ -78,9 +78,15 @@ def derive_reference(reference, project, runtime, run, step=650):
                   raw_export=str(export / "hf_unmerged"), merged_model=str(export / "merged"),
                   model_tag=tag, evaluation_root=str(evaluation), commands=commands,
                   source_sha256=sources, reference_step=500, evaluated_step=step,
-                  purpose=("One predeclared continuation-endpoint Final evaluation" if step == 650
-                           else "Step750 fixed by training Dev selection before Final evaluation"))
-    result["diagnostic_endpoint_step" if step == 650 else "dev_selected_step"] = step
+                  purpose={
+                      650: "One predeclared continuation-endpoint Final evaluation",
+                      750: "Step750 fixed by training Dev selection before Final evaluation",
+                      800: "User-authorized continuation-endpoint diagnostic after observing step750 Final; not model selection",
+                  }[step])
+    if step in (650, 800):
+        result["diagnostic_endpoint_step"] = step
+    if step in (750, 800):
+        result["dev_selected_step"] = 750
     return result
 
 
@@ -123,7 +129,7 @@ def prepare(project, step=650):
     expected_bounds = (600, 650) if step == 650 else (650, 800)
     if (training.get("resume_step"), training.get("total_updates")) != expected_bounds:
         raise ValueError("Unexpected completed training bounds")
-    selection = dev_selection(run / training_folder) if step == 750 else None
+    selection = dev_selection(run / training_folder) if step in (750, 800) else None
     checkpoint = run / training_folder / f"global_step_{step}"
     actor = checkpoint / "actor"
     meta = read(actor / "lora_train_meta.json")
@@ -430,7 +436,7 @@ def pipeline(project, step, shutdown_after_exit=False):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=("prepare", "export", "serve", "pipeline"))
-    parser.add_argument("--step", type=int, choices=(650, 750), default=650)
+    parser.add_argument("--step", type=int, choices=(650, 750, 800), default=650)
     parser.add_argument("--project", type=Path, default=Path(DEFAULT_PROJECT))
     parser.add_argument("--launch", action="store_true", help="Run export or pipeline in an independent background process")
     parser.add_argument("--shutdown-after-exit", action="store_true", help="For pipeline only: request shutdown60 seconds after exit")
