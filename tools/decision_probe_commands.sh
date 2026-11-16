@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # Invoke with bash, never source: strict options belong to a child shell only.
 if [[ "${BASH_SOURCE[0]}" != "$0" ]]; then
-  printf '%s\n' 'Please run: bash tools/decision_probe_commands.sh <prepare|sample|return>'
+  printf '%s\n' 'Please run: bash tools/decision_probe_commands.sh <prepare|recover|sample|return>'
   return 2
 fi
 set -uo pipefail
 PHASE="${1:-}"
-case "$PHASE" in prepare|sample|return) ;; *) printf '%s\n' 'Usage: bash tools/decision_probe_commands.sh <prepare|sample|return>'; exit 2 ;; esac
+case "$PHASE" in prepare|recover|sample|return) ;; *) printf '%s\n' 'Usage: bash tools/decision_probe_commands.sh <prepare|recover|sample|return>'; exit 2 ;; esac
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)" || exit 1
 cd -- "$ROOT" || exit 1
 STAMP="$(date -u +%Y%m%dT%H%M%SZ)_$$"
@@ -22,6 +22,9 @@ printf 'PHASE=%s\nLOG=%s\n' "$PHASE" "$LOG"
   RUN=outputs/decision_probe_v1/run800_v1
   export PYTHONUNBUFFERED=1
   case "$PHASE" in
+    recover)
+      "$PY" tools/recover_decision_probe_startup.py prepare
+      ;;
     prepare)
       "$PY" -m unittest discover -s tools -p test_decision_probe.py -v
       "$PY" tools/prepare_decision_probe.py --bundle "$BUNDLE"
@@ -52,9 +55,16 @@ PY
       cp -- "$CPU_DIR/cpu_check.json" "$RUN/cpu_check.json"
       ;;
     sample)
-      "$PY" tools/run_decision_probe.py pipeline --run-dir "$RUN"
+      if [[ -f outputs/decision_probe_v1/run800_startup_recovery_v1/startup_recovery.json ]]; then
+        "$PY" tools/recover_decision_probe_startup.py sample
+      else
+        "$PY" tools/run_decision_probe.py pipeline --run-dir "$RUN"
+      fi
       ;;
     return)
+      if [[ -f outputs/decision_probe_v1/run800_startup_recovery_v1/startup_recovery.json ]]; then
+        RUN=outputs/decision_probe_v1/run800_startup_recovery_v1
+      fi
       "$PY" tools/export_decision_probe.py --run-dir "$RUN" --code-ref "$(cat "$RUN/code_ref.txt")" --git-upload
       ;;
   esac
