@@ -1,0 +1,639 @@
+{
+  "runtime_hashes": {
+    "outputs\\difficulty_scheduler_v1\\runtime\\project\\environments\\ShopSimulator\\shop_env\\web_agent_site\\engine\\observation.py": "adabdf0109b8a0f592148c098e44065913ce6c699230047239d8809f412bf998",
+    "outputs\\difficulty_scheduler_v1\\runtime\\project\\environments\\ShopSimulator\\shop_env\\shop_env\\pack_api.py": "46998442f25948b420cd4d467400c420b39e1e8e4e89a2ae197bf8fe56d8bcea",
+    "outputs\\difficulty_scheduler_v1\\runtime\\project\\environments\\ShopSimulator\\shop_env\\web_agent_site\\engine\\reward.py": "ea692a5bd91c95dc086925372667e74328c0f86b3d6f1c67df3c59883df8990e",
+    "outputs\\difficulty_scheduler_v1\\runtime\\project\\environments\\ShopSimulator\\shop_env\\shop_env\\slot_lease_pool.py": "5be40275eebbed6735196a1dea4581ce707558e247d23d0de4d98907772a0420",
+    "outputs\\difficulty_scheduler_v1\\runtime\\project\\environments\\ShopSimulator\\shop_env\\web_agent_site\\envs\\web_agent_text_env.py": "d6db15f282849847a364d8d36af0eed113c1c97184a1ded98eb1fd29dab577d1",
+    "outputs\\difficulty_scheduler_v1\\runtime\\project\\environments\\ShopSimulator\\shop_env\\data\\items_eval_train.json": "57b10950a0064d16c81535a1d764a75879a508d250dde8a2a1787c5e6045559f",
+    "outputs\\difficulty_scheduler_v1\\runtime\\project\\environments\\ShopSimulator\\shop_env\\search_engine\\products.sqlite3": "ac2e73c4382d603cea781bfd6f32068712f4a618944e3de896e20ea815d8e103",
+    "outputs\\difficulty_scheduler_v1\\runtime\\project\\src\\shopping_grpo\\environment\\observation.py": "8b46e970483a51e5e564077fc2d6ae73b75175915c0ac78345a2cd4accff709a",
+    "outputs\\difficulty_scheduler_v1\\runtime\\project\\src\\shopping_grpo\\environment\\projection.py": "b493b30aeca4a3791d8bf8c893a6769633eec1a66bb5ceaf9b222b3487fd8258",
+    "outputs\\difficulty_scheduler_v1\\runtime\\project\\src\\shopping_grpo\\environment\\tools.py": "065bb6ba6cb68e155398890276f12602a2976e0266d3d74f39d42ba3b10c548a",
+    "outputs\\difficulty_scheduler_v1\\runtime\\project\\src\\shopping_grpo\\environment\\actions.py": "4214855d986422ee54d04cadfbbca11377c85858cbbae44f85697ea51c998e51",
+    "outputs\\difficulty_scheduler_v1\\runtime\\project\\src\\shopping_grpo\\environment\\product_id.py": "d0efdd7ed99c4548040bba600ef350fc01e03676aef02f2f3040a3fc478d482b"
+  },
+  "cases": [
+    {
+      "task_id": 22652,
+      "step": 755,
+      "uid": "818db633-c64f-43e1-a1cd-592acb83798f",
+      "generation_rollout_index": 0,
+      "consumed": true,
+      "query": "想找一款高光、修容和提亮三合一的高光盘，颜色是偏暖调的粉色，质地为哑光+微闪组合，适合打造自然立体妆效，不夸张但有存在感，价格的话五十元以内搞定。",
+      "original_reward": 0.04375000000000001,
+      "replayed_reward": 0.04375000000000001,
+      "reward_type": "partial_alternative_purchase",
+      "goal_price_upper": null,
+      "price_resolution": {
+        "status": "pass",
+        "price": 75.0,
+        "version": "variant-price-v1",
+        "method": "unique_effective_price_axis",
+        "evidence": {
+          "effective_price_axis": "color"
+        }
+      },
+      "selected_options": {
+        "颜色分类": "03#暖粉偏光 + 蜜丝婷防晒40ml"
+      },
+      "hard_gates": {
+        "category": {
+          "status": "pass",
+          "passed": true,
+          "verifiable": true,
+          "comparator": "category_leaf_ancestor_chain",
+          "required": [
+            "彩妆/香水/美妆工具›面部彩妆›高光"
+          ],
+          "actual": "彩妆/香水/美妆工具›面部彩妆›高光",
+          "source_field": "category",
+          "evidence": {
+            "comparisons": [
+              {
+                "required": [
+                  "彩妆/香水/美妆工具",
+                  "面部彩妆",
+                  "高光"
+                ],
+                "leaf_match": true,
+                "ancestor_match": true
+              }
+            ]
+          }
+        },
+        "budget": {
+          "status": "pass",
+          "passed": true,
+          "verifiable": true,
+          "comparator": "budget_not_declared_v1",
+          "required": null,
+          "actual": 75.0,
+          "source_field": "instruction",
+          "evidence": {
+            "status": "pass",
+            "price": 75.0,
+            "version": "variant-price-v1",
+            "method": "unique_effective_price_axis",
+            "evidence": {
+              "effective_price_axis": "color"
+            }
+          }
+        }
+      },
+      "requirement": {
+        "id": "r006",
+        "evidence": [
+          {
+            "text": "价格的话五十元以内搞定",
+            "start": 61,
+            "end": 72
+          },
+          {
+            "text": "价格的话五十元以内搞定。",
+            "start": 61,
+            "end": 73
+          }
+        ],
+        "operator": "at_most",
+        "expected": {
+          "type": "number",
+          "value": 50.0,
+          "unit": "CNY"
+        },
+        "kind": "explicit_budget"
+      },
+      "terminal_only_counterfactual": {
+        "reward": -0.85,
+        "reward_type": "wrong_purchase",
+        "hard_gates": {
+          "category": {
+            "status": "pass",
+            "passed": true,
+            "verifiable": true,
+            "comparator": "category_leaf_ancestor_chain",
+            "required": [
+              "彩妆/香水/美妆工具›面部彩妆›高光"
+            ],
+            "actual": "彩妆/香水/美妆工具›面部彩妆›高光",
+            "source_field": "category",
+            "evidence": {
+              "comparisons": [
+                {
+                  "required": [
+                    "彩妆/香水/美妆工具",
+                    "面部彩妆",
+                    "高光"
+                  ],
+                  "leaf_match": true,
+                  "ancestor_match": true
+                }
+              ]
+            }
+          },
+          "budget": {
+            "status": "fail",
+            "passed": false,
+            "verifiable": true,
+            "comparator": "variant_price_budget_v1",
+            "required": 50.0,
+            "actual": 75.0,
+            "source_field": "variant_price",
+            "evidence": {
+              "status": "pass",
+              "price": 75.0,
+              "version": "variant-price-v1",
+              "method": "unique_effective_price_axis",
+              "evidence": {
+                "effective_price_axis": "color"
+              }
+            }
+          }
+        },
+        "limit": "Only a copied goal upper bound changed; no prefix/dynamics/training counterfactual."
+      }
+    },
+    {
+      "task_id": 19271,
+      "step": 675,
+      "uid": "850c4042-dec8-4ca2-b437-2872f77aa676",
+      "generation_rollout_index": 1,
+      "consumed": true,
+      "query": "帮我在四百块钱以内的价位选择山姆同款的米高轮滑鞋组合装，给孩子买的，需要包括头盔、护膝、护肘、手套这些安全装备，要粉色M码，能从深圳线上直发的。",
+      "original_reward": 0.0007812500000000111,
+      "replayed_reward": 0.0007812500000000111,
+      "reward_type": "partial_alternative_purchase",
+      "goal_price_upper": null,
+      "price_resolution": {
+        "status": "pass",
+        "price": 419.0,
+        "version": "variant-price-v1",
+        "method": "constant_option_price",
+        "evidence": {}
+      },
+      "selected_options": {
+        "尺码": "m33-36",
+        "颜色分类": "粉色"
+      },
+      "hard_gates": {
+        "category": {
+          "status": "pass",
+          "passed": true,
+          "verifiable": true,
+          "comparator": "category_leaf_ancestor_chain",
+          "required": [
+            "玩具/童车/益智/积木/模型›童车/儿童轮滑›溜冰鞋/旱冰鞋"
+          ],
+          "actual": "玩具/童车/益智/积木/模型›童车/儿童轮滑›溜冰鞋/旱冰鞋",
+          "source_field": "category",
+          "evidence": {
+            "comparisons": [
+              {
+                "required": [
+                  "玩具/童车/益智/积木/模型",
+                  "童车/儿童轮滑",
+                  "溜冰鞋/旱冰鞋"
+                ],
+                "leaf_match": true,
+                "ancestor_match": true
+              }
+            ]
+          }
+        },
+        "budget": {
+          "status": "pass",
+          "passed": true,
+          "verifiable": true,
+          "comparator": "budget_not_declared_v1",
+          "required": null,
+          "actual": 419.0,
+          "source_field": "instruction",
+          "evidence": {
+            "status": "pass",
+            "price": 419.0,
+            "version": "variant-price-v1",
+            "method": "constant_option_price",
+            "evidence": {}
+          }
+        }
+      },
+      "requirement": {
+        "id": "r001",
+        "evidence": [
+          {
+            "text": "四百块钱以内",
+            "start": 3,
+            "end": 9
+          }
+        ],
+        "operator": "at_most",
+        "expected": {
+          "type": "number",
+          "value": 400.0,
+          "unit": "CNY"
+        },
+        "kind": "explicit_budget"
+      },
+      "terminal_only_counterfactual": {
+        "reward": -0.85,
+        "reward_type": "wrong_purchase",
+        "hard_gates": {
+          "category": {
+            "status": "pass",
+            "passed": true,
+            "verifiable": true,
+            "comparator": "category_leaf_ancestor_chain",
+            "required": [
+              "玩具/童车/益智/积木/模型›童车/儿童轮滑›溜冰鞋/旱冰鞋"
+            ],
+            "actual": "玩具/童车/益智/积木/模型›童车/儿童轮滑›溜冰鞋/旱冰鞋",
+            "source_field": "category",
+            "evidence": {
+              "comparisons": [
+                {
+                  "required": [
+                    "玩具/童车/益智/积木/模型",
+                    "童车/儿童轮滑",
+                    "溜冰鞋/旱冰鞋"
+                  ],
+                  "leaf_match": true,
+                  "ancestor_match": true
+                }
+              ]
+            }
+          },
+          "budget": {
+            "status": "fail",
+            "passed": false,
+            "verifiable": true,
+            "comparator": "variant_price_budget_v1",
+            "required": 400.0,
+            "actual": 419.0,
+            "source_field": "variant_price",
+            "evidence": {
+              "status": "pass",
+              "price": 419.0,
+              "version": "variant-price-v1",
+              "method": "constant_option_price",
+              "evidence": {}
+            }
+          }
+        },
+        "limit": "Only a copied goal upper bound changed; no prefix/dynamics/training counterfactual."
+      }
+    },
+    {
+      "task_id": 15497,
+      "step": 659,
+      "uid": "50b50608-32d7-489d-a526-ce97bf94c41c",
+      "generation_rollout_index": 3,
+      "consumed": true,
+      "query": "我想织一条男女都适合的围巾，给我推荐一款牛奶棉毛线，要求是由八股细毛线捆成的粗毛线，也要能用来给孩子织鞋子，给自己做包包的，颜色要黑色的，价格不超过5元。",
+      "original_reward": -0.85,
+      "replayed_reward": -0.85,
+      "reward_type": "wrong_purchase",
+      "goal_price_upper": 5.0,
+      "price_resolution": {
+        "status": "pass",
+        "price": 6.0,
+        "version": "variant-price-v1",
+        "method": "unique_effective_price_axis",
+        "evidence": {
+          "effective_price_axis": "color"
+        }
+      },
+      "selected_options": {
+        "颜色分类": "黑色22"
+      },
+      "hard_gates": {
+        "category": {
+          "status": "pass",
+          "passed": true,
+          "verifiable": true,
+          "comparator": "category_leaf_ancestor_chain",
+          "required": [
+            "服饰配件/皮带/帽子/围巾›制衣面料›毛线"
+          ],
+          "actual": "服饰配件/皮带/帽子/围巾›制衣面料›毛线",
+          "source_field": "category",
+          "evidence": {
+            "comparisons": [
+              {
+                "required": [
+                  "服饰配件/皮带/帽子/围巾",
+                  "制衣面料",
+                  "毛线"
+                ],
+                "leaf_match": true,
+                "ancestor_match": true
+              }
+            ]
+          }
+        },
+        "budget": {
+          "status": "fail",
+          "passed": false,
+          "verifiable": true,
+          "comparator": "variant_price_budget_v1",
+          "required": 5.0,
+          "actual": 6.0,
+          "source_field": "variant_price",
+          "evidence": {
+            "status": "pass",
+            "price": 6.0,
+            "version": "variant-price-v1",
+            "method": "unique_effective_price_axis",
+            "evidence": {
+              "effective_price_axis": "color"
+            }
+          }
+        }
+      },
+      "requirement": {
+        "id": "r008",
+        "evidence": [
+          {
+            "text": "价格不超过5元",
+            "start": 69,
+            "end": 76
+          }
+        ],
+        "operator": "at_most",
+        "expected": {
+          "type": "number",
+          "value": 5.0,
+          "unit": "CNY"
+        },
+        "kind": "explicit_budget"
+      },
+      "terminal_only_counterfactual": {
+        "reward": -0.85,
+        "reward_type": "wrong_purchase",
+        "hard_gates": {
+          "category": {
+            "status": "pass",
+            "passed": true,
+            "verifiable": true,
+            "comparator": "category_leaf_ancestor_chain",
+            "required": [
+              "服饰配件/皮带/帽子/围巾›制衣面料›毛线"
+            ],
+            "actual": "服饰配件/皮带/帽子/围巾›制衣面料›毛线",
+            "source_field": "category",
+            "evidence": {
+              "comparisons": [
+                {
+                  "required": [
+                    "服饰配件/皮带/帽子/围巾",
+                    "制衣面料",
+                    "毛线"
+                  ],
+                  "leaf_match": true,
+                  "ancestor_match": true
+                }
+              ]
+            }
+          },
+          "budget": {
+            "status": "fail",
+            "passed": false,
+            "verifiable": true,
+            "comparator": "variant_price_budget_v1",
+            "required": 5.0,
+            "actual": 6.0,
+            "source_field": "variant_price",
+            "evidence": {
+              "status": "pass",
+              "price": 6.0,
+              "version": "variant-price-v1",
+              "method": "unique_effective_price_axis",
+              "evidence": {
+                "effective_price_axis": "color"
+              }
+            }
+          }
+        },
+        "limit": "Only a copied goal upper bound changed; no prefix/dynamics/training counterfactual."
+      }
+    },
+    {
+      "task_id": 5423,
+      "step": 711,
+      "uid": "80cae4b2-f494-4693-beb2-73142ee23490",
+      "generation_rollout_index": 3,
+      "consumed": true,
+      "query": "帮我安利一款推车，能轻松移动，常用的功能都要有，配套设施要齐全，需配有4口锅，主要用来做煎饼类小吃，同时也能炸一些肉类和蔬菜串，适合在晚上人多的地方做生意，能直接用罐装燃料，价格在1500元以内。",
+      "original_reward": -0.85,
+      "replayed_reward": -0.85,
+      "reward_type": "wrong_purchase",
+      "goal_price_upper": 1500.0,
+      "price_resolution": {
+        "status": "pass",
+        "price": 1930.0,
+        "version": "variant-price-v1",
+        "method": "unique_effective_price_axis",
+        "evidence": {
+          "effective_price_axis": "color"
+        }
+      },
+      "selected_options": {
+        "颜色分类": "套餐二（整套推车）"
+      },
+      "hard_gates": {
+        "category": {
+          "status": "pass",
+          "passed": true,
+          "verifiable": true,
+          "comparator": "category_leaf_ancestor_chain",
+          "required": [
+            "厨房/烹饪用具›烧烤/烘焙用具›烧烤架炉/烧烤DIY用具›烧烤车"
+          ],
+          "actual": "厨房/烹饪用具›烧烤/烘焙用具›烧烤架炉/烧烤DIY用具›烧烤车",
+          "source_field": "category",
+          "evidence": {
+            "comparisons": [
+              {
+                "required": [
+                  "厨房/烹饪用具",
+                  "烧烤/烘焙用具",
+                  "烧烤架炉/烧烤diy用具",
+                  "烧烤车"
+                ],
+                "leaf_match": true,
+                "ancestor_match": true
+              }
+            ]
+          }
+        },
+        "budget": {
+          "status": "fail",
+          "passed": false,
+          "verifiable": true,
+          "comparator": "variant_price_budget_v1",
+          "required": 1500.0,
+          "actual": 1930.0,
+          "source_field": "variant_price",
+          "evidence": {
+            "status": "pass",
+            "price": 1930.0,
+            "version": "variant-price-v1",
+            "method": "unique_effective_price_axis",
+            "evidence": {
+              "effective_price_axis": "color"
+            }
+          }
+        }
+      },
+      "requirement": {
+        "id": "r009",
+        "evidence": [
+          {
+            "text": "价格在1500元以内",
+            "start": 87,
+            "end": 97
+          }
+        ],
+        "operator": "at_most",
+        "expected": {
+          "type": "number",
+          "value": 1500.0,
+          "unit": "CNY"
+        },
+        "kind": "explicit_budget"
+      },
+      "terminal_only_counterfactual": {
+        "reward": -0.85,
+        "reward_type": "wrong_purchase",
+        "hard_gates": {
+          "category": {
+            "status": "pass",
+            "passed": true,
+            "verifiable": true,
+            "comparator": "category_leaf_ancestor_chain",
+            "required": [
+              "厨房/烹饪用具›烧烤/烘焙用具›烧烤架炉/烧烤DIY用具›烧烤车"
+            ],
+            "actual": "厨房/烹饪用具›烧烤/烘焙用具›烧烤架炉/烧烤DIY用具›烧烤车",
+            "source_field": "category",
+            "evidence": {
+              "comparisons": [
+                {
+                  "required": [
+                    "厨房/烹饪用具",
+                    "烧烤/烘焙用具",
+                    "烧烤架炉/烧烤diy用具",
+                    "烧烤车"
+                  ],
+                  "leaf_match": true,
+                  "ancestor_match": true
+                }
+              ]
+            }
+          },
+          "budget": {
+            "status": "fail",
+            "passed": false,
+            "verifiable": true,
+            "comparator": "variant_price_budget_v1",
+            "required": 1500.0,
+            "actual": 1930.0,
+            "source_field": "variant_price",
+            "evidence": {
+              "status": "pass",
+              "price": 1930.0,
+              "version": "variant-price-v1",
+              "method": "unique_effective_price_axis",
+              "evidence": {
+                "effective_price_axis": "color"
+              }
+            }
+          }
+        },
+        "limit": "Only a copied goal upper bound changed; no prefix/dynamics/training counterfactual."
+      }
+    },
+    {
+      "task_id": 373,
+      "step": 775,
+      "uid": "3f1d8c8c-a416-4210-8852-169db2382ed1",
+      "generation_rollout_index": 0,
+      "consumed": true,
+      "query": "求推荐一款手动的口腔冲洗器，是牙科用的一次性注射器，带弯曲头方便操作，主要是用来清理牙洞的，价格别太贵，十几块钱左右的，要黄色的款。",
+      "original_reward": -0.024999999999999967,
+      "replayed_reward": -0.024999999999999967,
+      "reward_type": "partial_alternative_purchase",
+      "goal_price_upper": null,
+      "price_resolution": {
+        "status": "pass",
+        "price": 15.0,
+        "version": "variant-price-v1",
+        "method": "unique_effective_price_axis",
+        "evidence": {
+          "effective_price_axis": "color"
+        }
+      },
+      "selected_options": {
+        "颜色分类": "军绿色"
+      },
+      "hard_gates": {
+        "category": {
+          "status": "pass",
+          "passed": true,
+          "verifiable": true,
+          "comparator": "category_leaf_ancestor_chain",
+          "required": [
+            "医疗器械›冲牙器／洗牙器／洁牙机"
+          ],
+          "actual": "医疗器械›冲牙器／洗牙器／洁牙机",
+          "source_field": "category",
+          "evidence": {
+            "comparisons": [
+              {
+                "required": [
+                  "医疗器械",
+                  "冲牙器/洗牙器/洁牙机"
+                ],
+                "leaf_match": true,
+                "ancestor_match": true
+              }
+            ]
+          }
+        },
+        "budget": {
+          "status": "pass",
+          "passed": true,
+          "verifiable": true,
+          "comparator": "budget_not_declared_v1",
+          "required": null,
+          "actual": 15.0,
+          "source_field": "instruction",
+          "evidence": {
+            "status": "pass",
+            "price": 15.0,
+            "version": "variant-price-v1",
+            "method": "unique_effective_price_axis",
+            "evidence": {
+              "effective_price_axis": "color"
+            }
+          }
+        }
+      },
+      "requirement": {
+        "id": "r007",
+        "evidence": [
+          {
+            "text": "要黄色的款",
+            "start": 60,
+            "end": 65
+          }
+        ],
+        "operator": "eq",
+        "expected": {
+          "type": "text",
+          "value": "黄色"
+        },
+        "kind": "explicit_color"
+      }
+    }
+  ]
+}
