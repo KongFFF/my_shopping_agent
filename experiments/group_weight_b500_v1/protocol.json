@@ -1,0 +1,228 @@
+{
+  "version": "group-weight-b500-v1",
+  "state": "design_frozen_not_execution_ready",
+  "method": {
+    "F_definition": "all four valid trajectories have purchase_success=false",
+    "success_predicate": "reward_valid && reward_detail.purchase_success; includes native valid_alternative_purchase",
+    "F_weight": 0.5,
+    "S_weight": 1.0,
+    "normalization": "global_actor_effective_token_weighted_mean",
+    "formula": "L_B = sum_t(w_group(t) * mask_t * clipped_PPO_loss_t) / sum_t(w_group(t) * mask_t)",
+    "apply_after_dynamic_filter": true,
+    "group_identity": "uid; preserved through length balancing",
+    "all_other_losses": "unchanged; baseline entropy_coeff=0, KL disabled"
+  },
+  "baseline": {
+    "commit": "a583dba4c149be09622ce58ad6f7a160db77bb41",
+    "run": "grpo_baseline_20261022_202816",
+    "primary_endpoint": 500,
+    "actor_init": "/root/autodl-tmp/work/my_shopping_agent/upstream/shopping-grpo-longhorizon/outputs/runs/sft_20261021_165243/merged",
+    "sft_files": {
+      "chat_template.jinja": "273d8e0e683b885071fb17e08d71e5f2a5ddfb5309756181681de4f5a1822d80",
+      "config.json": "d2aa2ba0ce0fbabc0900f6e70ecf9b90577581a8812f3dac94566aabea5f929f",
+      "generation_config.json": "4775156af5f3183b603703a43c3506de9a079e63497871e0886c196de5a484b9",
+      "merge_manifest.json": "fe593b8ff8fdc0ff6ac1a7948bb96ee8abcbca82e639fb660bb7cc4ce80215b0",
+      "model.safetensors": "c79c26f6d39cc42b4d4766b276d54dfd00d241b6b1bec159976e270a2930f16a",
+      "processor_config.json": "d89ef49ce9cd37fbf510158e13c1ef063d9286411c1ec9049932dbe0487143b1",
+      "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+      "tokenizer_config.json": "792fa3f0cb88b111e54ef3134c873531008c4df471d108da17903426e308aa7b"
+    },
+    "data_sha256": {
+      "data/grpo/train.parquet": "98bb1799a42916b6ca2a1a2618f11cfec60f428e99e6ada448a78361768206e5",
+      "data/grpo/validation.parquet": "8c9fbdd22bf6d191d1da6bcca9c1612e170bb928483c4ce0c8d0934f9ba69317",
+      "data/grpo/train.jsonl": "4e6d441e1a432223741b2968d1622d1e77ab855a7d8fe9275cd7df2bbf5565bf",
+      "data/grpo/validation.jsonl": "11e0e15ec9fe6911c7c5b8e8525ad06a0b020367e58461e6ab1baa3cdbe73d61"
+    },
+    "environment": {
+      "environment_version": "shopsimulator-environment-v2.1",
+      "lease_contract": "explicit-client-release-v1",
+      "manifest_version": "shopping-environment-manifest-v1",
+      "max_steps": 35,
+      "observation_version": "shopping-observation-v2",
+      "product_data_sha256": "57b10950a0064d16c81535a1d764a75879a508d250dde8a2a1787c5e6045559f",
+      "reward": {
+        "early_abstain": -0.35,
+        "gold_purchase": 1.0,
+        "graceful_stop": -0.15,
+        "max_steps": -0.5,
+        "partial_purchase_base": -0.3,
+        "partial_purchase_cap": 0.25,
+        "partial_purchase_scale": 0.55,
+        "repeat_loop": -0.65,
+        "reward_unverifiable": 0.0,
+        "valid_alternative_purchase": 0.55,
+        "version": "shopsimulator-reward-v3",
+        "wrong_purchase": -0.85
+      },
+      "search": {
+        "field_weights": {
+          "attributes": 1.5,
+          "brand": 2.0,
+          "bullets": 0.8,
+          "category": 2.0,
+          "model": 2.5,
+          "options": 1.2,
+          "title": 3.0
+        },
+        "page_size": 20,
+        "top_k": 150,
+        "version": "shopsimulator-multifield-bm25-v2"
+      },
+      "seed": 20260728,
+      "runtime_files_sha256": {
+        "observation.py": "adabdf0109b8a0f592148c098e44065913ce6c699230047239d8809f412bf998",
+        "pack_api.py": "46998442f25948b420cd4d467400c420b39e1e8e4e89a2ae197bf8fe56d8bcea",
+        "reward.py": "ea692a5bd91c95dc086925372667e74328c0f86b3d6f1c67df3c59883df8990e",
+        "slot_lease_pool.py": "5be40275eebbed6735196a1dea4581ce707558e247d23d0de4d98907772a0420",
+        "web_agent_text_env.py": "d6db15f282849847a364d8d36af0eed113c1c97184a1ded98eb1fd29dab577d1"
+      },
+      "shopsimulator_commit": "9ecba272963960ab4a10e1a781bd05cd7634ce20",
+      "tool_version": "shopping-tools-v2"
+    },
+    "reference_launch_binding": {
+      "project": "/root/autodl-tmp/work/my_shopping_agent/upstream/shopping-grpo-longhorizon",
+      "output": "/root/autodl-tmp/work/my_shopping_agent/upstream/shopping-grpo-longhorizon/outputs/runs/grpo_baseline_20261022_202816/formal_resume350_v1",
+      "resume_step": 350,
+      "total_updates": 500,
+      "source_sha256": {
+        "/root/autodl-tmp/work/my_shopping_agent/upstream/shopping-grpo-longhorizon/.venv/lib/python3.12/site-packages/verl/workers/utils/losses.py": "70b3ac5ead9dc6dbcf06d4c209dc5a6725edc312e4d0914b190f3eafe313cc87",
+        "/root/autodl-tmp/work/my_shopping_agent/upstream/shopping-grpo-longhorizon/configs/agent_loop.yaml": "64e31ca42a06cfd3b40f19ccae2881ed2a6d55c03c811717f46b1011fbdc3a2d",
+        "/root/autodl-tmp/work/my_shopping_agent/upstream/shopping-grpo-longhorizon/configs/grpo.yaml": "8a59aa536ee95e70de9c55e3ea7bf2d15819dd17bfcda385bcf126b8475c6508",
+        "/root/autodl-tmp/work/my_shopping_agent/upstream/shopping-grpo-longhorizon/configs/tools.json": "cd12eddb9392fa9d9babb07b7cef9773f780478b399fcc82cc62bea03455ed01",
+        "/root/autodl-tmp/work/my_shopping_agent/upstream/shopping-grpo-longhorizon/data/environment.json": "538a4134857a2f1043de1b1b944541bc63bc4530a32d51429dc05939c120068a",
+        "/root/autodl-tmp/work/my_shopping_agent/upstream/shopping-grpo-longhorizon/pyproject.toml": "8b9651716f091a0451119b0e393073920993055d4ba1632e2245b40db2a59f06",
+        "/root/autodl-tmp/work/my_shopping_agent/upstream/shopping-grpo-longhorizon/scripts/check_grpo_runtime.py": "cd25a56adca8c54f44461acb029de85c73dda9aa4bb3d2b57dfe36b0476b21ed",
+        "/root/autodl-tmp/work/my_shopping_agent/upstream/shopping-grpo-longhorizon/scripts/grpo.sh": "279327f20fb7dfcc36fd6e24404859f7e4573c229f51a4b80f2bc48a15f572ba",
+        "/root/autodl-tmp/work/my_shopping_agent/upstream/shopping-grpo-longhorizon/scripts/train_grpo.py": "c181815a57bb8210994245b2d335d37d2488e6ae141d1f25f9bffb9167d3f159",
+        "/root/autodl-tmp/work/my_shopping_agent/upstream/shopping-grpo-longhorizon/src/shopping_grpo/training/grpo/compat.py": "de6438866ea439081fbfb26d550771fb751a9f4142b4126822c1555ab7c63b3e",
+        "/root/autodl-tmp/work/my_shopping_agent/upstream/shopping-grpo-longhorizon/uv.lock": "8b27a78b8a4e40b4fe13665ab825517ae2bf67b2e63d5277ef4f81af44bf8bc3",
+        "/root/autodl-tmp/work/my_shopping_agent/upstream/shopping-grpo-longhorizon/.venv/lib/python3.12/site-packages/verl/trainer/ppo/ray_trainer.py": "dce8e3d431218888c9cf65ea8a031091699ac4bd573c7c0a50677a14e75cca59",
+        "/root/autodl-tmp/work/my_shopping_agent/upstream/shopping-grpo-longhorizon/.venv/lib/python3.12/site-packages/verl/workers/engine/fsdp/transformer_impl.py": "6d8ae85629e69d011a3270c63bfaf4884e5bcd7a91504addba761009fc5cd6fd",
+        "/root/autodl-tmp/work/my_shopping_agent/upstream/shopping-grpo-longhorizon/.venv/lib/python3.12/site-packages/verl/utils/torch_functional.py": "cb37d045dec2161d637e2633032cc97c97334e5547cea62dace42630c9683259"
+      }
+    }
+  },
+  "training": {
+    "target_effective_updates": 500,
+    "fresh_GRPO_LoRA": true,
+    "lora_rank": 16,
+    "lora_alpha": 32,
+    "optimizer": {
+      "_target_": "verl.workers.config.FSDPOptimizerConfig",
+      "optimizer": "AdamW",
+      "optimizer_impl": "torch.optim",
+      "lr": 1e-06,
+      "lr_warmup_steps_ratio": 0.03,
+      "total_training_steps": -1,
+      "weight_decay": 0.01,
+      "lr_warmup_steps": -1,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "clip_grad": 1.0,
+      "min_lr_ratio": 0.0,
+      "num_cycles": 0.5,
+      "lr_scheduler_type": "constant",
+      "zero_indexed_step": true,
+      "warmup_style": null,
+      "override_optimizer_config": null
+    },
+    "warmup_effective_updates": 15,
+    "lr_after_warmup": 1e-06,
+    "total_epochs": 50,
+    "train_batch_size": 2,
+    "rollouts_per_task": 4,
+    "actor_minibatch_trajectories": 8,
+    "ppo_epochs": 1,
+    "seed_data": 42,
+    "seed_actor_loader": 42,
+    "seed_fsdp": 42,
+    "pythonhashseed": 42,
+    "vllm_seed": "inherit original exact package/config default; no new seed override",
+    "planned_full_resume_at": 350,
+    "save_every": 50,
+    "early_save_steps": [
+      1,
+      10,
+      25
+    ],
+    "restore": "model, optimizer, scheduler, extra/RNG and dataloader state; no adapter reinitialization",
+    "sampling": {
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "top_k": -1,
+      "max_model_len": 24576,
+      "context_input_budget": 16384,
+      "max_steps": 35,
+      "per_turn_max_tokens": 512,
+      "context_compaction": false
+    },
+    "dynamic_sampling": {
+      "enable": true,
+      "metric": "seq_reward",
+      "max_num_gen_batches": 3,
+      "max_consecutive_skipped_updates": 10,
+      "reward_tolerance": 1e-08
+    }
+  },
+  "evaluation": {
+    "primary": "fixed B500 independent Dev50 vs archived A500 independent Dev50",
+    "A500_successes": 27,
+    "sft_successes": 24,
+    "protocol": {
+      "benchmark": "/root/autodl-tmp/work/my_shopping_agent/upstream/shopping-grpo-longhorizon/outputs/runs/sft_20261021_165243/cpu_prep/dev50.jsonl",
+      "reward_contract": "shopsimulator-reward-v3",
+      "max_steps": 35,
+      "max_tokens": 512,
+      "temperature": 0.0,
+      "top_p": 1.0,
+      "context_window": 24576,
+      "context_safety_margin": 512,
+      "context_compaction": false,
+      "observation_token_budget": 1536,
+      "observation_detail_token_budget": 4096,
+      "observation_generic_token_budget": 768,
+      "observation_search_top_k": 20
+    },
+    "strict_success": "done && reward_valid && reward_type=gold_purchase",
+    "internal_validation_steps": [
+      0,
+      50,
+      100,
+      150,
+      200,
+      250,
+      300,
+      350,
+      400,
+      450,
+      500
+    ],
+    "selection": "fixed step500 primary; no best-of-checkpoints substitution",
+    "final200_execution": false,
+    "continuation_to800": "not authorized or automatic",
+    "continuation_screen": {
+      "net_dev_gain_at_least": 3,
+      "minimum_B_successes": 30,
+      "interpretation": "screening only, not statistical significance; review regressions/costs; no automatic800"
+    }
+  },
+  "caps": {
+    "training_generated_trajectories_including_invalid_skipped_rollback": 24000,
+    "internal_validation_episodes": 550,
+    "independent_dev_episodes": 50,
+    "smoke_episodes_max": 3,
+    "allocated_GPU_wall_hours_all_stages": 20,
+    "timeout_termination": "save latest safe checkpoint, mark budget_truncated; never call it B500",
+    "tokens": "count all sampling prompt/completion, Actor effective and rollout context separately; no invented matched historical token budget"
+  },
+  "launch_gates": [
+    "cloud historical baseline_plan SFT and data hashes pass",
+    "frozen baseline runtime/assets/dependencies verified; B overlay only declared change",
+    "B implementation tests: alpha1 equivalence, FF/SS cancellation, FS token weighting, masks/padding, microbatch invariance, uid shuffle",
+    "first B update checkpoint and optimizer/weight metrics verified before continuing",
+    "no active competing experiment, enough disk/memory and complete return/export plan"
+  ],
+  "claims": "single-seed historically matched experiment; same500 updates does not imply same generation cost"
+}
