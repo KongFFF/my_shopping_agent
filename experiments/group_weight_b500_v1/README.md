@@ -58,42 +58,29 @@ response_mask只计原来参与Actor训练的生成token，工具回复、paddin
 
 ## 无卡身份预检与Git回传（不训练）
 
-先在AutoDL仓库根目录执行。使用独立克隆，保留现有工作树；以下没有`exit`、`exec`或顶层`set -e`，失败不会主动关闭当前终端。若克隆失败不要运行后续代码；若目标目录已存在，保留它并检查，不删除重建。
+2026-11-18流程修复：旧的三段命令停用。已有目录不删除、不复用；使用唯一的新克隆，验证脚本与冻结文件、生成有效收据后才提交。流程失败不会关闭当前终端。若预检发现真实条件不匹配，将合法失败收据回传供分析，仍不会训练。
+
+完整复制执行以下一个代码块。不需要先手动克隆、切结果分支或配置全局Git身份：
 
 ```bash
-cd /root/autodl-tmp/work/my_shopping_agent
-REVIEW_DIR="$PWD/outputs/b500_protocol_review_v1"
-git clone --single-branch --branch codex/b500-protocol-v1 "$(git remote get-url origin)" "$REVIEW_DIR"
+if (
+  cd /root/autodl-tmp/work/my_shopping_agent &&
+  git -c http.version=HTTP/1.1 fetch origin codex/b500-preflight-recovery-v1 &&
+  B500_BOOTSTRAP=$(mktemp /tmp/b500-preflight-return-XXXXXX.py) &&
+  git show FETCH_HEAD:tools/run_b500_preflight_return.py > "$B500_BOOTSTRAP" &&
+  /root/autodl-tmp/work/my_shopping_agent/upstream/shopping-grpo-longhorizon/.venv/bin/python \
+    "$B500_BOOTSTRAP" --repo /root/autodl-tmp/work/my_shopping_agent
+); then
+  printf '回传流程完成；身份是否通过以 PREFLIGHT_PASSED 为准。未启动训练。\n'
+else
+  printf '流程已停止。保留上方日志和 STATE 路径；不要继续旧上传命令。未启动训练。\n'
+fi
 ```
 
-确认克隆成功后，调用既有虚拟环境的Python，仅哈希文件和读取包元数据。哈希模型耗时取决于磁盘，不需要GPU：
+脚本只在新克隆中配置提交作者：优先继承主仓库已配置身份，缺失则使用明确的工具身份`B500 Evidence Export <b500-evidence@localhost>`，不修改全局Git设置。只有远端分支指向预期commit经确认后，才输出RETURN_BRANCH和RETURN_COMMIT。
 
-```bash
-PROJECT=/root/autodl-tmp/work/my_shopping_agent/upstream/shopping-grpo-longhorizon
-REVIEW_DIR=/root/autodl-tmp/work/my_shopping_agent/outputs/b500_protocol_review_v1
-STAMP=$(date -u +%Y%m%dT%H%M%SZ)
-RECEIPT="$REVIEW_DIR/analysis/b500_matching_20261117/cloud_preflight/$STAMP.json"
-"$PROJECT/.venv/bin/python" "$REVIEW_DIR/tools/check_b500_history.py" \
-  --asset-project "$PROJECT" \
-  --runtime-project "$PROJECT/outputs/bounded_resume500_to650/runtime" \
-  --output "$RECEIPT"
-PREFLIGHT_STATUS=$?
-printf 'PREFLIGHT_EXIT_CODE=%s\nRECEIPT=%s\n' "$PREFLIGHT_STATUS" "$RECEIPT"
-```
+克隆、文件或收据校验、commit失败，立即阻断后续步骤。模型哈希可能需要几分钟，但不加载张量或启动GPU。合法预检失败与程序崩溃分别处理：有匹配协议的合法失败收据就回传；没有收据或退出码不符就停止。
 
-若该隔离runtime已不存在或哈希不匹配，只回传失败收据，不随意换当前主工作树继续。预检脚本验证原veRL0.8.0/vLLM0.25.1及绑定的关键源码；未独立封存的依赖/GPU条件仍在历史限制中，包名版本相等不能代替源码身份。
+每次运行在主仓库outputs下保存`b500-review-…-state.json`，记录真实克隆目录、结果分支和阶段。若push失败，提交与收据保留；按输出的`--retry-push`命令只重试上传，无需重新哈希或重跑预检。旧`outputs/b500_protocol_review_v1`及其未提交分支均保留，不需要清理。
 
-无论通过与否都回传收据，不启动GPU：
-
-```bash
-cd /root/autodl-tmp/work/my_shopping_agent/outputs/b500_protocol_review_v1
-RETURN_BRANCH="codex/b500-preflight-results-$STAMP"
-git switch -c "$RETURN_BRANCH"
-git add -- analysis/b500_matching_20261117/cloud_preflight
-git commit -m "Return B500 CPU history identity preflight"
-git -c http.version=HTTP/1.1 push -u origin "$RETURN_BRANCH"
-printf 'RETURN_BRANCH=%s\nRETURN_COMMIT=' "$RETURN_BRANCH"
-git rev-parse HEAD
-```
-
-只有push成功才表示远端已有结果；网络失败保留原分支/提交并重试push，不重跑模型或删除运行目录。CPU身份通过不代表B实现通过，也不自动开始训练。
+请回传成功输出的RETURN_BRANCH/RETURN_COMMIT；若流程失败则回传STOPPED信息和STATE路径。身份通过不代表B实现已通过，仍不启动训练。
