@@ -4,18 +4,23 @@ set -euo pipefail
 ROOT=/root/autodl-tmp/work/my_shopping_agent
 PROJECT="$ROOT/upstream/shopping-grpo-longhorizon"
 RUN="$ROOT/outputs/runs/b500_group_weight_v1"
+ACTIVE="$ROOT/outputs/b500_active_run.txt"
+if [[ -f "$ACTIVE" ]]; then
+  IFS= read -r RUN < "$ACTIVE"
+  [[ "$RUN" == "$ROOT/outputs/runs/"* ]] || { printf 'STOP: unexpected active-run path.\n' >&2; exit 1; }
+fi
 PY="$PROJECT/.venv/bin/python"
-PHASE="${1:?Use prepare, run, status, or return}"
+PHASE="${1:?Use recover, run, status, or return}"
 cd "$ROOT"
-if [[ "$PHASE" == prepare ]]; then
-  if [[ -e "$RUN" ]]; then
-    printf 'STOP: run directory exists; preserve it and use status/return: %s\n' "$RUN" >&2
-    exit 1
-  fi
+if [[ "$PHASE" == recover ]]; then
+  [[ ! -e "$ACTIVE" ]] || { printf 'STOP: recovery already prepared; use status/return.\n' >&2; exit 1; }
   mkdir -p "$ROOT/outputs"
-  CODE=$(mktemp -d "$ROOT/outputs/b500-live-code-XXXXXX")
-  git -c http.version=HTTP/1.1 clone --single-branch --branch codex/b500-live-run-v1 "$(git remote get-url origin)" "$CODE"
-  "$PY" "$CODE/tools/b500_run.py" prepare --run-dir "$RUN"
+  CODE=$(mktemp -d "$ROOT/outputs/b500-guard-code-XXXXXX")
+  git -c http.version=HTTP/1.1 clone --depth 1 --single-branch --branch codex/b500-bypass-guard-fix "$(git remote get-url origin)" "$CODE"
+  "$PY" "$CODE/tools/recover_b500_guard.py" --old-run "$RUN" --active-pointer "$ACTIVE"
+elif [[ "$PHASE" == prepare ]]; then
+  printf 'STOP: this repair helper is for recover, run, status, return; do not repeat prepare.\n' >&2
+  exit 1
 else
   CODE=$("$PY" -c 'import json,sys; print(json.load(open(sys.argv[1]))["repo"])' "$RUN/run.json")
   case "$PHASE" in

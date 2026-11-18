@@ -9,6 +9,8 @@ from pathlib import Path
 import sys
 from types import SimpleNamespace
 import unittest
+from unittest.mock import patch
+import types
 import zipfile
 import torch
 
@@ -64,6 +66,43 @@ def direct_losses(old,new,a):
 
 
 class WeightTests(unittest.TestCase):
+    def runtime_bypass(self):
+        if __import__('importlib.util',fromlist=['find_spec']).find_spec('omegaconf')is None:
+            sys.path.insert(0,str(ROOT/'outputs/difficulty_scheduler_v1/cpu_dependencies'))
+        from omegaconf import OmegaConf
+        cfg=OmegaConf.create(json.loads((ROOT/'experiments/group_weight_b500_v1/historical_a_composed_config.json').read_text()))
+        source=ROOT/'experiments/group_weight_b500_v1/reference/rollout_corr_helper.py'
+        self.assertEqual(hashlib.sha256(source.read_bytes()).hexdigest(),'b5b09c8361d587e7f8078fb873766abc2cbf7ce231b9c449450928413ed11ff4')
+        names={'apply_bypass_mode','compute_rollout_correction_and_rejection_mask'}
+        nodes=[n for n in ast.parse(source.read_text()).body if isinstance(n,ast.FunctionDef)and n.name in names]
+        module=ast.parse('from __future__ import annotations');module.body+=nodes
+        scope={'torch':torch,'compute_offpolicy_metrics':lambda **kw:{}}
+        exec(compile(ast.fix_missing_locations(module),str(source),'exec'),scope)
+        batch=SimpleNamespace(batch={'rollout_log_probs':torch.zeros(8,5,dtype=torch.float64)})
+        scope['apply_bypass_mode'](batch,cfg.algorithm.rollout_correction,cfg.actor_rollout_ref.actor.policy_loss)
+        return cfg,scope
+    def test_real_apply_bypass_runtime_config_accepted(self):
+        from b500_hook import validate_config
+        cfg,_=self.runtime_bypass();self.assertEqual(cfg.actor_rollout_ref.actor.policy_loss.loss_mode,'bypass_mode');validate_config(cfg)
+    def test_unexpected_runtime_reinforce_or_rejection_rejected(self):
+        from b500_hook import validate_config
+        for key,value in [('loss_type','reinforce'),('rollout_rs','token'),('rollout_is','token')]:
+            cfg,_=self.runtime_bypass();cfg.actor_rollout_ref.actor.policy_loss.rollout_correction[key]=value
+            with self.assertRaisesRegex(ValueError,key):validate_config(cfg)
+    def test_real_bypass_PPO_dispatch_loss_and_gradient(self):
+        cfg,helpers=self.runtime_bypass()
+        source=ROOT/'analysis/grpo_mechanism_audit_20261116/package_reference/verl/trainer/ppo/core_algos.py'
+        fn=next(n for n in ast.parse(source.read_text()).body if isinstance(n,ast.FunctionDef)and n.name=='compute_policy_loss_bypass_mode');fn.decorator_list=[]
+        module=ast.parse('from __future__ import annotations');module.body.append(fn)
+        scope=PPO.__globals__;exec(compile(ast.fix_missing_locations(module),str(source),'exec'),scope)
+        mod=types.ModuleType('verl.trainer.ppo.rollout_corr_helper');mod.compute_rollout_correction_and_rejection_mask=helpers['compute_rollout_correction_and_rejection_mask']
+        u,s,m,a=fixture();c,_=make_plan(u,s,m);old=torch.zeros_like(a);x=torch.randn_like(a).requires_grad_()
+        actor=config(m.sum());actor.policy_loss=cfg.actor_rollout_ref.actor.policy_loss
+        with patch.dict(sys.modules,{'verl.trainer.ppo.rollout_corr_helper':mod}):
+            actual,_=scope['compute_policy_loss_bypass_mode'](old,x,scaled_advantages(a,c),m,config=actor)
+        expected,_=PPO(old,x,scaled_advantages(a,c),m,config=actor)
+        torch.testing.assert_close(actual,expected)
+        torch.testing.assert_close(torch.autograd.grad(actual,x,retain_graph=True)[0],torch.autograd.grad(expected,x)[0])
     def check_gradient(self,kinds='FS',alpha=.5):
         uid,info,mask,a=fixture(kinds);coeff,plan=make_plan(uid,info,mask,alpha)
         old=torch.randn(8,5,dtype=torch.float64)

@@ -19,15 +19,24 @@ def main():
         'experiments/group_weight_b500_v1/historical_a_composed_config.json',
         'analysis/grpo_mechanism_audit_20261116/package_reference/verl/trainer/ppo/core_algos.py',
         'analysis/grpo_mechanism_audit_20261116/package_reference/manifest.json']
-    impl={'version':'b500-overlay-v1','protocol_sha256':expected,
+    files.append('experiments/group_weight_b500_v1/reference/rollout_corr_helper.py')
+    impl={'version':'b500-overlay-v1.1-bypass-guard','protocol_sha256':expected,
           'files_sha256':{n:sha(ROOT/n)for n in files},
           'state':'local_CPU_accepted_cloud_CPU_and_GPU_integration_pending'}
     save(P/'implementation_manifest.json',impl)
+    launch_names=['tools/b500_run.py','tools/b500_commands.sh','tools/test_b500_run_control.py',
+        'tools/recover_b500_guard.py','tools/test_recover_b500_guard.py',
+        'experiments/group_weight_b500_v1/overlay/b500_run_control.py']
+    save(P/'launch_manifest.json',{'version':'b500-live-v1.1-bypass-guard',
+        'protocol_sha256':expected,'accepted_implementation_sha256':sha(P/'implementation_manifest.json'),
+        'files_sha256':{n:sha(ROOT/n)for n in launch_names}})
     m=json.loads((P/'manifest.json').read_text(encoding='utf-8'))
-    for n in ['README.md','implementation_manifest.json']:m['files_sha256'][n]=sha(P/n)
-    for n in ['run_b500_preflight_return.py','run_b500_cpu_acceptance.py','freeze_b500_implementation.py']:
+    for n in ['README.md','implementation_manifest.json','launch_manifest.json','B500实际运行命令.md','首步配置误报恢复.md']:
+        m['files_sha256'][n]=sha(P/n)
+    for n in ['run_b500_preflight_return.py','run_b500_cpu_acceptance.py','freeze_b500_implementation.py',
+        'b500_run.py','b500_commands.sh','recover_b500_guard.py']:
         m['tools_sha256'][n]=sha(ROOT/'tools'/n)
-    m['workflow_revision']='2026-11-18-overlay-CPU-v1';save(P/'manifest.json',m)
+    m['workflow_revision']='2026-11-18-bypass-guard-recovery-v1';save(P/'manifest.json',m)
     print('Frozen B500 implementation; research protocol unchanged.')
 
 

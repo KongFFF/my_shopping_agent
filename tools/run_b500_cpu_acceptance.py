@@ -40,13 +40,19 @@ def main():
             matched=target.is_file()and digest(target)==wm[name]
             checks.append({'path':str(target),'matched':matched})
             if not matched:errors.append('Installed loss/padding differs from CPU-tested reference: '+name)
+        target=a.asset_project/'.venv/lib/python3.12/site-packages/verl/trainer/ppo/rollout_corr_helper.py'
+        matched=target.is_file()and digest(target)==digest(package/'reference/rollout_corr_helper.py')
+        checks.append({'path':str(target),'matched':matched})
+        if not matched:errors.append('Installed rollout bypass helper differs from locked reference')
     report={'version':'b500-cpu-acceptance-v1','at':datetime.now(timezone.utc).isoformat(),
         'protocol_sha256':m['protocol_sha256'],'implementation_manifest_sha256':digest(package/'implementation_manifest.json'),
         'training_started':False,'model_weights_loaded':False,'checks':checks,'errors':errors,'passed':False}
     if not errors:
         import torch
         if torch.cuda.is_initialized():raise RuntimeError('Unexpected CUDA initialization before tests')
-        stream=io.StringIO();suite=unittest.defaultTestLoader.discover(str(ROOT/'tools'),pattern='test_b500_weighting.py')
+        # The repair must qualify both method compatibility and zero-update
+        # recovery/control gates in the native environment, without CUDA.
+        stream=io.StringIO();suite=unittest.defaultTestLoader.discover(str(ROOT/'tools'),pattern='*b500*.py')
         result=unittest.TextTestRunner(stream=stream,verbosity=2).run(suite)
         report.update(tests_run=result.testsRun,test_log=stream.getvalue(),torch_version=torch.__version__,
             gpu_initialized=torch.cuda.is_initialized(),passed=result.wasSuccessful()and not torch.cuda.is_initialized())

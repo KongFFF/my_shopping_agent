@@ -10,7 +10,7 @@ from unittest.mock import patch
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'experiments/group_weight_b500_v1/overlay'))
 from b500_run_control import reserve,BudgetStop,checkpoint,REQUIRED,install
-from b500_run import remap,prepare,belongs_to_run
+from b500_run import remap,prepare,belongs_to_run,digest,PACKAGE
 
 
 class Controls(unittest.TestCase):
@@ -63,8 +63,12 @@ class Controls(unittest.TestCase):
     def test_prepare_preserves_training_500_warmup_and_resume(self):
         import yaml
         out=self.out/'new-run';asset=Path('/root/autodl-tmp/work/my_shopping_agent/upstream/shopping-grpo-longhorizon')
+        receipt=self.out/'native_cpu.json';receipt.write_text(json.dumps({'passed':True,
+            'implementation_manifest_sha256':digest(PACKAGE/'implementation_manifest.json'),
+            'protocol_sha256':digest(PACKAGE/'protocol.json'),'gpu_initialized':False,
+            'model_weights_loaded':False,'training_started':False}))
         with patch('b500_run.call')as invoke,patch('b500_run.verify_runtime_snapshot'):
-            prepare(asset,out)
+            prepare(asset,out,receipt)
             self.assertEqual(invoke.call_count,1)
         a=yaml.safe_load((out/'configs/phase350.yaml').read_text());b=yaml.safe_load((out/'configs/phase500.yaml').read_text())
         self.assertEqual(a['trainer']['total_training_steps'],500)

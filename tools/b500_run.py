@@ -48,15 +48,23 @@ def verify_runtime_snapshot(asset,runtime):
         if (runtime/name).resolve()!=(asset/name).resolve():raise ValueError('Shared baseline asset link differs: '+name)
 
 
-def prepare(asset,out):
+def accepted_cpu_receipt(receipt):
+    r=read(receipt)
+    if (not r.get('passed')or r.get('implementation_manifest_sha256')!=digest(PACKAGE/'implementation_manifest.json')
+        or r.get('protocol_sha256')!=digest(PACKAGE/'protocol.json')
+        or r.get('gpu_initialized')is not False or r.get('model_weights_loaded')is not False
+        or r.get('training_started')is not False):
+        raise ValueError('Native CPU receipt is not bound to this implementation/protocol or initialized GPU/models')
+
+
+def prepare(asset,out,cpu_receipt=None):
     verify_launch_code()
     if out.exists():raise ValueError('Run directory already exists; use status/return, never prepare over it: '+str(out))
     runtime=asset/'outputs/bounded_resume500_to650/runtime'
     verify_runtime_snapshot(asset,runtime)
     # Revalidate frozen identity; no GPU or tensor loading.
-    receipt=ROOT/'analysis/b500_implementation_20261118/cloud_cpu_acceptance/20261118T034604Z.json'
-    r=read(receipt)
-    if not r['passed']or r['implementation_manifest_sha256']!=digest(PACKAGE/'implementation_manifest.json'):raise ValueError('Cloud CPU acceptance is not bound to this implementation')
+    receipt=cpu_receipt or ROOT/'analysis/b500_implementation_20261118/cloud_cpu_acceptance/20261118T034604Z.json'
+    accepted_cpu_receipt(receipt)
     import tempfile
     with tempfile.NamedTemporaryFile(suffix='.json')as tmp:
         call([sys.executable,str(ROOT/'tools/check_b500_history.py'),'--asset-project',str(asset),'--runtime-project',str(runtime),'--output',tmp.name])
@@ -85,7 +93,7 @@ def prepare(asset,out):
         (out/'configs'/f'phase{stop}.yaml').write_text(yaml.safe_dump(c,allow_unicode=True,sort_keys=False))
     write(out/'run.json',{'version':'b500-live-v1','project':str(asset),'runtime':str(runtime),'output':str(out),'repo':str(ROOT),
         'protocol_sha256':digest(PACKAGE/'protocol.json'),'implementation_manifest_sha256':digest(PACKAGE/'implementation_manifest.json'),
-        'env':env,'config_hashes':{str(stop):digest(out/'configs'/f'phase{stop}.yaml')for stop in (350,500)},'training_started':False,'launch_attempted':False})
+        'cpu_receipt':str(receipt),'env':env,'config_hashes':{str(stop):digest(out/'configs'/f'phase{stop}.yaml')for stop in (350,500)},'training_started':False,'launch_attempted':False})
     print('PREPARED='+str(out)+'; no training started')
 
 
@@ -121,10 +129,12 @@ def run(out):
     asset=Path(spec['project']);runtime=Path(spec['runtime']);env=dict(os.environ,**spec['env']);env.pop('RAY_ADDRESS',None)
     verify_runtime_snapshot(asset,runtime)
     # All allocated time from this GPU command counts, including preflight and validation.
-    spec.update(launch_attempted=True,started_at=time.time(),deadline=time.time()+20*3600);write(out/'run.json',spec)
+    deadline=spec.get('inherited_deadline',time.time()+20*3600)
+    if time.time()>=deadline-120:raise ValueError('Original B500 wall budget expired; preserve evidence, do not reset budget')
+    accepted_cpu_receipt(Path(spec['cpu_receipt']))
+    spec.update(launch_attempted=True,started_at=time.time(),deadline=deadline);write(out/'run.json',spec)
     environment=None;trainer=None
     try:
-        if not read(ROOT/'analysis/b500_implementation_20261118/cloud_cpu_acceptance/20261118T034604Z.json')['passed']:raise ValueError('No native CPU acceptance')
         call([sys.executable,'-c',"import torch; assert torch.cuda.is_available(); f,t=torch.cuda.mem_get_info(); print('GPU free GiB',f/2**30); assert f>=90*2**30"],env=env)
         limit=Path('/sys/fs/cgroup/memory.max')
         if limit.exists()and limit.read_text().strip()!='max'and int(limit.read_text())<110*2**30:raise ValueError('CPU memory quota below110GiB')
@@ -181,7 +191,7 @@ def run(out):
         steps=[e['global_step']for e in events if e['event']=='optimizer_step']
         if steps!=list(range(1,501)):raise ValueError('Effective update chain is not exactly1..500')
         write(out/'training_complete.json',{'completed_updates':500,'protocol_sha256':spec['protocol_sha256'],
-            'generation_budget':read(out/'generation_budget.json'),'elapsed_seconds':time.time()-spec['started_at'],
+            'generation_budget':read(out/'generation_budget.json'),'elapsed_seconds':time.time()-spec.get('original_started_at',spec['started_at']),
             'independent_Dev_done':False,'Final_done':False})
         print('B500_TRAINING_COMPLETE; retain all checkpoints; return evidence before posttraining export/evaluation.')
     except Exception as e:
@@ -204,7 +214,7 @@ def export(out):
     spec=read(out/'run.json');repo=Path(spec['repo']);(repo/'outputs').mkdir(exist_ok=True)
     destination=Path(tempfile.mkdtemp(prefix='b500-training-return-',dir=repo/'outputs'))
     origin=git(['remote','get-url','origin'],repo,capture=True)
-    git(['clone','--single-branch','--branch','codex/b500-live-run-v1',origin,str(destination)],repo)
+    git(['clone','--single-branch','--branch','codex/b500-bypass-guard-fix',origin,str(destination)],repo)
     configure_author(destination,repo);stamp=time.strftime('%Y%m%dT%H%M%SZ',time.gmtime());branch='codex/b500-training-results-'+stamp+'-'+destination.name.rsplit('-',1)[-1]
     git(['switch','-c',branch],destination)
     evidence=destination/'analysis/b500_training_return_20261118'/stamp;evidence.mkdir(parents=True)

@@ -13,14 +13,32 @@ TRAINER_SHA='dce8e3d431218888c9cf65ea8a031091699ac4bd573c7c0a50677a14e75cca59'
 
 def validate_config(config):
     a=config.actor_rollout_ref.actor
-    if (config.model_engine!='dp' or config.trainer.n_gpus_per_node!=1 or config.trainer.nnodes!=1
-        or config.data.train_batch_size!=2 or a.ppo_mini_batch_size!=2 or a.ppo_epochs!=1 or a.shuffle
-        or config.actor_rollout_ref.rollout.n!=4 or a.loss_agg_mode!='token-mean'
-        or a.policy_loss.loss_mode!='vanilla' or a.entropy_coeff!=0 or a.use_kl_loss
-        or config.algorithm.adv_estimator!='grpo' or config.algorithm.norm_adv_by_std_in_grpo
-        or config.algorithm.use_kl_in_reward or not config.shopping_dynamic_sampling.enable
-        or config.distillation.enabled):
-        raise ValueError('B500 configuration differs from supported frozen Actor contract')
+    checks={'model_engine':(config.model_engine,'dp'),'GPU_count':(config.trainer.n_gpus_per_node,1),
+        'nodes':(config.trainer.nnodes,1),'train_batch_size':(config.data.train_batch_size,2),
+        'ppo_mini_batch_size':(a.ppo_mini_batch_size,2),'ppo_epochs':(a.ppo_epochs,1),'shuffle':(a.shuffle,False),
+        'rollout_n':(config.actor_rollout_ref.rollout.n,4),'loss_agg_mode':(a.loss_agg_mode,'token-mean'),
+        'entropy_coeff':(a.entropy_coeff,0),'use_kl_loss':(a.use_kl_loss,False),
+        'adv_estimator':(config.algorithm.adv_estimator,'grpo'),
+        'norm_adv_by_std':(config.algorithm.norm_adv_by_std_in_grpo,False),
+        'use_kl_in_reward':(config.algorithm.use_kl_in_reward,False),
+        'dynamic_sampling':(config.shopping_dynamic_sampling.enable,True),'distillation':(config.distillation.enabled,False)}
+    errors={k:{'actual':x,'expected':y}for k,(x,y)in checks.items()if x!=y}
+    # Pinned trainer applies apply_bypass_mode before _update_actor. Keep the
+    # original PPO-clip path; do not disable bypass or permit REINFORCE/RS/IS.
+    expected={'bypass_mode':True,'loss_type':'ppo_clip','rollout_is':None,'rollout_rs':None,
+        'rollout_is_threshold':2.0,'rollout_rs_threshold':None,'rollout_is_batch_normalize':False}
+    rc=config.algorithm.rollout_correction
+    for k,v in expected.items():
+        if rc.get(k)!=v:errors['algorithm.rollout_correction.'+k]={'actual':rc.get(k),'expected':v}
+    mode=a.policy_loss.loss_mode
+    if mode not in ('vanilla','bypass_mode'):errors['loss_mode']={'actual':mode,'expected':'vanilla -> bypass_mode/ppo_clip'}
+    if mode=='bypass_mode':
+        active=a.policy_loss.get('rollout_correction')
+        if active is None:errors['actor.rollout_correction']='missing runtime bypass configuration'
+        else:
+            for k,v in expected.items():
+                if active.get(k)!=v:errors['actor.rollout_correction.'+k]={'actual':active.get(k),'expected':v}
+    if errors:raise ValueError('B500 runtime configuration differences: '+json.dumps(errors,default=str,sort_keys=True))
 
 
 def append_record(path,record):
