@@ -1,6 +1,6 @@
 # B500协议 v1：SFT起点、全失败组降权
 
-2026-11-17。**研究设计已冻结，2026-11-18云端历史身份预检已通过；B核心overlay已实现并通过本地CPU验收，AutoDL原环境CPU和GPU集成验收待完成，尚未训练。** 机器可读的唯一参数来源为[protocol.json](protocol.json)，哈希见[manifest.json](manifest.json)。历史对照核验见[报告](../../analysis/b500_matching_20261117/历史A匹配核验.md)。
+2026-11-17。**研究设计已冻结，2026-11-18云端历史身份预检已通过；B核心overlay已实现并通过本地CPU验收，AutoDL原环境CPU验收也已通过，实际GPU/FSDP运行流程与验收待完成，尚未训练。** 机器可读的唯一参数来源为[protocol.json](protocol.json)，哈希见[manifest.json](manifest.json)。历史对照核验见[报告](../../analysis/b500_matching_20261117/历史A匹配核验.md)。
 
 ## 实验命题及主要变化
 
