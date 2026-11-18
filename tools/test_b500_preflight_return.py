@@ -44,10 +44,12 @@ class FlowTests(unittest.TestCase):
             published.append(args)
             if mode=='push_failure':raise RuntimeError('push failed')
         try:
-            with patch.object(runner,'git',side_effect=git),patch.object(runner.subprocess,'run',side_effect=process),patch.object(runner,'publish',side_effect=publish),contextlib.redirect_stdout(io.StringIO()),contextlib.redirect_stderr(io.StringIO()):
+            output=io.StringIO()
+            with patch.object(runner,'git',side_effect=git),patch.object(runner.subprocess,'run',side_effect=process),patch.object(runner,'publish',side_effect=publish),contextlib.redirect_stdout(output),contextlib.redirect_stderr(io.StringIO()):
                 if mode in ('success','failed_receipt'):
                     state=runner.execute(repo,Path(sys.executable),repo/'assets',repo/'runtime')
                     self.assertTrue(state['uploaded']);self.assertEqual(state['preflight_passed'],mode=='success')
+                    self.assertIn('Identity preflight passed.' if mode=='success' else 'Failed identity receipt returned',output.getvalue())
                 else:
                     with self.assertRaises(RuntimeError):runner.execute(repo,Path(sys.executable),repo/'assets',repo/'runtime')
             if mode in ('clone_failure','missing_tool','no_receipt','wrong_receipt'):

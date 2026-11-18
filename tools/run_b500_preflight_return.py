@@ -8,7 +8,7 @@ import subprocess
 import sys
 import tempfile
 
-BRANCH='codex/b500-preflight-lockfile-fix'
+BRANCH='codex/b500-identity-accepted'
 
 
 def git(args,cwd,*,capture=False,check=True):
@@ -88,7 +88,8 @@ def execute(repo,python,asset,runtime):
         state.update(phase='complete',uploaded=True);write_state(state_path,state)
         print('PREFLIGHT_PASSED='+str(receipt['passed']).lower())
         print('RETURN_BRANCH='+branch+'\nRETURN_COMMIT='+commit)
-        print('No training started. A failed identity receipt is returned for diagnosis.')
+        print('No training started. Identity preflight passed.' if receipt['passed']
+              else 'No training started. Failed identity receipt returned for diagnosis.')
         return state
     except Exception as e:
         state['error']=str(e);write_state(state_path,state)

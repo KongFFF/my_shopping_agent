@@ -1,6 +1,6 @@
 # B500协议 v1：SFT起点、全失败组降权
 
-2026-11-17。**研究设计已冻结，尚未实现B训练补丁，尚未执行云端身份预检或GPU训练。** 机器可读的唯一参数来源为[protocol.json](protocol.json)，哈希见[manifest.json](manifest.json)。历史对照核验见[报告](../../analysis/b500_matching_20261117/历史A匹配核验.md)。
+2026-11-17。**研究设计已冻结，2026-11-18云端历史身份预检已通过；尚未实现B训练补丁或执行GPU训练。** 机器可读的唯一参数来源为[protocol.json](protocol.json)，哈希见[manifest.json](manifest.json)。历史对照核验见[报告](../../analysis/b500_matching_20261117/历史A匹配核验.md)。
 
 ## 实验命题及主要变化
 
@@ -65,7 +65,7 @@ response_mask只计原来参与Actor训练的生成token，工具回复、paddin
 ```bash
 if (
   cd /root/autodl-tmp/work/my_shopping_agent &&
-  git -c http.version=HTTP/1.1 fetch origin codex/b500-preflight-lockfile-fix &&
+  git -c http.version=HTTP/1.1 fetch origin codex/b500-identity-accepted &&
   B500_BOOTSTRAP=$(mktemp /tmp/b500-preflight-return-XXXXXX.py) &&
   git show FETCH_HEAD:tools/run_b500_preflight_return.py > "$B500_BOOTSTRAP" &&
   /root/autodl-tmp/work/my_shopping_agent/upstream/shopping-grpo-longhorizon/.venv/bin/python \
