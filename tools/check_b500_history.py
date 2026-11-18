@@ -17,6 +17,12 @@ def digest(p):
     return h.hexdigest()
 
 
+def resolve_source_path(original,old_project,asset,runtime):
+    relative=original.relative_to(old_project)
+    shared=relative.parts[0]in ('.venv','data','environments') or relative.as_posix()=='uv.lock'
+    return (asset if shared else runtime)/relative
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--asset-project',type=Path,required=True)
@@ -58,7 +64,7 @@ def main():
         try:relative=old.relative_to(old_project)
         except ValueError:fail('Unexpected historical source outside project: '+n);continue
         # Preserve shared package/data assets; only project code may be isolated.
-        target=(asset if relative.parts[0]in ('.venv','data','environments')else runtime)/relative
+        target=resolve_source_path(old,old_project,asset,runtime)
         check(target,h,'baseline_runtime')
     for distribution in ('verl','vllm','torch','transformers','peft'):
         try:report['packages'][distribution]=metadata.version(distribution)

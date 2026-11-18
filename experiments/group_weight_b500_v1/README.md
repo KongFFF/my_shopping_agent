@@ -65,7 +65,7 @@ response_mask只计原来参与Actor训练的生成token，工具回复、paddin
 ```bash
 if (
   cd /root/autodl-tmp/work/my_shopping_agent &&
-  git -c http.version=HTTP/1.1 fetch origin codex/b500-preflight-recovery-v1 &&
+  git -c http.version=HTTP/1.1 fetch origin codex/b500-preflight-lockfile-fix &&
   B500_BOOTSTRAP=$(mktemp /tmp/b500-preflight-return-XXXXXX.py) &&
   git show FETCH_HEAD:tools/run_b500_preflight_return.py > "$B500_BOOTSTRAP" &&
   /root/autodl-tmp/work/my_shopping_agent/upstream/shopping-grpo-longhorizon/.venv/bin/python \

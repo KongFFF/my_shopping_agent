@@ -8,7 +8,7 @@ import subprocess
 import sys
 import tempfile
 
-BRANCH='codex/b500-preflight-recovery-v1'
+BRANCH='codex/b500-preflight-lockfile-fix'
 
 
 def git(args,cwd,*,capture=False,check=True):
