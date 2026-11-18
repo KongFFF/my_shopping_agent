@@ -84,3 +84,5 @@ fi
 每次运行在主仓库outputs下保存`b500-review-…-state.json`，记录真实克隆目录、结果分支和阶段。若push失败，提交与收据保留；按输出的`--retry-push`命令只重试上传，无需重新哈希或重跑预检。旧`outputs/b500_protocol_review_v1`及其未提交分支均保留，不需要清理。
 
 请回传成功输出的RETURN_BRANCH/RETURN_COMMIT；若流程失败则回传STOPPED信息和STATE路径。身份通过不代表B实现已通过，仍不启动训练。
+
+实际训练命令已集中到[B500实际运行命令](B500实际运行命令.md)：无卡prepare、有卡后台run、status、return。尚未执行GPU；独立运行控制不改变已验收的方法核心清单。
