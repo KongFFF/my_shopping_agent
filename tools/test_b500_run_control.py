@@ -5,11 +5,12 @@ import tempfile
 import time
 from types import SimpleNamespace
 import unittest
+import zipfile
 from unittest.mock import patch
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'experiments/group_weight_b500_v1/overlay'))
-from b500_run_control import reserve,BudgetStop,checkpoint,REQUIRED,install
+from b500_run_control import reserve,BudgetStop,checkpoint,REQUIRED,install,retain_checkpoints,install_checkpoint_retention
 from b500_run import remap,prepare,belongs_to_run,digest,PACKAGE
 
 
@@ -42,6 +43,7 @@ class Controls(unittest.TestCase):
         train=self.make_checkpoint(350);events=[]
         module=SimpleNamespace(append_training_diagnostic=lambda *a,**k:events.append(a))
         class Trainer:
+            def _save_checkpoint(self):pass
             def __init__(self):self.async_rollout_manager=SimpleNamespace(generate_sequences=lambda b:'ok')
             def _shutdown_dump_executor(self):self.closed=True
             def fit(self):
@@ -78,6 +80,80 @@ class Controls(unittest.TestCase):
         self.assertTrue(b['trainer']['resume_from_path'].endswith('global_step_350'))
         self.assertEqual(a['ray_kwargs']['ray_init']['runtime_env']['worker_process_setup_hook'],'b500_run_control.setup_worker')
         with self.assertRaises(ValueError):prepare(asset,out)
+
+
+class Retention(unittest.TestCase):
+    def setUp(self):
+        self.temp=tempfile.TemporaryDirectory(prefix='b500-retention-',dir=ROOT/'outputs');self.root=Path(self.temp.name).resolve()
+    def tearDown(self):
+        self.root.relative_to((ROOT/'outputs').resolve());self.temp.cleanup()
+    def save(self,n):
+        for name in REQUIRED:
+            p=self.root/f'global_step_{n}'/name;p.parent.mkdir(parents=True,exist_ok=True)
+            if p.suffix=='.pt':
+                with zipfile.ZipFile(p,'w')as z:z.writestr('data.pkl',b'synthetic test state')
+            else:p.write_text('{}')
+        (self.root/'latest_checkpointed_iteration.txt').write_text(str(n))
+    def existing(self):return {int(p.name.rsplit('_',1)[1])for p in self.root.glob('global_step_*')}
+    def trainer(self,fn):
+        from test_b500_weighting import attrs
+        cfg=attrs({'trainer':{'default_local_dir':str(self.root),'max_actor_ckpt_to_keep':10},
+            'actor_rollout_ref':{'actor':{'checkpoint':{'async_save':False}}}})
+        class T:
+            config=cfg;global_steps=200
+            def _save_checkpoint(self):
+                if self.config.trainer.max_actor_ckpt_to_keep is not None:raise AssertionError('Native pre-delete not disabled')
+                return fn(self.global_steps)
+        install_checkpoint_retention(T);install_checkpoint_retention(T);return T()
+    def test_scan_existing_and_keep_latest_two(self):
+        for n in (1,10,25,50,100,150,200):self.save(n)
+        retain_checkpoints(self.root,200);self.assertEqual(self.existing(),{150,200})
+    def test_350_pinned_across_process_restart_and_later_saves(self):
+        for n in (300,350,400):self.save(n)
+        retain_checkpoints(self.root,400);self.assertEqual(self.existing(),{350,400})
+        self.save(450);retain_checkpoints(self.root,450);self.assertEqual(self.existing(),{350,400,450})
+        self.save(500);retain_checkpoints(self.root,500);self.assertEqual(self.existing(),{350,450,500})
+    def test_failed_save_restores_config_without_deleting(self):
+        self.save(100);self.save(150)
+        def fail(n):raise OSError('disk full')
+        t=self.trainer(fail)
+        with self.assertRaises(OSError):t._save_checkpoint()
+        self.assertEqual(self.existing(),{100,150});self.assertEqual(t.config.trainer.max_actor_ckpt_to_keep,10)
+    def test_new_truncated_file_prevents_any_cleanup(self):
+        for n in (50,100,150,200):self.save(n)
+        (self.root/'global_step_200/data.pt').write_bytes(b'truncated')
+        with self.assertRaises((zipfile.BadZipFile,RuntimeError)):retain_checkpoints(self.root,200)
+        self.assertEqual(self.existing(),{50,100,150,200})
+    def test_wrong_tracker_prevents_any_cleanup(self):
+        for n in (100,150,200):self.save(n)
+        (self.root/'latest_checkpointed_iteration.txt').write_text('150')
+        with self.assertRaises(RuntimeError):retain_checkpoints(self.root,200)
+        self.assertEqual(self.existing(),{100,150,200})
+    def test_unfinished_old_directory_preserved(self):
+        for n in (50,100,150,200):self.save(n)
+        (self.root/'global_step_50/data.pt').unlink()
+        retain_checkpoints(self.root,200);self.assertEqual(self.existing(),{50,150,200})
+    def test_CRC_corruption_in_retained_fallback_stops_cleanup(self):
+        for n in (50,100,150,200):self.save(n)
+        p=self.root/'global_step_150/data.pt';raw=p.read_bytes().replace(b'synthetic test state',b'corrupted test state');p.write_bytes(raw)
+        with self.assertRaises((zipfile.BadZipFile,RuntimeError)):retain_checkpoints(self.root,200)
+        self.assertEqual(self.existing(),{50,100,150,200})
+    def test_successful_save_prunes_after_original_returns(self):
+        self.save(50);self.save(100);self.save(150)
+        def original(n):
+            self.assertEqual(self.existing(),{50,100,150});self.save(n);return 'saved'
+        t=self.trainer(original);self.assertEqual(t._save_checkpoint(),'saved')
+        self.assertEqual(self.existing(),{150,200});self.assertEqual(t.config.trainer.max_actor_ckpt_to_keep,10)
+    def test_low_space_refuses_before_original_and_before_deletion(self):
+        self.save(100);self.save(150);t=self.trainer(self.save)
+        with patch('b500_run_control.shutil.disk_usage',return_value=SimpleNamespace(free=0)):
+            with self.assertRaisesRegex(RuntimeError,'Insufficient space'):t._save_checkpoint()
+        self.assertEqual(self.existing(),{100,150})
+    def test_future_checkpoint_prevents_rollback_cleanup(self):
+        self.save(150);self.save(200)
+        (self.root/'latest_checkpointed_iteration.txt').write_text('150')
+        with self.assertRaisesRegex(RuntimeError,'Future checkpoint'):retain_checkpoints(self.root,150)
+        self.assertEqual(self.existing(),{150,200})
 
 
 if __name__=='__main__':unittest.main()

@@ -3,6 +3,9 @@ import json
 import hashlib
 import math
 import os
+import re
+import shutil
+import zipfile
 from pathlib import Path
 import time
 
@@ -24,6 +27,77 @@ def checkpoint(root,step):
     return str(folder)
 
 
+def checked_folder(root,step,crc=False):
+    root=Path(root).resolve();folder=root/f'global_step_{step}'
+    if folder.is_symlink()or folder.resolve().parent!=root:raise RuntimeError('Unsafe checkpoint path: '+str(folder))
+    for p in [folder,*folder.rglob('*')]:
+        if p.is_symlink()or getattr(p,'is_junction',lambda:False)():raise RuntimeError('Checkpoint links forbidden: '+str(p))
+    for name in REQUIRED:
+        p=folder/name
+        if not p.is_file()or not p.stat().st_size:raise RuntimeError('Incomplete checkpoint: '+str(p))
+        if p.suffix=='.pt':
+            with zipfile.ZipFile(p)as archive:
+                if not archive.namelist():raise RuntimeError('Empty checkpoint archive: '+str(p))
+                if crc and archive.testzip()is not None:raise RuntimeError('Checkpoint CRC failed: '+str(p))
+        elif not isinstance(read(p),dict):raise RuntimeError('Invalid FSDP config: '+str(p))
+    return folder
+
+
+def retain_checkpoints(root,step):
+    """Only called after synchronous save; never rotate on a failed save."""
+    root=Path(root).resolve();checkpoint(root,step);checked_folder(root,step,crc=True)
+    complete=[];unmanaged=[]
+    for folder in root.iterdir():
+        match=re.fullmatch(r'global_step_(\d+)',folder.name)
+        if not match:continue
+        n=int(match[1])
+        # Refuse ambiguous names; failed/foreign directories are preserved.
+        if folder.name!=f'global_step_{n}':continue
+        if n>step:raise RuntimeError('Future checkpoint present; resolve rollback directory before retention')
+        try:checked_folder(root,n)
+        except (OSError,ValueError,RuntimeError,zipfile.BadZipFile):unmanaged.append(n);continue
+        complete.append(n)
+    keep=set(sorted(complete)[-2:]);keep.add(350)
+    # Validate retained fallbacks before deleting any other recovery point.
+    for n in keep.intersection(complete):
+        if n!=step:checked_folder(root,n,crc=True)
+    remove=sorted(set(complete)-keep)
+    def log(event,**fields):
+        with (root/'checkpoint_retention.jsonl').open('a')as f:
+            f.write(json.dumps({'event':event,'new_step':step,**fields})+'\n');f.flush();os.fsync(f.fileno())
+    log('retention_plan',keep=sorted(keep.intersection(complete)),remove=remove,unmanaged=unmanaged)
+    for n in remove:
+        # Recheck the exact absolute deletion target immediately before removal.
+        folder=checked_folder(root,n)
+        if folder.parent!=root or n==350 or n in keep:raise RuntimeError('Unsafe checkpoint deletion')
+        shutil.rmtree(folder)
+        log('checkpoint_removed',step=n)
+
+
+def install_checkpoint_retention(trainer_class):
+    original=trainer_class._save_checkpoint
+    if getattr(original,'_b500_retention',False):return
+    def save(self):
+        cfg=self.config.trainer;root=Path(cfg.default_local_dir).resolve();step=int(self.global_steps)
+        if self.config.actor_rollout_ref.actor.checkpoint.async_save:raise RuntimeError('Retention requires synchronous save')
+        if cfg.get('remove_previous_ckpt_in_save',False):raise RuntimeError('Legacy pre-save deletion forbidden')
+        if (root/f'global_step_{step}').exists():raise RuntimeError('Refusing to overwrite an existing checkpoint')
+        # Require space for a whole new save, before touching any old directory.
+        sizes=[]
+        for folder in root.glob('global_step_*'):
+            try:checked_folder(root,int(folder.name.rsplit('_',1)[1]))
+            except (OSError,ValueError,RuntimeError,zipfile.BadZipFile):continue
+            sizes.append(sum(p.stat().st_size for p in folder.rglob('*')if p.is_file()))
+        if sizes and shutil.disk_usage(root).free<int(max(sizes)*1.1)+2**30:
+            raise RuntimeError('Insufficient space for next full checkpoint plus margin; no old checkpoint deleted')
+        old=cfg.max_actor_ckpt_to_keep;cfg.max_actor_ckpt_to_keep=None
+        try:result=original(self)
+        finally:cfg.max_actor_ckpt_to_keep=old
+        retain_checkpoints(root,step)
+        return result
+    save._b500_retention=True;trainer_class._save_checkpoint=save
+
+
 def reserve(path,n,validation,deadline):
     if n<=0:raise ValueError('Empty generation batch')
     if time.time()>=deadline-120:raise BudgetStop('Wall budget reached; preserve latest safe checkpoint')
@@ -35,6 +109,7 @@ def reserve(path,n,validation,deadline):
 
 def install(trainer_class,diagnostics_module,control):
     if getattr(trainer_class.fit,'_b500_controlled',False):return
+    install_checkpoint_retention(trainer_class)
     original_fit=trainer_class.fit
     def fit(self):
         out=Path(control['output']);budget=out/'generation_budget.json'

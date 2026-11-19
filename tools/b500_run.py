@@ -222,6 +222,7 @@ def export(out):
     with zipfile.ZipFile(evidence/'evidence.zip','w',zipfile.ZIP_DEFLATED)as z:
         for p in selected:z.write(p,p.name)
         for p in (out/'configs').glob('*.yaml'):z.write(p,'configs/'+p.name)
+        if(out/'train/checkpoint_retention.jsonl').is_file():z.write(out/'train/checkpoint_retention.jsonl','checkpoint_retention.jsonl')
     write(evidence/'manifest.json',{'run':str(out),'archive_sha256':digest(evidence/'evidence.zip'),'training_complete':(out/'training_complete.json').exists(),
         'protocol_sha256':spec['protocol_sha256'],'weights_included':False})
     git(['add','--',evidence.relative_to(destination).as_posix()],destination);git(['commit','-m','Return B500 training evidence'],destination)
