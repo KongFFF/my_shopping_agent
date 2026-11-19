@@ -74,7 +74,7 @@ def retain_checkpoints(root,step):
         log('checkpoint_removed',step=n)
 
 
-def install_checkpoint_retention(trainer_class):
+def install_checkpoint_retention(trainer_class,size_floor=0):
     original=trainer_class._save_checkpoint
     if getattr(original,'_b500_retention',False):return
     def save(self):
@@ -88,7 +88,8 @@ def install_checkpoint_retention(trainer_class):
             try:checked_folder(root,int(folder.name.rsplit('_',1)[1]))
             except (OSError,ValueError,RuntimeError,zipfile.BadZipFile):continue
             sizes.append(sum(p.stat().st_size for p in folder.rglob('*')if p.is_file()))
-        if sizes and shutil.disk_usage(root).free<int(max(sizes)*1.1)+2**30:
+        estimate=max([size_floor,*sizes])
+        if estimate and shutil.disk_usage(root).free<int(estimate*1.1)+2**30:
             raise RuntimeError('Insufficient space for next full checkpoint plus margin; no old checkpoint deleted')
         old=cfg.max_actor_ckpt_to_keep;cfg.max_actor_ckpt_to_keep=None
         try:result=original(self)
@@ -98,18 +99,18 @@ def install_checkpoint_retention(trainer_class):
     save._b500_retention=True;trainer_class._save_checkpoint=save
 
 
-def reserve(path,n,validation,deadline):
+def reserve(path,n,validation,deadline,record_only=False):
     if n<=0:raise ValueError('Empty generation batch')
-    if time.time()>=deadline-120:raise BudgetStop('Wall budget reached; preserve latest safe checkpoint')
+    if not record_only and time.time()>=deadline-120:raise BudgetStop('Wall budget reached; preserve latest safe checkpoint')
     state=read(path)if Path(path).exists()else {'train':0,'validation_physical':0}
     key='validation_physical'if validation else 'train';limit=2400 if validation else 24000
-    if state[key]+n>limit:raise BudgetStop('Generation budget exhausted: '+key)
+    if not record_only and state[key]+n>limit:raise BudgetStop('Generation budget exhausted: '+key)
     state[key]+=n;write(path,state)
 
 
 def install(trainer_class,diagnostics_module,control):
     if getattr(trainer_class.fit,'_b500_controlled',False):return
-    install_checkpoint_retention(trainer_class)
+    install_checkpoint_retention(trainer_class,control.get('checkpoint_size_floor',0))
     original_fit=trainer_class.fit
     def fit(self):
         out=Path(control['output']);budget=out/'generation_budget.json'
@@ -117,7 +118,7 @@ def install(trainer_class,diagnostics_module,control):
         original_append=diagnostics_module.append_training_diagnostic
         def generate(batch):
             validation=batch.meta_info.get('validate')is True
-            reserve(budget,len(batch),validation,control['deadline'])
+            reserve(budget,len(batch),validation,control['deadline'],control.get('budget_record_only',False))
             result=original_generate(batch)
             tokens=result.batch.get('response_mask')
             with (out/'generation_tokens.jsonl').open('a')as f:
@@ -134,6 +135,9 @@ def install(trainer_class,diagnostics_module,control):
             if m['training/optimizer_updated']!=1 or float(m['actor/grad_norm'])<=0:raise RuntimeError('No finite nonzero Actor update')
             if float(m.get('b500/actor_tokens',0))<=0:raise RuntimeError('B weighting hook did not report actual Actor tokens')
             if not math.isclose(float(m['actor/lr']),1e-6*min(step/15,1),rel_tol=1e-5):raise RuntimeError('Unexpected LR/warmup after resume')
+            if step==151:
+                write(out/'accepted_step_151.json',{'step':151,'lr':float(m['actor/lr']),
+                    'grad_norm':float(m['actor/grad_norm']),'diagnostics_written':True,'checkpoint_saved':False})
             if step in (1,350,500):
                 saved=checkpoint(control['train_dir'],step)
                 write(out/f'accepted_step_{step}.json',{'step':step,'checkpoint':saved,'lr':float(m['actor/lr']),

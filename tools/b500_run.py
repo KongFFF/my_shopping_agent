@@ -129,8 +129,12 @@ def run(out):
     asset=Path(spec['project']);runtime=Path(spec['runtime']);env=dict(os.environ,**spec['env']);env.pop('RAY_ADDRESS',None)
     verify_runtime_snapshot(asset,runtime)
     # All allocated time from this GPU command counts, including preflight and validation.
-    deadline=spec.get('inherited_deadline',time.time()+20*3600)
-    if time.time()>=deadline-120:raise ValueError('Original B500 wall budget expired; preserve evidence, do not reset budget')
+    if spec.get('resume_step')==150:
+        sys.path.insert(0,str(PACKAGE/'overlay'))
+        from b500_run_control import checked_folder
+        checked_folder(Path(spec['source_checkpoint']).parent,150)
+    deadline=None if spec.get('budget_record_only')else spec.get('inherited_deadline',time.time()+20*3600)
+    if deadline is not None and time.time()>=deadline-120:raise ValueError('Original B500 wall budget expired; preserve evidence, do not reset budget')
     accepted_cpu_receipt(Path(spec['cpu_receipt']))
     spec.update(launch_attempted=True,started_at=time.time(),deadline=deadline);write(out/'run.json',spec)
     environment=None;trainer=None
@@ -142,7 +146,7 @@ def run(out):
         checkpoint_size=sum(p.stat().st_size for p in parent.rglob('*')if p.is_file())
         sft_size=sum(p.stat().st_size for p in Path(env['GRPO_MODEL_PATH']).glob('*.safetensors'))
         checkpoint_size=checkpoint_size or 2*sft_size
-        required=13*checkpoint_size+2*sft_size+16*2**30
+        required=spec.get('required_free_bytes',13*checkpoint_size+2*sft_size+16*2**30)
         if not sft_size or shutil.disk_usage(out).free<required:raise ValueError('Insufficient disk for retained checkpoints across resume and export margin')
         with socket.socket()as sock:sock.bind(('127.0.0.1',5727))
         env['SHOPPING_GRPO_ROOT']=str(runtime)
@@ -172,7 +176,8 @@ def run(out):
         for stop in (350,500):
             config=out/'configs'/f'phase{stop}.yaml'
             if digest(config)!=spec['config_hashes'][str(stop)]:raise ValueError('Config drift')
-            write(out/'control.json',{'output':str(out),'train_dir':str(out/'train'),'stop_at':stop,'deadline':spec['deadline']})
+            write(out/'control.json',{'output':str(out),'train_dir':str(out/'train'),'stop_at':stop,'deadline':spec['deadline'],
+                'budget_record_only':spec.get('budget_record_only',False),'checkpoint_size_floor':spec.get('checkpoint_size_bytes',0)})
             command=[sys.executable,'-u','-m','verl.trainer.main_ppo',f'--config-path={out/"configs"}',f'--config-name=phase{stop}']
             with (out/f'train_to_{stop}.log').open('w')as log:
                 print(f'START_PHASE={stop} LOG={log.name}',flush=True)
@@ -180,7 +185,7 @@ def run(out):
                 trainer=subprocess.Popen(command,cwd=runtime,env=env,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
                 write(out/'active_process.json',{'pid':trainer.pid,'stop_at':stop})
                 while trainer.poll()is None:
-                    if time.time()>=spec['deadline']-30:
+                    if spec['deadline']is not None and time.time()>=spec['deadline']-30:
                         os.killpg(trainer.pid,signal.SIGTERM);raise TimeoutError('20h budget exhausted')
                     time.sleep(2)
             owned_cleanup(out)
@@ -214,7 +219,7 @@ def export(out):
     spec=read(out/'run.json');repo=Path(spec['repo']);(repo/'outputs').mkdir(exist_ok=True)
     destination=Path(tempfile.mkdtemp(prefix='b500-training-return-',dir=repo/'outputs'))
     origin=git(['remote','get-url','origin'],repo,capture=True)
-    git(['clone','--single-branch','--branch','codex/b500-bypass-guard-fix',origin,str(destination)],repo)
+    git(['clone','--depth','1','--single-branch','--branch','codex/b500-resume150',origin,str(destination)],repo)
     configure_author(destination,repo);stamp=time.strftime('%Y%m%dT%H%M%SZ',time.gmtime());branch='codex/b500-training-results-'+stamp+'-'+destination.name.rsplit('-',1)[-1]
     git(['switch','-c',branch],destination)
     evidence=destination/'analysis/b500_training_return_20261118'/stamp;evidence.mkdir(parents=True)
@@ -238,7 +243,7 @@ def main():
     elif a.phase=='run':run(out)
     elif a.phase=='return':export(out)
     else:
-        for n in ['run.json','generation_budget.json','accepted_step_1.json','phase350_complete.json','accepted_step_500.json','training_complete.json','stopped.json']:
+        for n in ['run.json','generation_budget.json','resume150_receipt.json','accepted_step_151.json','phase350_complete.json','accepted_step_500.json','training_complete.json','stopped.json']:
             if(out/n).exists():print(n,(out/n).read_text())
 
 
