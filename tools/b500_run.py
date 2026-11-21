@@ -129,10 +129,10 @@ def run(out):
     asset=Path(spec['project']);runtime=Path(spec['runtime']);env=dict(os.environ,**spec['env']);env.pop('RAY_ADDRESS',None)
     verify_runtime_snapshot(asset,runtime)
     # All allocated time from this GPU command counts, including preflight and validation.
-    if spec.get('resume_step')==150:
+    if spec.get('resume_step')in (150,500):
         sys.path.insert(0,str(PACKAGE/'overlay'))
         from b500_run_control import checked_folder
-        checked_folder(Path(spec['source_checkpoint']).parent,150)
+        checked_folder(Path(spec['source_checkpoint']).parent,spec['resume_step'])
     deadline=None if spec.get('budget_record_only')else spec.get('inherited_deadline',time.time()+20*3600)
     if deadline is not None and time.time()>=deadline-120:raise ValueError('Original B500 wall budget expired; preserve evidence, do not reset budget')
     accepted_cpu_receipt(Path(spec['cpu_receipt']))
@@ -173,11 +173,13 @@ def run(out):
                 response=client.reset(task)
                 if response['environment_version']!='shopsimulator-environment-v2.1':raise ValueError('Environment changed')
             if len({c.env_idx for c in clients})!=8:raise ValueError('Eight distinct slots required')
-        for stop in (350,500):
+        target=spec.get('target_step',500)
+        for stop in spec.get('phase_stops',(350,500)):
             config=out/'configs'/f'phase{stop}.yaml'
             if digest(config)!=spec['config_hashes'][str(stop)]:raise ValueError('Config drift')
             write(out/'control.json',{'output':str(out),'train_dir':str(out/'train'),'stop_at':stop,'deadline':spec['deadline'],
-                'budget_record_only':spec.get('budget_record_only',False),'checkpoint_size_floor':spec.get('checkpoint_size_bytes',0)})
+                'budget_record_only':spec.get('budget_record_only',False),'checkpoint_size_floor':spec.get('checkpoint_size_bytes',0),
+                'final_step':target,'first_new_step':spec.get('resume_step',0)+1})
             command=[sys.executable,'-u','-m','verl.trainer.main_ppo',f'--config-path={out/"configs"}',f'--config-name=phase{stop}']
             with (out/f'train_to_{stop}.log').open('w')as log:
                 print(f'START_PHASE={stop} LOG={log.name}',flush=True)
@@ -190,15 +192,15 @@ def run(out):
                     time.sleep(2)
             owned_cleanup(out)
             if trainer.returncode or (out/'budget_truncated.json').exists():raise RuntimeError(f'Phase{stop} failed/truncated; do not restart blindly')
-            needed='phase350_complete.json'if stop==350 else 'accepted_step_500.json'
+            needed='phase350_complete.json'if stop==350 else f'accepted_step_{stop}.json'
             if not(out/needed).is_file():raise RuntimeError('Expected complete phase receipt missing')
         events=[json.loads(l)for l in (out/'training_diagnostics.jsonl').read_text().splitlines()]
         steps=[e['global_step']for e in events if e['event']=='optimizer_step']
-        if steps!=list(range(1,501)):raise ValueError('Effective update chain is not exactly1..500')
-        write(out/'training_complete.json',{'completed_updates':500,'protocol_sha256':spec['protocol_sha256'],
+        if steps!=list(range(1,target+1)):raise ValueError('Effective update chain is not exactly1..'+str(target))
+        write(out/'training_complete.json',{'completed_updates':target,'new_updates':target-spec.get('resume_step',0),'protocol_sha256':spec['protocol_sha256'],
             'generation_budget':read(out/'generation_budget.json'),'elapsed_seconds':time.time()-spec.get('original_started_at',spec['started_at']),
             'independent_Dev_done':False,'Final_done':False})
-        print('B500_TRAINING_COMPLETE; retain all checkpoints; return evidence before posttraining export/evaluation.')
+        print(f'B{target}_TRAINING_COMPLETE; retain all checkpoints; return evidence before posttraining export/evaluation.')
     except Exception as e:
         write(out/'stopped.json',{'error':str(e),'at':time.time()});raise
     finally:
@@ -219,18 +221,20 @@ def export(out):
     spec=read(out/'run.json');repo=Path(spec['repo']);(repo/'outputs').mkdir(exist_ok=True)
     destination=Path(tempfile.mkdtemp(prefix='b500-training-return-',dir=repo/'outputs'))
     origin=git(['remote','get-url','origin'],repo,capture=True)
-    git(['clone','--depth','1','--single-branch','--branch','codex/b500-resume150',origin,str(destination)],repo)
-    configure_author(destination,repo);stamp=time.strftime('%Y%m%dT%H%M%SZ',time.gmtime());branch='codex/b500-training-results-'+stamp+'-'+destination.name.rsplit('-',1)[-1]
+    git(['clone','--depth','1','--single-branch','--branch',spec.get('code_branch','codex/b500-resume150'),origin,str(destination)],repo)
+    configure_author(destination,repo);stamp=time.strftime('%Y%m%dT%H%M%SZ',time.gmtime());target=spec.get('target_step',500)
+    branch=f'codex/b{target}-training-results-'+stamp+'-'+destination.name.rsplit('-',1)[-1]
     git(['switch','-c',branch],destination)
-    evidence=destination/'analysis/b500_training_return_20261118'/stamp;evidence.mkdir(parents=True)
+    evidence=destination/spec.get('return_root','analysis/b500_training_return_20261118')/stamp;evidence.mkdir(parents=True)
     selected=[p for p in out.iterdir()if p.is_file()and p.suffix in ('.json','.jsonl','.log')]
     with zipfile.ZipFile(evidence/'evidence.zip','w',zipfile.ZIP_DEFLATED)as z:
         for p in selected:z.write(p,p.name)
         for p in (out/'configs').glob('*.yaml'):z.write(p,'configs/'+p.name)
+        for p in (out/'validation').glob('*.jsonl'):z.write(p,'validation/'+p.name)
         if(out/'train/checkpoint_retention.jsonl').is_file():z.write(out/'train/checkpoint_retention.jsonl','checkpoint_retention.jsonl')
     write(evidence/'manifest.json',{'run':str(out),'archive_sha256':digest(evidence/'evidence.zip'),'training_complete':(out/'training_complete.json').exists(),
-        'protocol_sha256':spec['protocol_sha256'],'weights_included':False})
-    git(['add','--',evidence.relative_to(destination).as_posix()],destination);git(['commit','-m','Return B500 training evidence'],destination)
+        'protocol_sha256':spec['protocol_sha256'],'target_step':target,'resume_step':spec.get('resume_step',0),'weights_included':False})
+    git(['add','--',evidence.relative_to(destination).as_posix()],destination);git(['commit','-m',f'Return B{target} training evidence'],destination)
     commit=git(['rev-parse','HEAD'],destination,capture=True);publish(destination,branch,commit)
     print('RETURN_BRANCH='+branch+'\nRETURN_COMMIT='+commit)
 
@@ -243,7 +247,7 @@ def main():
     elif a.phase=='run':run(out)
     elif a.phase=='return':export(out)
     else:
-        for n in ['run.json','generation_budget.json','resume150_receipt.json','accepted_step_151.json','phase350_complete.json','accepted_step_500.json','training_complete.json','stopped.json']:
+        for n in ['run.json','generation_budget.json','resume150_receipt.json','b650_preparation.json','accepted_step_151.json','accepted_step_501.json','phase350_complete.json','accepted_step_500.json','accepted_step_650.json','training_complete.json','stopped.json']:
             if(out/n).exists():print(n,(out/n).read_text())
 
 

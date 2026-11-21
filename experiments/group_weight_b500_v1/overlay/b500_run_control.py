@@ -135,10 +135,10 @@ def install(trainer_class,diagnostics_module,control):
             if m['training/optimizer_updated']!=1 or float(m['actor/grad_norm'])<=0:raise RuntimeError('No finite nonzero Actor update')
             if float(m.get('b500/actor_tokens',0))<=0:raise RuntimeError('B weighting hook did not report actual Actor tokens')
             if not math.isclose(float(m['actor/lr']),1e-6*min(step/15,1),rel_tol=1e-5):raise RuntimeError('Unexpected LR/warmup after resume')
-            if step==151:
-                write(out/'accepted_step_151.json',{'step':151,'lr':float(m['actor/lr']),
+            if step==control.get('first_new_step',151):
+                write(out/f'accepted_step_{step}.json',{'step':step,'lr':float(m['actor/lr']),
                     'grad_norm':float(m['actor/grad_norm']),'diagnostics_written':True,'checkpoint_saved':False})
-            if step in (1,350,500):
+            if step in (1,350,500,control.get('final_step',500)):
                 saved=checkpoint(control['train_dir'],step)
                 write(out/f'accepted_step_{step}.json',{'step':step,'checkpoint':saved,'lr':float(m['actor/lr']),
                     'grad_norm':float(m['actor/grad_norm']),'diagnostics_written':True})
