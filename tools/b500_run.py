@@ -129,7 +129,7 @@ def run(out):
     asset=Path(spec['project']);runtime=Path(spec['runtime']);env=dict(os.environ,**spec['env']);env.pop('RAY_ADDRESS',None)
     verify_runtime_snapshot(asset,runtime)
     # All allocated time from this GPU command counts, including preflight and validation.
-    if spec.get('resume_step')in (150,500,650):
+    if spec.get('resume_step')in (150,500,650,750):
         sys.path.insert(0,str(PACKAGE/'overlay'))
         from b500_run_control import checked_folder
         checked_folder(Path(spec['source_checkpoint']).parent,spec['resume_step'])
@@ -247,7 +247,7 @@ def main():
     elif a.phase=='run':run(out)
     elif a.phase=='return':export(out)
     else:
-        for n in ['run.json','generation_budget.json','resume150_receipt.json','b650_preparation.json','b800_preparation.json','accepted_step_151.json','accepted_step_501.json','phase350_complete.json','accepted_step_500.json','accepted_step_650.json','accepted_step_651.json','accepted_step_800.json','training_complete.json','stopped.json']:
+        for n in ['run.json','generation_budget.json','resume150_receipt.json','b650_preparation.json','b800_preparation.json','finish750_preparation.json','accepted_step_151.json','accepted_step_501.json','phase350_complete.json','accepted_step_500.json','accepted_step_650.json','accepted_step_651.json','accepted_step_751.json','accepted_step_800.json','training_complete.json','stopped.json']:
             if(out/n).exists():print(n,(out/n).read_text())
 
 
