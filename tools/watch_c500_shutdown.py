@@ -34,9 +34,9 @@ def same_process(expected):
     return actual is not None and all(actual[k] == expected[k] for k in ('pid','start_ticks','boot_id','argv'))
 
 
-def bind_supervisor(run):
+def bind_supervisor(run, experiment="C500", supervisor_script="c500_run.py"):
     spec = read_json(run/'run.json')
-    if spec.get('experiment') != 'C500' or spec.get('gamma') != 4.0:
+    if spec.get('experiment') != experiment or spec.get('gamma') != 4.0:
         raise ValueError('Not the current C500 gamma4 run')
     pid = int((run/'supervisor.pid').read_text().strip())
     if pid <= 1:
@@ -45,7 +45,7 @@ def bind_supervisor(run):
     if identity is None:
         raise ValueError('Supervisor already exited; guard NOT armed, no shutdown')
     argv = [x.decode() for x in identity['argv'] if x]
-    code = str(Path(spec['repo'])/'tools/c500_run.py')
+    code = str(Path(spec['repo'])/'tools'/supervisor_script)
     if code not in argv or 'run' not in argv or '--run-dir' not in argv:
         raise ValueError('PID is not the expected C500 supervisor')
     i = argv.index('--run-dir')

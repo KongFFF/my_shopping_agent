@@ -1,0 +1,49 @@
+{
+  "version": "C650-gamma4-continuation-v1",
+  "authorization_date": "2026-11-24",
+  "parent_C500_independent_results": {
+    "Dev50": 25,
+    "Final200": 138,
+    "interpretation": "C500 no consistent advantage over A/B; user explicitly authorizes continuation without changing that result"
+  },
+  "base_protocol_sha256": "4d4d1a9405045c103ca680a4ab9bf6141dbe21bd7be97355392632553d66355e",
+  "core_implementation_manifest_sha256": "506fe5390b1ae5e948d19e0a7e2627cb7d8a20989879503c612fc4347cf99cdd",
+  "gamma": 4,
+  "F_raw_weight": 0.25,
+  "S_raw_weight": 1.0,
+  "normalization": "global_actor_effective_token_weighted_mean",
+  "parent_step": 500,
+  "target_step": 650,
+  "new_effective_updates": 150,
+  "source_actor_sha256": "13802457534bf2e4e4c59e82a78f6620774c1700386e378398e692828ca1a805",
+  "source_merged_sha256_for_reference_only": "e920696f73d3ae0cd5b82767bc3aa2f14d05fd73a0cf1c6f5143197d47e14c0a",
+  "restore": [
+    "model",
+    "optimizer",
+    "scheduler in extra",
+    "RNG in extra",
+    "original pinned dataloader restore rule"
+  ],
+  "dataloader_note": "At an epoch boundary the pinned veRL may start a fresh epoch instead of loading exhausted loader state, as A650/B650; no custom fix",
+  "lr": 1e-06,
+  "no_new_warmup": true,
+  "configuration_changes_only": [
+    "trainer total_training_steps=650",
+    "resume from complete C500 global_step_500",
+    "no validation before resume",
+    "new output/log/code identity and driver hook env",
+    "trace experiment identity"
+  ],
+  "sampling_environment_reward_prompt_and_seeds": "unchanged from C500 and same650 A/B protocol",
+  "dynamic_sampling_max_consecutive_skipped_updates": 10,
+  "checkpoint_and_validation_steps": [
+    550,
+    600,
+    650
+  ],
+  "checkpoint_retention": "new run latest2 complete after synchronous save+CRC acceptance;350 remains protected in parent, parent paths never deleted",
+  "budget": "user-managed; inherited physical generation counters; no time/generation automatic cutoff",
+  "evaluation": "not automatically launched; fixed650 future independent evaluation; no best checkpoint selection",
+  "continuation_beyond650": "not automatic",
+  "claims": "single-seed historical matched endpoint; A650 had600 fault recovery; no forced failures; sampling/cost differ; Final observed multiple times"
+}

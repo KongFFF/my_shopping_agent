@@ -69,6 +69,20 @@ class GuardTests(unittest.TestCase):
         with patch.object(w.subprocess,'run') as run:
             w.call_shutdown();self.assertEqual(run.call_count,1)
 
+    def test_C650_explicit_supervisor_binding(self):
+        (self.run/'run.json').write_text(json.dumps({'experiment':'C650','gamma':4,'repo':'/code'}))
+        (self.run/'supervisor.pid').write_text('123')
+        identity={'pid':123,'start_ticks':'1','boot_id':'b','argv':[b'python',str(Path('/code')/'tools/c650_run.py').encode(),b'run',b'--run-dir',str(self.run).encode()]}
+        with patch.object(w,'snapshot',return_value=identity):
+            self.assertEqual(w.bind_supervisor(self.run,experiment='C650',supervisor_script='c650_run.py'),identity)
+            with self.assertRaises(ValueError):w.bind_supervisor(self.run)
+    def test_C650_refuses_C500_process(self):
+        (self.run/'run.json').write_text(json.dumps({'experiment':'C650','gamma':4,'repo':'/code'}))
+        (self.run/'supervisor.pid').write_text('123')
+        identity={'pid':123,'start_ticks':'1','boot_id':'b','argv':[b'python',str(Path('/code')/'tools/c500_run.py').encode(),b'run',b'--run-dir',str(self.run).encode()]}
+        with patch.object(w,'snapshot',return_value=identity):
+            with self.assertRaises(ValueError):w.bind_supervisor(self.run,experiment='C650',supervisor_script='c650_run.py')
+
     def test_zombie_not_live(self):
         stat='123 (process name) Z '+' '.join(['0']*20)
         (self.run/'123').mkdir();(self.run/'123/stat').write_text(stat)
