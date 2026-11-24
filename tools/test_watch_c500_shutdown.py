@@ -56,6 +56,19 @@ class GuardTests(unittest.TestCase):
             with self.assertRaises(ValueError):w.bind_supervisor(self.run)
         identity['argv'][-1]=str(self.run).encode()
         with patch.object(w,'snapshot',return_value=identity):self.assertEqual(w.bind_supervisor(self.run),identity)
+    def test_exec_format_falls_back_to_bash_only(self):
+        with patch.object(w.subprocess,'run',side_effect=[OSError(w.errno.ENOEXEC,'Exec format'),None]) as run:
+            w.call_shutdown()
+            self.assertEqual(run.call_count,2)
+            self.assertEqual(run.call_args.args[0],['/bin/bash',str(w.SHUTDOWN)])
+    def test_other_shutdown_errors_do_not_fallback(self):
+        with patch.object(w.subprocess,'run',side_effect=PermissionError(13,'denied')) as run:
+            with self.assertRaises(PermissionError):w.call_shutdown()
+            self.assertEqual(run.call_count,1)
+    def test_native_shutdown_needs_no_fallback(self):
+        with patch.object(w.subprocess,'run') as run:
+            w.call_shutdown();self.assertEqual(run.call_count,1)
+
     def test_zombie_not_live(self):
         stat='123 (process name) Z '+' '.join(['0']*20)
         (self.run/'123').mkdir();(self.run/'123/stat').write_text(stat)

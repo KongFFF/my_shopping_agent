@@ -1,5 +1,6 @@
 """Attach to an existing C500 supervisor; shut down AutoDL only after its exit."""
 import argparse
+import errno
 import json
 import os
 from pathlib import Path
@@ -60,6 +61,17 @@ def write_state(run, event, **fields):
     print(json.dumps(record), flush=True)
 
 
+def call_shutdown():
+    try:
+        subprocess.run([str(SHUTDOWN)],check=True,timeout=30)
+    except OSError as error:
+        if error.errno != errno.ENOEXEC:
+            raise
+        # Some AutoDL images expose a shell script without a shebang.
+        # A shell command supports this; direct execve does not.
+        subprocess.run(['/bin/bash',str(SHUTDOWN)],check=True,timeout=30)
+
+
 def finish(run, identity, grace, poll=5, sleep=time.sleep, alive=same_process,
            shutdown=None):
     """Cancellation is checked throughout; phase350 receipt alone has no effect."""
@@ -81,7 +93,7 @@ def finish(run, identity, grace, poll=5, sleep=time.sleep, alive=same_process,
     write_state(run, 'shutdown_requested', reason=reason)
     os.sync()
     # AutoDL documents this exact command, rather than systemctl/poweroff.
-    (shutdown or (lambda:subprocess.run([str(SHUTDOWN)],check=True,timeout=30)))()
+    (shutdown or call_shutdown)()
 
 
 def main():
