@@ -10,7 +10,7 @@ import zipfile
 ROOT=Path(__file__).resolve().parents[1]
 
 
-def audit(path):
+def audit(path, previous_archive=None):
     errors=[]
     def check(ok,label):
         if not ok:errors.append(label)
@@ -50,7 +50,7 @@ def audit(path):
         check(set(b['actor_rollout_ref']['actor']['checkpoint']['load_contents'])=={'model','optimizer','extra'},'Full restore components')
         es=rows('training_diagnostics.jsonl');updates=[e for e in es if e['event']=='optimizer_step']
         check([e['global_step']for e in updates]==list(range(1,651)),'Exactly1..650 update chain')
-        previous=ROOT/'analysis/c500_training_return/20261124T024612Z/evidence.zip'
+        previous=previous_archive or ROOT/'analysis/c500_training_return/20261124T024612Z/evidence.zip'
         with zipfile.ZipFile(previous)as pz:
             pe=[json.loads(l)for l in pz.read('training_diagnostics.jsonl').splitlines()]
             check(es[:len(pe)]==pe,'Exact committed C500 prefix preserved')
