@@ -104,8 +104,13 @@ def prepare(training,out):
     if out.exists():raise ValueError('Output exists; preserve it and use status/return')
     (ROOT/'outputs').mkdir(exist_ok=True);log=ROOT/'outputs/c650_eval_cpu_tests.log';print('EVAL_CPU_LOG='+str(log),flush=True)
     with log.open('w')as f:
-        for pattern in ['test_c650_evaluation.py','test_b500_dev50.py']:
-            subprocess.run([sys.executable,'-m','unittest','discover','-s',str(ROOT/'tools'),'-p',pattern],check=True,stdout=f,stderr=subprocess.STDOUT)
+        for pattern in ['test_c650_evaluation.py','test_c650_protocol_guards.py']:
+            try:
+                subprocess.run([sys.executable,'-m','unittest','discover','-s',str(ROOT/'tools'),'-p',pattern],check=True,stdout=f,stderr=subprocess.STDOUT)
+            except subprocess.CalledProcessError:
+                f.flush();print('CPU_CHECK_FAILED: '+pattern+' LOG='+str(log),flush=True)
+                print(log.read_text(errors='replace')[-12000:],flush=True)
+                raise
     run=verify_training(training,out)
     asset=Path(run['project']);runtime=Path(run['runtime']);verify_runtime_snapshot(asset,runtime)
     sys.path.insert(0,str(PACKAGE/'overlay'))
