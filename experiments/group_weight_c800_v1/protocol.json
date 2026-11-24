@@ -1,0 +1,50 @@
+{
+  "version": "C800-gamma4-continuation-v1",
+  "authorization_date": "2026-11-24",
+  "base_protocol_sha256": "4d4d1a9405045c103ca680a4ab9bf6141dbe21bd7be97355392632553d66355e",
+  "core_implementation_manifest_sha256": "506fe5390b1ae5e948d19e0a7e2627cb7d8a20989879503c612fc4347cf99cdd",
+  "gamma": 4,
+  "F_raw_weight": 0.25,
+  "S_raw_weight": 1.0,
+  "normalization": "global_actor_effective_token_weighted_mean",
+  "parent_step": 650,
+  "target_step": 800,
+  "new_effective_updates": 150,
+  "source_actor_sha256": "ca4524e7217dcc64d002421d913e9dbf13561b01aec20df390e1e6b065617eac",
+  "source_merged_sha256_for_reference_only": "6240fd22492f9164c29a0be5ff857138bf2fff4fd6f4282ebdf2ecc130a3d0c0",
+  "restore": [
+    "model",
+    "optimizer",
+    "scheduler in extra",
+    "RNG in extra",
+    "original pinned dataloader restore rule"
+  ],
+  "dataloader_note": "At an epoch boundary the pinned veRL may start a fresh epoch instead of loading exhausted loader state, as A650/B650; no custom fix",
+  "lr": 1e-06,
+  "no_new_warmup": true,
+  "configuration_changes_only": [
+    "trainer total_training_steps=800",
+    "resume from complete C650 global_step_650",
+    "no validation before resume",
+    "new output/log/code identity and driver hook env",
+    "trace experiment identity"
+  ],
+  "sampling_environment_reward_prompt_and_seeds": "unchanged from C650; no automatic B800 skip-threshold50 adjustment",
+  "dynamic_sampling_max_consecutive_skipped_updates": 10,
+  "checkpoint_and_validation_steps": [
+    700,
+    750,
+    800
+  ],
+  "checkpoint_retention": "new run latest2 complete after synchronous save+CRC acceptance;350 remains protected in parent, parent paths never deleted",
+  "budget": "user-managed; inherited physical generation counters; no time/generation automatic cutoff",
+  "evaluation": "not automatically launched; fixed800 future independent evaluation; no best checkpoint selection",
+  "claims": "single-seed historical endpoint; A/B recovery and sampling costs differ, B800 tail changed skip threshold10->50 while C800 keeps10; Final observed multiple times",
+  "parent_C650_independent_results": {
+    "Dev50": 24,
+    "Final200": 136,
+    "interpretation": "C650 has no consistent advantage; user explicitly authorizes C800 without changing prior negative results"
+  },
+  "parent_continuation_protocol_sha256": "861c593608f05545c56b329a94cc05678d2573902f8e1ba25cdad9e8951e5ac2",
+  "continuation_beyond800": "not automatic"
+}
